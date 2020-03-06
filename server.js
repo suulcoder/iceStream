@@ -19,14 +19,11 @@ const SQLQuery = (apiRoute,Query) => {
                 if(err){
                     return console.log(err)
                 }
-                else{
-                    artists=table.rows
-                    res.json(artists)
-                    return table.rows
-                }
+                artists=table.rows
+                res.json(artists)
+                return table.rows
             })
         })
-        
     });
 }
 
