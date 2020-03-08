@@ -36,8 +36,8 @@ const admin = combineReducers({
 
 export default admin
 
-export const getUser = (state,id) => state.byID[id]
-export const getAllUsers = state => state.order.map(
-    id => getUser(state,id)
+export const getPermission = (state,id) => state.byID[id]
+export const getAllPermissions = state => state.order.map(
+    id => getPermission(state,id)
 ).filter(user => user != null)
-export const getAdminState = state => state;
+export const getAdminState = state => state.adminState; 
