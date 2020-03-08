@@ -25,7 +25,8 @@ const byId = (state={},action) => {
 const order = (state={},action) => {
     switch (action.type) {
         case types.element_added:
-            return {...state,[action.payload.index]:action.payload.element}
+            return {...state,
+                [action.payload.index]:action.payload.element.id}
         case types.element_deleted:
             const section = state[action.payload.index].filter(id => id!=action.payload.id)
             return {...state,[action.payload.index]:section}
@@ -55,11 +56,11 @@ const isSelected = (state=[null,null],action) => {
 const orderSections = (state=[],action) => {
     switch (action.type) {
         case types.section_added:
-            return [...state, action.payload.id];
+            return [...state, action.payload];
         case types.section_deleted:
-            return state.filter(id=>action.payload.id!=id)
+            return state.filter(id=>action.payload!=id)
         default:
-            break;
+            return state
     }
 }
 
