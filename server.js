@@ -26,9 +26,8 @@ const SQLQuery = (apiRoute,Query) => {
         })
     });
 }
-
+SQLQuery('/api/user','SELECT * FROM User')
 SQLQuery('/api/artists','SELECT * FROM Artist')
-SQLQuery('/api/users','SELECT * FROM Users')
 
 const port=8080;
 app.listen(port,()=>console.log(`Server started on port ${port}`))
