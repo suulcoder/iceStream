@@ -26,7 +26,7 @@ const SQLQuery = (apiRoute,Query) => {
         })
     });
 }
-
+SQLQuery('/api/user','SELECT * FROM User')
 SQLQuery('/api/artists','SELECT * FROM Artist')
 
 const port=8080;
