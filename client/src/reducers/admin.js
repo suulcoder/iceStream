@@ -1,15 +1,5 @@
 import * as types from '../types/admin'
 import {combineReducers} from 'redux'
-
-const adminState = (state=true,action)=>{
-    switch (action.type) {
-        case types.adminState_changed:
-            return !state
-        default:
-            return state
-    }
-}
-
 const byID = (state={},action) => {
     switch (action.type) {
         case types.user_permissions_updated:
@@ -29,7 +19,6 @@ const order = (state=[],action) => {
 }
 
 const admin = combineReducers({
-    adminState,
     byID,
     order
 })
@@ -40,4 +29,3 @@ export const getPermission = (state,id) => state.byID[id]
 export const getAllPermissions = state => state.order.map(
     id => getPermission(state,id)
 ).filter(user => user != null)
-export const getAdminState = state => state.adminState; 
