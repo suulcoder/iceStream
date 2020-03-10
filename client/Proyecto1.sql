@@ -16,7 +16,7 @@ CREATE TABLE Album
     Title VARCHAR(160) NOT NULL,
     ArtistId INT NOT NULL,
     CONSTRAINT PK_Album PRIMARY KEY (AlbumId),
-    FOREIGN KEY (ArtistId) REFERENCES Artist (ArtistId) ON DELETE NO ACTION ON UPDATE NO ACTION
+    FOREIGN KEY (ArtistId) REFERENCES Artist (ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS Employee;
@@ -38,7 +38,7 @@ CREATE TABLE Employee
     Fax VARCHAR(24),
     Email VARCHAR(60),
     CONSTRAINT PK_Employee PRIMARY KEY (EmployeeId),
-    FOREIGN KEY (ReportsTo) REFERENCES Employee (EmployeeId) ON DELETE NO ACTION ON UPDATE NO ACTION
+    FOREIGN KEY (ReportsTo) REFERENCES Employee (EmployeeId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS Customer;
@@ -58,7 +58,7 @@ CREATE TABLE Customer
     Email VARCHAR(60) NOT NULL,
     SupportRepId INT,
     CONSTRAINT PK_Customer PRIMARY KEY (CustomerId),
-    FOREIGN KEY (SupportRepId) REFERENCES Employee (EmployeeId) ON DELETE NO ACTION ON UPDATE NO ACTION
+    FOREIGN KEY (SupportRepId) REFERENCES Employee (EmployeeId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS Genre;
@@ -82,7 +82,7 @@ CREATE TABLE Invoice
     BillingPostalCode VARCHAR(10),
     Total NUMERIC(10,2) NOT NULL,
     CONSTRAINT PK_Invoice PRIMARY KEY (InvoiceId),
-    FOREIGN KEY (CustomerId) REFERENCES Customer (CustomerId) ON DELETE NO ACTION ON UPDATE NO ACTION
+    FOREIGN KEY (CustomerId) REFERENCES Customer (CustomerId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS MediaType;
@@ -106,9 +106,9 @@ CREATE TABLE Track
     Bytes INT,
     UnitPrice NUMERIC(10,2) NOT NULL,
     CONSTRAINT PK_Track PRIMARY KEY (TrackId),
-    FOREIGN KEY (AlbumId) REFERENCES Album (AlbumId) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    FOREIGN KEY (GenreId) REFERENCES Genre (GenreId) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    FOREIGN KEY (MediaTypeId) REFERENCES MediaType (MediaTypeId) ON DELETE NO ACTION ON UPDATE NO ACTION
+    FOREIGN KEY (AlbumId) REFERENCES Album (AlbumId) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (GenreId) REFERENCES Genre (GenreId) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (MediaTypeId) REFERENCES MediaType (MediaTypeId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS InvoiceLine;
@@ -120,8 +120,8 @@ CREATE TABLE InvoiceLine
     UnitPrice NUMERIC(10,2) NOT NULL,
     Quantity INT NOT NULL,
     CONSTRAINT PK_InvoiceLine PRIMARY KEY (InvoiceLineId),
-    FOREIGN KEY (InvoiceId) REFERENCES Invoice (InvoiceId) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE NO ACTION ON UPDATE NO ACTION
+    FOREIGN KEY (InvoiceId) REFERENCES Invoice (InvoiceId) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS Playlist;
@@ -138,9 +138,68 @@ CREATE TABLE PlaylistTrack
     PlaylistId INT NOT NULL,
     TrackId INT NOT NULL,
     CONSTRAINT PK_PlaylistTrack PRIMARY KEY (PlaylistId, TrackId),
-    FOREIGN KEY (PlaylistId) REFERENCES Playlist (PlaylistId) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE NO ACTION ON UPDATE NO ACTION
+    FOREIGN KEY (PlaylistId) REFERENCES Playlist (PlaylistId) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+DROP TABLE IF EXISTS User;
+CREATE TABLE User
+(
+    UserId INT NOT NULL,
+    Username VARCHAR(50),
+    email VARCHAR(50)
+    password VARCHAR(30),
+    role VARCHAR(30)
+)
+
+DROP TABLE IF EXISTS UserPermission;
+CREATE TABLE UserPermissions
+(
+    UserId INT NOT NULL,
+    canLogin Boolean,
+    canAddArtist Boolean,
+    canAddAlbum Boolean,
+    canAddTrack boolean
+    CONSTRAINT PK_UserPermission PRIMARY KEY (UserId)
+    FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
+)
+
+DROP TABLE IF EXISTS TrackPermission;
+CREATE TABLE TrackPermissions
+(
+    UserId INT NOT NULL,
+    TrackId INT NOT NULL,
+    canInactivate Boolean,
+    canUpdate Boolean,
+    canDelete Boolean,
+    CONSTRAINT PK_TrackPermission PRIMARY KEY (UserId,TrackId)
+    FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
+)
+
+DROP TABLE IF EXISTS ArtistPermission;
+CREATE TABLE ArtistPermissions
+(
+    UserId INT NOT NULL,
+    ArtistId INT NOT NULL,
+    canUpdate Boolean,
+    canDelete Boolean,
+    CONSTRAINT PK_ArtistPermission PRIMARY KEY (UserId,ArtistId)
+    FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
+)
+
+DROP TABLE IF EXISTS AlbumPermission;
+CREATE TABLE AlbumPermissions
+(
+    UserId INT NOT NULL,
+    AlbumId INT NOT NULL,
+    canUpdate Boolean,
+    canDelete Boolean,
+    CONSTRAINT PK_AlbumPermission PRIMARY KEY (UserId,AlbumId)
+    FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (AlbumId) REFERENCES Artist(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
+)
 
 
 
@@ -171,6 +230,8 @@ CREATE INDEX IFK_TrackMediaTypeId ON Track (MediaTypeId);
 /*******************************************************************************
    Populate Tables
 ********************************************************************************/
+INSERT INTO User (UserId,Username,email,password,role) VALUES (1,'admin','admin@iceStream.com','admin','admin')
+
 INSERT INTO Genre (GenreId, Name) VALUES (1,'Rock');
 INSERT INTO Genre (GenreId, Name) VALUES (2,'Jazz');
 INSERT INTO Genre (GenreId, Name) VALUES (3,'Metal');
