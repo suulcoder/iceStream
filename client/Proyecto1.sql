@@ -98,7 +98,7 @@ CREATE TABLE Track
 (
     TrackId INT NOT NULL,
     Name VARCHAR(200) NOT NULL,
-    AlbumId INT,
+    AlbumId INT NOT NULL,
     MediaTypeId INT NOT NULL,
     GenreId INT,
     Composer VARCHAR(220),
@@ -142,15 +142,16 @@ CREATE TABLE PlaylistTrack
     FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS User;
-CREATE TABLE User
+DROP TABLE IF EXISTS Users;
+CREATE TABLE Users
 (
     UserId INT NOT NULL,
     Username VARCHAR(50),
-    email VARCHAR(50)
+    email VARCHAR(50),
     password VARCHAR(30),
-    role VARCHAR(30)
-)
+    role VARCHAR(30),
+    UNIQUE(UserId)
+);
 
 DROP TABLE IF EXISTS UserPermission;
 CREATE TABLE UserPermissions
@@ -159,10 +160,10 @@ CREATE TABLE UserPermissions
     canLogin Boolean,
     canAddArtist Boolean,
     canAddAlbum Boolean,
-    canAddTrack boolean
-    CONSTRAINT PK_UserPermission PRIMARY KEY (UserId)
-    FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-)
+    canAddTrack boolean,
+    CONSTRAINT PK_UserPermission PRIMARY KEY (UserId),
+    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 DROP TABLE IF EXISTS TrackPermission;
 CREATE TABLE TrackPermissions
@@ -172,10 +173,10 @@ CREATE TABLE TrackPermissions
     canInactivate Boolean,
     canUpdate Boolean,
     canDelete Boolean,
-    CONSTRAINT PK_TrackPermission PRIMARY KEY (UserId,TrackId)
-    FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT PK_TrackPermission PRIMARY KEY (UserId,TrackId),
+    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
-)
+);
 
 DROP TABLE IF EXISTS ArtistPermission;
 CREATE TABLE ArtistPermissions
@@ -184,10 +185,10 @@ CREATE TABLE ArtistPermissions
     ArtistId INT NOT NULL,
     canUpdate Boolean,
     canDelete Boolean,
-    CONSTRAINT PK_ArtistPermission PRIMARY KEY (UserId,ArtistId)
-    FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT PK_ArtistPermission PRIMARY KEY (UserId,ArtistId),
+    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
-)
+);
 
 DROP TABLE IF EXISTS AlbumPermission;
 CREATE TABLE AlbumPermissions
@@ -196,10 +197,10 @@ CREATE TABLE AlbumPermissions
     AlbumId INT NOT NULL,
     canUpdate Boolean,
     canDelete Boolean,
-    CONSTRAINT PK_AlbumPermission PRIMARY KEY (UserId,AlbumId)
-    FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (AlbumId) REFERENCES Artist(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
-)
+    CONSTRAINT PK_AlbumPermission PRIMARY KEY (UserId,AlbumId),
+    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (AlbumId) REFERENCES Album(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 
 
@@ -230,8 +231,7 @@ CREATE INDEX IFK_TrackMediaTypeId ON Track (MediaTypeId);
 /*******************************************************************************
    Populate Tables
 ********************************************************************************/
-INSERT INTO User (UserId,Username,email,password,role) VALUES (1,'admin','admin@iceStream.com','admin','admin')
-
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (1,'admin','admin@iceStream.com','admin','admin');
 INSERT INTO Genre (GenreId, Name) VALUES (1,'Rock');
 INSERT INTO Genre (GenreId, Name) VALUES (2,'Jazz');
 INSERT INTO Genre (GenreId, Name) VALUES (3,'Metal');
