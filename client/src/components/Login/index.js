@@ -1,6 +1,7 @@
 import './styles.css';
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
+import * as actions from '../../actions/app'
 
 const Login = ({onSubmit}) => {
     const [user,changeUser] = useState('')
@@ -34,7 +35,7 @@ export default connect(
     undefined,
     dispatch => ({
         onSubmit(){
-            console.log("here")
+            dispatch(actions.changeState(1))
         }
     })
 )(Login)

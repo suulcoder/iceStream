@@ -10,8 +10,8 @@
     color: black    ;
     font-family: 'Courier New', Courier, monospace;
     font-size: larger;
-    margin-right: 5px;
     margin-left: 15px;
+    margin-right: 5px;
 }
 .empty{
     background-color: black;
@@ -21,8 +21,39 @@
     background-color: white;
     height: 2px;
 }
+.buttons{
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+.button{
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 10px;
+    color: black;
+    font-size: small;
+    margin-left: 10px;
+    margin-right: 5px;
+    margin-top: 10px;
+    padding: 7px;
+}
+.headerContainer{
+    align-items: baseline;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
 @media (max-width: 710px){
     .header{
+        justify-content: center;
+    }
+    .headerContainer{
+        justify-content: center;
+    }
+}
+@media (max-width: 760px){
+    .header{
+        flex-direction: column;
         justify-content: center;
     }
 }

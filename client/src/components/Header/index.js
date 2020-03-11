@@ -1,10 +1,12 @@
 import './styles.css';
-import React,{Fragment , useState } from 'react';
+import React,{Fragment } from 'react';
 import * as selectors from '../../reducers'
 import Login from '../Login'
 import { connect } from 'react-redux';
+import Search from '../Search';
+import * as actions from '../../actions/app'
 
-const Header = ({app,onSubmit}) => (
+const Header = ({app,role,onSubmit,logout}) => (
         <Fragment>
             <div className="header">
                 <div className="tittle">
@@ -16,7 +18,17 @@ const Header = ({app,onSubmit}) => (
                     (app===0) ? (
                         <Login></Login>
                     ) : (
-                        <div></div>
+                        <div className="headerContainer">
+                            <Search></Search>
+                            <div className="buttons">
+                                <button className='button' type="submit" onClick={onSubmit(role)}>
+                                                {(role==='admin')?role:'myIce'}
+                                            </button>
+                                <button className="button" type="submit" onClick={logout}>
+                                    {'LOG OUT'}
+                                </button>
+                            </div>
+                        </div>
                     )
                 }
             </div>
@@ -29,8 +41,26 @@ export default connect(
     state=>{
         console.log(state)
         return({
-            app: selectors.getAppState(state)
+            app: selectors.getAppState(state),
+            role: (selectors.getUser(state)!=null) ?selectors.getUser(state)[Object[selectors.getUser(state)[7]]]:null
         })
     },
-    undefined
+    dispatch=>({
+        onSubmit(role){
+            switch (role){
+                case 'admin':
+                    dispatch(actions.changeState(4))
+                    break;
+                case 'client':
+                    dispatch(actions.changeState(3))
+                    break;
+                default:
+                    break;
+            }
+            
+        },
+        logout(){
+            dispatch(actions.changeState(0))
+        }
+    })
 )(Header)
