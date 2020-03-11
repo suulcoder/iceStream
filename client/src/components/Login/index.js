@@ -34,7 +34,24 @@ const Login = ({onSubmit}) => {
 export default connect(
     undefined,
     dispatch => ({
-        onSubmit(){
+        onSubmit(user,password){
+            const data = {
+                user:user,
+                password:password
+            }
+            console.log(data)
+            const request = new Request('http://localhost:8080/api/checkUser',{
+                method:'POST',
+                headers: new Headers({ 'Content-Type':'application/json'}),
+                body: JSON.stringify(data)
+            });
+            fetch(request)
+                .then(function(response){
+                    response.json()
+                    .then(function(data){
+                        console.log(data)
+                    })
+                })
             dispatch(actions.changeState(1))
         }
     })

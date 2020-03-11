@@ -9,6 +9,15 @@ const pool = new pg.Pool({
     password: 'admin',
     database: 'ProyectoBasedeDatos'
 })
+
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+	next();
+});
+
 const SQLQuery = (apiRoute,Query,method='get') => {
     switch (method) {
         case 'get':
@@ -53,6 +62,7 @@ const SQLQuery = (apiRoute,Query,method='get') => {
 }
 SQLQuery('/api/user',query.getAllUsers)
 SQLQuery('/api/genre',query.getAllGenre)
+SQLQuery('/api/checkuser',query.getUserByUsername,'post')
 SQLQuery('/api/permission/add',query.getUsersAddPermissions)
 SQLQuery('/api/permission/canIncativateSong',query.getCanInactivateSongPermissions)
 SQLQuery('/api/report/mostColaborative',query.getMostColaborativeArtists)

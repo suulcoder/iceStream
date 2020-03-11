@@ -151,6 +151,7 @@ CREATE TABLE Users
     password VARCHAR(30),
     role VARCHAR(30),
     UNIQUE(UserId)
+    UNIQUE(Username)
 );
 
 DROP TABLE IF EXISTS UserPermission;
