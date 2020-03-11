@@ -36,14 +36,13 @@ export default connect(
     dispatch => ({
         onSubmit(user,password){
             const data = {
-                user:user,
-                password:password
+                user,
+                password
             }
-            console.log(data)
             const request = new Request('http://localhost:8080/api/checkUser',{
                 method:'POST',
                 headers: new Headers({ 'Content-Type':'application/json'}),
-                body: JSON.stringify(data)
+                body: JSON.parse(data)
             });
             fetch(request)
                 .then(function(response){
@@ -52,6 +51,7 @@ export default connect(
                         console.log(data)
                     })
                 })
+
             dispatch(actions.changeState(1))
         }
     })
