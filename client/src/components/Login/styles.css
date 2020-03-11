@@ -1,0 +1,37 @@
+.login{
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.user{
+    border-radius: 7px;
+    font-size: small;
+    margin-right: 5px;
+    padding: 5px;
+    margin-top: 5px;
+}
+.password{
+    border-radius: 7px;
+    font-size: small;
+    margin-right: 5px;
+    padding: 5px;
+    margin-top: 5px;
+}
+.login_button{
+    font-size: small;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+    padding: 7px;
+    margin-right: 5px;
+    margin-top: 10px;
+}
+@media (max-width: 455px){
+    .login{
+        flex-direction: column;
+    }
+}

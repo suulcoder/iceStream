@@ -1,0 +1,28 @@
+.header{
+    align-items: center;
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    overflow: auto;
+}
+.tittle{
+    color: black    ;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: larger;
+    margin-right: 5px;
+    margin-left: 15px;
+}
+.empty{
+    background-color: black;
+    height: 2px;
+}
+.bar{
+    background-color: white;
+    height: 2px;
+}
+@media (max-width: 710px){
+    .header{
+        justify-content: center;
+    }
+}

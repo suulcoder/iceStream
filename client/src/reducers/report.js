@@ -1,13 +1,12 @@
 import * as types from '../types/report'
 
-numberOfReports = 8
 
 const report = (state=0,action) => {
     switch (action.type) {
         case types.report_changed_up:
-            return (state+1)%numberOfReports
+            return (state+1)%8
         case types.report_changed_down:
-            return (state-1)%numberOfReports
+            return (state-1)%8
         default:
             return state
     }

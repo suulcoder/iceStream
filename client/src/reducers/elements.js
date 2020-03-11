@@ -28,8 +28,8 @@ const order = (state={},action) => {
             return {...state,
                 [action.payload.index]:action.payload.element.id}
         case types.element_deleted:
-            const section = state[action.payload.index].filter(id => id!=action.payload.id)
-            if(section.length()==0){
+            const section = state[action.payload.index].filter(id => id!==action.payload.id)
+            if(section.length()===0){
                 delete state[action.payload.index]
             }
             return {...state,[action.payload.index]:section}
@@ -61,7 +61,6 @@ const elements = combineReducers({
     byId,
     isEdited,
     isSelected,
-    orderSections
 })
 
 export default elements;
