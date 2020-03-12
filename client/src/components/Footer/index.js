@@ -1,6 +1,5 @@
 import './styles.css';
-import React, { Fragment } from 'react';
-import * as selectors from '../../reducers'
+import React from 'react';
 import { connect } from 'react-redux';
 
 const Footer = ({app,role,onSubmit,logout}) => (
