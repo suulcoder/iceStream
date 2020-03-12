@@ -1,6 +1,7 @@
 const query = require('./queries')
 const express = require('express');
 const pg = require('pg');
+const bodyParser = require('body-parser')
 const app = express();
 
 const pool = new pg.Pool({
@@ -9,6 +10,10 @@ const pool = new pg.Pool({
     password: 'admin',
     database: 'ProyectoBasedeDatos'
 })
+
+app.use(bodyParser.urlencoded({ extended: false })) 
+app.use(express.urlencoded({ extended: true })) 
+app.use(bodyParser.json())
 
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
@@ -38,6 +43,7 @@ const SQLQuery = (apiRoute,Query,method='get') => {
             });
         case 'post':
             app.post(apiRoute,function(request,response){
+                console.log(request)
                 const values = Object.values(request.body)
                 pool.connect((err,db,done)=>{
                     if(err){
@@ -51,7 +57,7 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                             }
                             else{
                                 db.end()
-                                response.status(201).send({message: 'DATA INSERTED!'})
+                                response.status(201).send(res.rows)
                             }
                         })
                     }

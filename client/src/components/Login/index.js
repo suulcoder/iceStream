@@ -35,17 +35,14 @@ export default connect(
     undefined,
     dispatch => ({
         onSubmit(user,password){
-            const data = {
-                user,
-                password
-            }
-            const request = new Request('http://localhost:8080/api/checkUser',{
+            const request = new Request('http://localhost:8080/api/checkuser',{
                 method:'POST',
-                headers: new Headers({ 'Content-Type':'application/json'}),
-                body: JSON.parse(data)
-            });
+                headers: { 'Content-Type':'application/json'},
+                body: JSON.stringify({user:user,password:password})
+            })
+            console.log(request.body)
             fetch(request)
-                .then(function(response){
+                .then(async(response)=>{
                     response.json()
                     .then(function(data){
                         console.log(data)
