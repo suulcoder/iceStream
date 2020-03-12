@@ -37,7 +37,7 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                             return res.status(400).send(err)
                         }
                         console.log(table.rows)
-                        return table.rows
+                        response.status(201).send(res.rows)
                     })
                 })
             });
@@ -68,7 +68,7 @@ const SQLQuery = (apiRoute,Query,method='get') => {
 }
 SQLQuery('/api/user',query.getAllUsers)
 SQLQuery('/api/genre',query.getAllGenre)
-SQLQuery('/api/checkuser',query.getUserByUsername,'post')
+SQLQuery('/api/checkuser',query.getUserByUsername)
 SQLQuery('/api/newUserID',query.getLastUserId)
 SQLQuery('/api/permission/add',query.getUsersAddPermissions)
 SQLQuery('/api/permission/canIncativateSong',query.getCanInactivateSongPermissions)

@@ -1,9 +1,6 @@
 import './styles.css';
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions/app'
-import * as userActions from '../../actions/user'
-import throttle from 'lodash/throttle'
 
 const Login = ({onSubmit}) => {
     const [user,changeUser] = useState('')

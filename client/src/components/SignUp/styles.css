@@ -1,13 +1,13 @@
 .signin{
     align-items: center;
     background-color: white;
-    min-width: 180px;
     border-radius: 40px;
     display: flex;
-    margin-top: 45px;
     flex-direction: column;
     justify-content: center;
     margin-bottom: 10px;
+    margin-top: 45px;
+    min-width: 180px;
     padding: 15px;
 }
 .userSignUp{
