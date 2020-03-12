@@ -22,15 +22,16 @@
     padding: 7px;
 }
 .login_button{
-    background-color: black;
+    border-color: transparent;
+    background-color: transparent;
     border-radius: 20px;
-    color: white;
-    font-size: small;
+    color: black;
+    font-size: medium;
     margin-right: 5px;
     margin-top: 10px;
     padding: 10px;
 }
-@media (max-width: 455px){
+@media (max-width: 555px){
     .login{
         flex-direction: column;
     }

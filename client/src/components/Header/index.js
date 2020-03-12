@@ -33,9 +33,6 @@ const Header = ({app,role,onSubmit,logout}) => (
                         </div>
                     )
                 }
-                {
-                    (app==4)?(<h1>4</h1>):(<h1>3</h1>)
-                }
             </div>
             <div className="empty"></div>
             <div className="bar"></div>

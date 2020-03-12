@@ -1,0 +1,35 @@
+.footerCont{
+    align-items: baseline;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+}
+.myText{
+    padding: 5px;
+}
+.footer{
+    align-items: center;
+    background-color: black;
+    color: white;
+    display: flex;
+    font-size: xx-small;
+    justify-content: space-between;
+    overflow: auto;
+    padding: 10px 20px 10px 20px;
+    width: 100%;
+}
+.authorContainer{
+    align-items: center;
+    display: flex;
+    font-size: xx-small;
+    justify-content: center;
+}
+.authors{
+    display: flex;
+    flex-direction: column;
+    margin-left: 1px;
+    margin-right: 35px;
+}

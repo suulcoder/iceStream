@@ -1,12 +1,14 @@
 import { connect } from 'react-redux';
 import React, { Fragment } from 'react'
-import PropTypes from "prop-types";
-import { withRouter } from "react-router";
 import Header from '../Header'
+import Container from '../Container';
+import Footer from '../Footer';
 
 const AppState = () => (
     <Fragment>
         <Header></Header>
+        <Container></Container>
+        <Footer></Footer>
     </Fragment>
 )
 
