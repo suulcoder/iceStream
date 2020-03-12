@@ -2,6 +2,8 @@ import './styles.css';
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/app'
+import * as userActions from '../../actions/user'
+import throttle from 'lodash/throttle'
 
 const Login = ({onSubmit}) => {
     const [user,changeUser] = useState('')
@@ -40,16 +42,23 @@ export default connect(
                 headers: { 'Content-Type':'application/json'},
                 body: JSON.stringify({user:user,password:password})
             })
-            console.log(request.body)
             fetch(request)
                 .then(async(response)=>{
                     response.json()
-                    .then(function(data){
-                        console.log(data)
-                    })
+                    .then(throttle(table => {
+                        if(table!==null){
+                            try{
+                                const data = table.rows 
+                                dispatch(userActions.setUser(data[0]))
+                                dispatch(actions.changeState(1))
+                            }
+                            catch(err){
+                                dispatch(userActions.setUsertoNull())
+                                alert("USERNAME OR PASSWORD ARE INCORRECT")
+                            }
+                        }
+                    },3000))
                 })
-
-            dispatch(actions.changeState(1))
         }
     })
 )(Login)

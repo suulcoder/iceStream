@@ -4,7 +4,8 @@ import * as selectors from '../../reducers'
 import Login from '../Login'
 import { connect } from 'react-redux';
 import Search from '../Search';
-import * as actions from '../../actions/app'
+import * as actions from '../../actions/app';
+import * as userActions from '../../actions/user'
 
 const Header = ({app,role,onSubmit,logout}) => (
         <Fragment>
@@ -14,6 +15,7 @@ const Header = ({app,role,onSubmit,logout}) => (
                         {'IceStream'}
                     </h1>
                 </div>
+                {console.log(role)}
                 {
                     (app===0) ? (
                         <Login></Login>
@@ -22,7 +24,7 @@ const Header = ({app,role,onSubmit,logout}) => (
                             <Search></Search>
                             <div className="buttons">
                                 <button className='button' type="submit" onClick={onSubmit(role)}>
-                                                {(role==='admin')?role:'myIce'}
+                                                {(role==='admin')?'ADMIN':'myIce'}
                                             </button>
                                 <button className="button" type="submit" onClick={logout}>
                                     {'LOG OUT'}
@@ -30,6 +32,9 @@ const Header = ({app,role,onSubmit,logout}) => (
                             </div>
                         </div>
                     )
+                }
+                {
+                    (app==4)?(<h1>4</h1>):(<h1>3</h1>)
                 }
             </div>
             <div className="empty"></div>
@@ -42,7 +47,7 @@ export default connect(
         console.log(state)
         return({
             app: selectors.getAppState(state),
-            role: (selectors.getUser(state)!=null) ?selectors.getUser(state)[Object[selectors.getUser(state)[7]]]:null
+            role: (selectors.getUser(state)!=null)?selectors.getUser(state)[Object.keys(selectors.getUser(state))[1]]:null
         })
     },
     dispatch=>({
@@ -60,6 +65,7 @@ export default connect(
             
         },
         logout(){
+            dispatch(userActions.setUsertoNull())
             dispatch(actions.changeState(0))
         }
     })
