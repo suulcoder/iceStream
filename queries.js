@@ -11,7 +11,7 @@ module.exports = {
  getCanDeleteArtistPermissions : "SELECT * FROM ArtistPermission WHERE canDelete=True GROUP BY UserId",
  getCanUpdateAlbumPermissions : "SELECT * FROM AlbumPermission WHERE canUpdate=True GROUP BY UserId",
  getCanDeleteAlbumPermissions : "SELECT * FROM AlbumPermission WHERE canDelete=True GROUP BY UserId",
- getUserByUsername : "SELECT * FROM Users WHERE Username=$1 AND password=$2",
+ getUserByUsername : "SELECT * FROM Users INNER JOIN UserPermissions ON Users.UserId=UserPermissions.UserId WHERE Username=$1 AND password=$2 AND canLogin='TRUE'",
  getLastUserId :
     (`SELECT max(Userid)\n` +
         `FROM Users\n`),

@@ -26,24 +26,18 @@ app.use((req, res, next) => {
 const SQLQuery = (apiRoute,Query,method='get') => {
     switch (method) {
         case 'get':
-            app.get(apiRoute,function(request,response){
-                const values = Object.values(request.body)
+            app.get(apiRoute,(request,res)=>{
                 pool.connect((err,db,done)=>{
                     if(err){
-                        return response.status(400).send(err)
+                        return res.status(400).send(err)
                     }
-                    else{
-                        db.query(Query,values,(req,res) => {
-                            done()
-                            if(err){
-                                return response.status(400).send(err)
-                            }
-                            else{
-                                db.end()
-                                response.status(201).send(res)
-                            }
-                        })
-                    }
+                    db.query(Query,(err,table) => {
+                        done();
+                        if(err){
+                            return res.status(400).send(err)
+                        }
+                        return table.rows
+                    })
                 })
             });
         case 'post':
@@ -55,12 +49,12 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                     }
                     else{
                         db.query(Query,values,(req,res) => {
+                            console.log(req)
                             done()
                             if(err){
                                 return response.status(400).send(err)
                             }
                             else{
-                                db.end()
                                 response.status(201).send(res)
                             }
                         })

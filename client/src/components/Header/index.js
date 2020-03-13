@@ -15,7 +15,6 @@ const Header = ({app,role,onSubmit,logout}) => (
                         {'IceStream'}
                     </h1>
                 </div>
-                {console.log(role)}
                 {
                     (app===0) ? (
                         <Login></Login>

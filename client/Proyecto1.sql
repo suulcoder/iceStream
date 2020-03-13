@@ -154,19 +154,19 @@ CREATE TABLE Users
     UNIQUE(Username)
 );
 
-DROP TABLE IF EXISTS UserPermission;
+DROP TABLE IF EXISTS UserPermissions;
 CREATE TABLE UserPermissions
 (
     UserId INT NOT NULL,
-    canLogin Boolean,
-    canAddArtist Boolean,
-    canAddAlbum Boolean,
-    canAddTrack boolean,
-    CONSTRAINT PK_UserPermission PRIMARY KEY (UserId),
+    canLogin VARCHAR(5),
+    canAddArtist VARCHAR(5),
+    canAddAlbum VARCHAR(5),
+    canAddTrack VARCHAR(5),
+    UNIQUE (UserId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS TrackPermission;
+DROP TABLE IF EXISTS TrackPermissions;
 CREATE TABLE TrackPermissions
 (
     UserId INT NOT NULL,
@@ -179,7 +179,7 @@ CREATE TABLE TrackPermissions
     FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS ArtistPermission;
+DROP TABLE IF EXISTS ArtistPermissions;
 CREATE TABLE ArtistPermissions
 (
     UserId INT NOT NULL,
@@ -191,7 +191,7 @@ CREATE TABLE ArtistPermissions
     FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS AlbumPermission;
+DROP TABLE IF EXISTS AlbumPermissions;
 CREATE TABLE AlbumPermissions
 (
     UserId INT NOT NULL,
@@ -233,6 +233,7 @@ CREATE INDEX IFK_TrackMediaTypeId ON Track (MediaTypeId);
    Populate Tables
 ********************************************************************************/
 INSERT INTO Users (UserId,Username,email,password,role) VALUES (1,'admin','admin@iceStream.com','admin','admin');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack) VALUES (1,'TRUE','TRUE','TRUE','TRUE');
 INSERT INTO Genre (GenreId, Name) VALUES (1,'Rock');
 INSERT INTO Genre (GenreId, Name) VALUES (2,'Jazz');
 INSERT INTO Genre (GenreId, Name) VALUES (3,'Metal');
