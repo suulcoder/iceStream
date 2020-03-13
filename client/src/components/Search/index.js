@@ -2,6 +2,7 @@ import './styles.css';
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
 
+
 const Search = ({onSubmit}) => {
     const [query,changeQuery] = useState('')
     return (

@@ -36,7 +36,7 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                         if(err){
                             return res.status(400).send(err)
                         }
-                        return table.rows
+                        return res.status(201).send(table.rows)
                     })
                 })
             });
@@ -44,18 +44,19 @@ const SQLQuery = (apiRoute,Query,method='get') => {
             app.post(apiRoute,function(request,response){
                 const values = Object.values(request.body)
                 pool.connect((err,db,done)=>{
+                    done()
                     if(err){
                         return response.status(400).send(err)
                     }
                     else{
                         db.query(Query,values,(req,res) => {
-                            console.log(req)
-                            done()
+                            console.log(Query,values)
                             if(err){
                                 return response.status(400).send(err)
                             }
                             else{
-                                response.status(201).send(res)
+                                console.log("data inserted")
+                                return response.status(201).send(res)
                             }
                         })
                     }
@@ -65,9 +66,11 @@ const SQLQuery = (apiRoute,Query,method='get') => {
     return null
 }
 SQLQuery('/api/user',query.getAllUsers)
+SQLQuery('/api/permission','SELECT * FROM UserPermissions')
 SQLQuery('/api/genre',query.getAllGenre)
 SQLQuery('/api/checkuser',query.getUserByUsername)
-SQLQuery('/api/newUserID',query.getLastUserId)
+SQLQuery('/api/adduser',query.addUser,'post')
+SQLQuery('/api/newuserid',query.getLastUserId)
 SQLQuery('/api/permission/add',query.getUsersAddPermissions)
 SQLQuery('/api/permission/canIncativateSong',query.getCanInactivateSongPermissions)
 SQLQuery('/api/report/mostColaborative',query.getMostColaborativeArtists)
