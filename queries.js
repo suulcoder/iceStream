@@ -12,7 +12,9 @@ module.exports = {
  getCanUpdateAlbumPermissions : "SELECT * FROM AlbumPermission WHERE canUpdate=True GROUP BY UserId",
  getCanDeleteAlbumPermissions : "SELECT * FROM AlbumPermission WHERE canDelete=True GROUP BY UserId",
  getUserByUsername : "SELECT * FROM Users INNER JOIN UserPermissions ON Users.UserId=UserPermissions.UserId WHERE Username=$1 AND password=$2 AND canLogin='TRUE'",
- addUser: "INSERT INTO Users (UserId,Username,email,password,role) VALUES ($1,$2,$3,$4,$5); "+"INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack) VALUES ($1,'TRUE','TRUE','TRUE','TRUE');",
+ checkUserByUsername : "SELECT * FROM Users WHERE Username=$1",
+ addUser: "INSERT INTO Users (UserId,Username,email,password,role) VALUES ($1,$2,$3,$4,$5)",
+ addUserPermission: "INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack) VALUES ($1,$2,$3,$4,$5);",
  getLastUserId : `SELECT max(Userid) FROM Users\n`,
  getLastArtistId :
     ("SELECT max(artistid)\n" +

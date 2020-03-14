@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/app'
 import * as userActions from '../../actions/user'
-import throttle from 'lodash/throttle'
+import throttle from 'lodash/throttle';
 
 const Login = ({onSubmit}) => {
     const [user,changeUser] = useState('')
@@ -53,35 +53,64 @@ export default connect(
     undefined,
     dispatch=>({
         onSubmit(user,email,password,passwordConfirm){
-            if(passwordConfirm===password){
-                if(email.includes('@') && email.includes('.')){
-                    let myId = 0
-                    fetch('http://localhost:8080/api/newuserid',{method:'GET'})
-                        .then(response => response.json())
-                        .then(data => {
-                            const request = new Request('http://localhost:8080/api/adduser',{
-                                method:'POST',
-                                headers: { 'Content-Type':'application/json'},
-                                body: JSON.stringify({id:Object.values(data[0])[0]+1,user:user,email:email,password:password,role:'client'})
-                            })
-                            fetch(request)
-                            .then(async(response)=>{
-                                console.log(response)
-                                response.json()
-                                .then(throttle(table => {
-                                    console.log(table)
-                                },3000))
-                            })
-                        })
-                        .catch(error => alert("something went wrong"))
+            if(password && user && email){
+                if(passwordConfirm===password){
+                    if(email.includes('@') && email.includes('.')){
+                        fetch('http://localhost:8080/api/newuserid',{method:'GET'})
+                            .then(response => response.json())
+                            .then(data => {
+                                const request = new Request('http://localhost:8080/api/checkusername',{
+                                    method:'POST',
+                                    headers: { 'Content-Type':'application/json'},
+                                    body: JSON.stringify({user:user})
+                                })
+                                fetch(request)
+                                    .then(async(response)=>{
+                                        response.json()
+                                        .then(throttle(table => {
+                                            if(table.rows.lenght===0 || table.rows.lenght===undefined){                
+                                                const request_user = new Request('http://localhost:8080/api/adduser',{
+                                                    method:'POST',
+                                                    headers: { 'Content-Type':'application/json'},
+                                                    body: JSON.stringify({id:Object.values(data[0])[0]+1,user:user,email:email,password:password,role:'client'})
+                                                })
+                                                fetch(request_user)
+                                                .then(async(response)=>{
+                                                    response.json()
+                                                    .then(throttle(table1 => {
+                                                        dispatch(userActions.setUser(table.rows[0]))
+                                                    },3000))
+                                                })
+                                                const per_request = new Request('http://localhost:8080/api/addpermission',{
+                                                    method:'POST',
+                                                    headers: { 'Content-Type':'application/json'},
+                                                    body: JSON.stringify({id:Object.values(data[0])[0]+1,canLogin: 'TRUE',canAddArtist: 'TRUE', canAddAlbum: 'TRUE',canAddTrack: 'TRUE',})
+                                                })
+                                                fetch(per_request)
+                                                .then(async(response)=>{
+                                                    response.json()
+                                                    .then(throttle(table => {
+                                                        dispatch(actions.changeState(1))
+                                                    },3000))
+                                                })
+                                            }
+                                            else{
+                                                alert('USER ALREADY EXISTS')
+                                            }}),3000)})
+                                    })
+                    }
+                    else{
+                        alert("INVALID EMAIL")
+                    }
                 }
                 else{
-                    alert("INVALID EMAIL")
+                    alert("Passwords must be the same and must not be empty")
                 }
             }
             else{
-                alert("Passwords must be the same")
+                alert("ALL FIELDS MUST BE COMPLETED")
             }
+            
         }
     })
 )(Login)

@@ -40,6 +40,7 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                     })
                 })
             });
+            break;
         case 'post':
             app.post(apiRoute,function(request,response){
                 const values = Object.values(request.body)
@@ -50,18 +51,18 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                     }
                     else{
                         db.query(Query,values,(req,res) => {
-                            console.log(Query,values)
+                            console.log(res)
                             if(err){
                                 return response.status(400).send(err)
                             }
                             else{
-                                console.log("data inserted")
                                 return response.status(201).send(res)
                             }
                         })
                     }
                 })
             });
+            break;
     }
     return null
 }
@@ -69,7 +70,9 @@ SQLQuery('/api/user',query.getAllUsers)
 SQLQuery('/api/permission','SELECT * FROM UserPermissions')
 SQLQuery('/api/genre',query.getAllGenre)
 SQLQuery('/api/checkuser',query.getUserByUsername)
+SQLQuery('/api/checkusername',query.checkUserByUsername,'post')
 SQLQuery('/api/adduser',query.addUser,'post')
+SQLQuery('/api/addpermission',query.addUserPermission,'post')
 SQLQuery('/api/newuserid',query.getLastUserId)
 SQLQuery('/api/permission/add',query.getUsersAddPermissions)
 SQLQuery('/api/permission/canIncativateSong',query.getCanInactivateSongPermissions)
