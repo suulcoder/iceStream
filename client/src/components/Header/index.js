@@ -39,13 +39,10 @@ const Header = ({app,role,onSubmit,logout}) => (
 )
 
 export default connect(
-    state=>{
-        console.log(state)
-        return({
+    state=>({
             app: selectors.getAppState(state),
             role: (selectors.getUser(state)!=null)?selectors.getUser(state)[Object.keys(selectors.getUser(state))[1]]:null
-        })
-    },
+        }),
     dispatch=>({
         onSubmit(role){
             switch (role){
@@ -53,7 +50,7 @@ export default connect(
                     dispatch(actions.changeState(4))
                     break;
                 case 'client':
-                    dispatch(actions.changeState(3))
+                    dispatch(actions.changeState(1))
                     break;
                 default:
                     break;

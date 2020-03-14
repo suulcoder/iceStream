@@ -3,6 +3,7 @@ import React from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import SignUp from '../SignUp';
+import Report from '../Report';
 
 const Header = ({app}) => (
         <div className="container">
@@ -10,7 +11,12 @@ const Header = ({app}) => (
                 (app===0) ? (
                     <SignUp></SignUp>
                 ) : (
-                    <div>  </div>
+                    (app==1)?(
+                        <Report></Report>
+                    ):(
+                        <div>  </div>
+                    )
+                    
                 )
             }
             <div></div>
