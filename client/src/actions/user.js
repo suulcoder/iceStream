@@ -5,6 +5,8 @@ export const setUser = ({userid, username, email, password, role}) => ({
     payload: {
         email,
         role,
+        username,
+        userid
     }
 })
 
