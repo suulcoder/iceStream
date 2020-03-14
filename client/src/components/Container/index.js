@@ -11,7 +11,7 @@ const Header = ({app}) => (
                 (app===0) ? (
                     <SignUp></SignUp>
                 ) : (
-                    (app==1)?(
+                    (app===1)?(
                         <Report></Report>
                     ):(
                         <div>  </div>
@@ -24,8 +24,11 @@ const Header = ({app}) => (
 )
 
 export default connect(
-    state=>({
+    state=>{
+        console.log(state)
+        return ({
             app: selectors.getAppState(state),
-        }),
+        })
+    },
     undefined
 )(Header)

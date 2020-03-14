@@ -1,5 +1,5 @@
 import './styles.css';
-import React, {useState} from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/report';
 import * as selectors from '../../reducers'
@@ -7,17 +7,17 @@ import * as selectors from '../../reducers'
 
 const Report = ({index,forward,backward}) =>(
     <div className="report">
-        <button className="reportbutton">
+        <button className="reportbutton" onClick={backward}>
             {'<'}
         </button>
         {
-            (index==0)?(
+            (index===0)?(
                 <div></div>
             ):(
                 <div/>
             )
         }
-        <button className="reportbutton">
+        <button className="reportbutton" onClick={forward}>
             {'>'}
         </button>
 

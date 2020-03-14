@@ -6,7 +6,7 @@ const report = (state=0,action) => {
         case types.report_changed_up:
             return (state+1)%8
         case types.report_changed_down:
-            return (state-1)%8
+            return (state+7)%8
         default:
             return state
     }
