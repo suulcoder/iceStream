@@ -1,9 +1,10 @@
 import './styles.css';
-import React from 'react';
+import React, { Fragment } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import SignUp from '../SignUp';
 import Report from '../Report';
+import Elements from '../Elements';
 
 const Header = ({app}) => (
         <div className="container">
@@ -12,7 +13,10 @@ const Header = ({app}) => (
                     <SignUp></SignUp>
                 ) : (
                     (app===1)?(
-                        <Report></Report>
+                        <Fragment>
+                            <Report></Report>
+                            <Elements></Elements>
+                        </Fragment>
                     ):(
                         <div>  </div>
                     )
