@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/app'
 import * as userActions from '../../actions/user'
 import throttle from 'lodash/throttle';
-import {Client, TrackHandler, ArtistHandler } from 'spotify-sdk'; 
-import {token} from '../../constants/spotify'
-import * as elementActions from '../../actions/elemnts'
 
 const Login = ({onSubmit}) => {
     const [user,changeUser] = useState('')

@@ -5,8 +5,27 @@ import { connect } from 'react-redux';
 
 const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song}) => (
     <div className="footerCont">
-        <div className="selectedTrack">
-        </div>
+        {(isSelected)?(
+            <div className="selectedTrack">
+                <img src={image} className="footer_img"></img>
+                <div className="info">
+                    <div><strong>Name: </strong>{name}</div>
+                    <div><strong>Album: </strong>{album}</div>
+                    <div><strong>Artist: </strong>{artist}</div>
+                    <div><strong>Genre: </strong>{genre}</div>
+                </div>
+                <div className="info">
+                    <div><strong>Composer: </strong>{composer}</div>
+                    <div><strong>MediaType: </strong>{mediatype}</div>
+                    <div><strong>Duration: </strong>{Math.floor(milliseconds / 60000) + ":" + ((milliseconds % 60000) / 1000).toFixed(0)}</div>
+                    <div><strong>Price: </strong>${unitprice}</div>
+                    <div><strong>Size: </strong>{((bytes/1024)/1024).toFixed(2)}Mb</div>
+                </div>
+            </div>
+        ):(
+            <div className="selectedTrack">
+            </div>
+        )}
         <div className="bar"></div>
         <div className="empty"></div>
         <div className="footer">

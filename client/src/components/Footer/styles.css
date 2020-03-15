@@ -33,3 +33,25 @@
     margin-left: 1px;
     margin-right: 35px;
 }
+.selectedTrack{
+    min-height: 30px;
+    align-items: center;
+    background-color: black;
+    color: white;
+    display: flex;
+    font-size: xx-small;
+    justify-content: space-between;
+    overflow: auto;
+    padding: 20px;
+    width: 100%;
+}
+.info{
+    min-width: 100px;
+    margin-right: 15px;
+    margin-left: 15px;
+    padding: 20px;
+}
+.footer_img{
+    width: 100px;
+    height: 100px;
+}

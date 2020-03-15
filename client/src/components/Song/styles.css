@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: row;
     padding: 2px;
+    align-items: center;
 }
 .trackname{
     color: white;
@@ -9,4 +10,8 @@
 }
 .play{
     background-image: url('./default.png');
+    background-size: cover;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 10px;
 }
