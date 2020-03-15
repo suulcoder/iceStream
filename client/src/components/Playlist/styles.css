@@ -1,17 +1,96 @@
 .playlist{
+    width: 200px;
+    max-height: 200px;
     display: flex;
+    margin-top: 25px;
     flex-direction: column;
     overflow: auto;
     padding: 10px;
-    overflow: auto;
-    flex-wrap: wrap;
 }
-.titlePlaylist{
-    background-color: gray;
-    color: white;
-}
-.containerPlay{
+
+.playlistInfo{
+    width: 200px;
     display: flex;
     flex-direction: column;
-    
+    align-items: center;
+}
+.titlePlaylist{
+    background-color: transparent;
+    color: white;
+    font-size: medium;
+}
+.playlistImage{
+    margin-top: 15px;
+    width: 200px;
+    height: 200px;
+}
+.artistPlaylist{
+    color: white;
+    font-size: x-small;
+}
+.containerPlay{
+    direction: ltr;
+    transform: rotate(180deg);
+    height: 700px;
+    align-items: center;
+    justify-content: center;
+    background-color:black;
+    border-radius: 40px;
+    border-color: gold;
+    border-style: double;
+    padding: 30px;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    margin-top: 55px;
+    margin-right: 35px;
+    margin-left: 35px;
+}
+@media (min-width: 520px){
+    .playlist{
+        width: 380px;
+    }
+    .playlistInfo{
+        width: 380px;
+    }
+    .playlistImage{
+        width: 300px;
+        height: 300px;
+    }
+}
+@media (min-width: 930px){
+    .playlist{
+        width: 410px;
+    }
+    .playlistInfo{
+        width: 410px;
+    }
+    .playlistImage{
+        width: 300px;
+        height: 300px;
+    }
+}
+@media (min-width: 930px){
+    .playlist{
+        width: 410px;
+    }
+    .playlistInfo{
+        width: 410px;
+    }
+    .playlistImage{
+        width: 300px;
+        height: 300px;
+    }
+}
+@media (min-width: 930px){
+    .playlist{
+        width: 450;
+    }
+    .playlistInfo{
+        width: 450px;
+    }
+    .playlistImage{
+        width: 350px;
+        height: 350px;
+    }
 }

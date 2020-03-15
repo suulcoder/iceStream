@@ -7,10 +7,10 @@ export const addSong = ({playlist,trackid,name,album,mediatype,genre,composer,mi
     return ({
         type: types.element_added,
         payload:{
-            index : genre,
+            index : album+"|"+image+"|"+artist,
             element:{
-                id: 'track_'+trackid,
                 type:'track',
+                id: 'track_'+trackid,
                 name,
                 album,
                 mediatype,

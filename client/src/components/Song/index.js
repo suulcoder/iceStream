@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 const Song = ({type,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song}) => (
     <Fragment>
         <div className="track">
-                <img src={image} className="image"></img>
+            <button className="play">
+            </button>
+            <div className="trackname">{name}</div>
         </div>
     </Fragment>
     

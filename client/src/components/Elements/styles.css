@@ -2,5 +2,10 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1800px;
+    overflow-x: scroll;
+    direction: rtl;
+    transform: rotate(180deg);
+    padding: 25px;
 }

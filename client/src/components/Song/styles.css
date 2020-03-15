@@ -1,0 +1,12 @@
+.track{
+    display: flex;
+    flex-direction: row;
+    padding: 2px;
+}
+.trackname{
+    color: white;
+    font-size: x-small;
+}
+.play{
+    background-image: url('./default.png');
+}

@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/app'
 import * as userActions from '../../actions/user'
 import throttle from 'lodash/throttle';
+import {Client, TrackHandler, ArtistHandler } from 'spotify-sdk'; 
+import {token} from '../../constants/spotify'
+import * as elementActions from '../../actions/elemnts'
 
 const Login = ({onSubmit}) => {
     const [user,changeUser] = useState('')
@@ -83,11 +86,12 @@ export default connect(
                                                         dispatch(userActions.setUser({id:Object.values(data[0])[0]+1,user:user,email:email,password:password,role:'client'}))
                                                     },3000))
                                                 })
+                                            
                                                 const per_request = new Request('http://localhost:8080/api/addpermission',{
-                                                    method:'POST',
-                                                    headers: { 'Content-Type':'application/json'},
-                                                    body: JSON.stringify({id:Object.values(data[0])[0]+1,canLogin: 'TRUE',canAddArtist: 'TRUE', canAddAlbum: 'TRUE',canAddTrack: 'TRUE',})
-                                                })
+                                                method:'POST',
+                                                headers: { 'Content-Type':'application/json'},
+                                                body: JSON.stringify({id:Object.values(data[0])[0]+1,canLogin: 'TRUE',canAddArtist: 'TRUE', canAddAlbum: 'TRUE',canAddTrack: 'TRUE',})
+                                                 })
                                                 fetch(per_request)
                                                 .then(async(response)=>{
                                                     response.json()
