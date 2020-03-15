@@ -1,19 +1,23 @@
 import * as types from '../types/elements'
 
-export const addSong = (index,id,name,album,mediaType,genre,composer,millisecons,bytes,unitePrice) => ({
+export const addSong = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song}) => ({
     type: types.element_added,
     payload:{
-        index,
+        index : album,
         element:{
-            id:('track'+String(id)),
+            type: 'track',
+            id:trackid,
             name,
             album,
-            mediaType,
+            mediatype,
             genre,
             composer,
-            millisecons,
+            milliseconds,
             bytes,
-            unitePrice
+            unitprice,
+            artist,
+            image,
+            song
         }
     }
 })

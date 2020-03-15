@@ -18,6 +18,8 @@ const Elements = ({playlists}) => (
 )
 
 export default connect(
-  undefined,
+  state=>({
+    playlists: selectors.getSectionIDs(state)
+  }),
   undefined
 )(Elements)

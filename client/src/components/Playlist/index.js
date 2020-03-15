@@ -4,9 +4,10 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import Element from '../Element'
 
-const Playlist = ({elements}) => (
+const Playlist = ({elements, nombre}) => (
     <Fragment>
         <div className="playlists">
+            <h2>{nombre}</h2>
             {elements.map(
                 element => (
                     <Element key={element} id={element}>
@@ -18,6 +19,9 @@ const Playlist = ({elements}) => (
   )
 
 export default connect(
-    undefined,
+    (state, {id})=>({
+        elements:selectors.getSection(state,id),
+        nombre: id
+    }),
     undefined
 )(Playlist)

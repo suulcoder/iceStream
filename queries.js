@@ -1,6 +1,6 @@
 module.exports = {
  getAllUsers :`SELECT * FROM Users`,
- getAllSongs : `SELECT * FROM Track`,
+ getAllSongs : "SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId LIMIT 100",
  getAllGenre : "SELECT * FROM Genre",
  getAllMediaType : "SELECT * FROM MediaType",
  getUsersAddPermissions : "SELECT * FROM UserPermission",
@@ -19,14 +19,11 @@ module.exports = {
  getLastArtistId :
     ("SELECT max(artistid)\n" +
         "from artist"),
- getAllPlaylistInfo :
-    (`SELECT p1.name\n` +
-        `from playlist p1\n` +
-        `order by p1.name`),
- getAllSongsInPlaylist : (`SELECT p1.name, t1.name\n` +
-    `from playlist p1 join playlisttrack pt1 on p1.playlistid = pt1.playlistid join track t1 on t1.trackid = pt1.trackid\n` +
-    `where p1.playlistid = $1\n` +
-    `order by p1.name, t1.name`),
+ getAllPlaylistInfo : 
+    (`SELECT playlistid\n` +
+        `FROM playlist`),
+ getAllSongsInPlaylist : (`SELECT *\n` +
+    `FROM playlist p1 join playlisttrack pt1 on p1.playlistid = pt1.playlistid join track t1 on t1.trackid = pt1.trackid`),
  getMostCommonGenres : ('SELECT g1.name, count(g1.name)\n' +
     'from track t1 join genre g1 on t1.genreid = g1.genreid\n' +
     'group by g1.name\n' +

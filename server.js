@@ -67,13 +67,14 @@ const SQLQuery = (apiRoute,Query,method='get') => {
     return null
 }
 SQLQuery('/api/user',query.getAllUsers)
-SQLQuery('/api/permission','SELECT * FROM UserPermissions')
 SQLQuery('/api/genre',query.getAllGenre)
 SQLQuery('/api/checkuser',query.getUserByUsername,'post')
 SQLQuery('/api/checkusername',query.checkUserByUsername,'post')
 SQLQuery('/api/adduser',query.addUser,'post')
 SQLQuery('/api/addpermission',query.addUserPermission,'post')
 SQLQuery('/api/newuserid',query.getLastUserId)
+SQLQuery('/api/getPlaylists',query.getAllPlaylistInfo)
+SQLQuery('/api/getsongs',query.getAllSongs)
 SQLQuery('/api/permission/add',query.getUsersAddPermissions)
 SQLQuery('/api/permission/canIncativateSong',query.getCanInactivateSongPermissions)
 SQLQuery('/api/report/mostColaborative',query.getMostColaborativeArtists)

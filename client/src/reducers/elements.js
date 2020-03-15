@@ -26,7 +26,7 @@ const order = (state={},action) => {
     switch (action.type) {
         case types.element_added:
             return {...state,
-                [action.payload.index]:action.payload.element.id}
+                [action.payload.index]:[action.payload.element.id]}
         case types.element_deleted:
             const section = state[action.payload.index].filter(id => id!==action.payload.id)
             if(section.length()===0){
@@ -66,9 +66,8 @@ const elements = combineReducers({
 export default elements;
 
 export const getElement = (state, id) => state.byId[id];
-export const getSection = (state, index) => state.order[index].map(
-    id => getElement(state, id),
-  ).filter(agent => agent != null);
+export const getSection = (state, index) => state.order[index]
 export const getAll = (state) => state.orderSections.map(
     section => getSection(state,section)
 ).filter(section => section!=null);
+export const getSectionIDs = (state) => Object.keys(state.order)
