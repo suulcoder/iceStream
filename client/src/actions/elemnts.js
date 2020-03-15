@@ -109,18 +109,16 @@ export const deleteElement = (index,id) => ({
     }
 })
 
-export const selectElement = (index,id) => ({
+export const selectElement = (id) => ({
     type: types.element_selected,
     payload:{
-        index,
         id
     }
 })
 
-export const editElement = (index,id) => ({
+export const editElement = (id) => ({
     type: types.element_edited,
     payload:{
-        index,
         id
     }
 })

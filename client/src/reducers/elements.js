@@ -46,19 +46,19 @@ const order = (state={},action) => {
     }
 }
 
-const isEdited = (state=[null,null],action) => {
+const isEdited = (state=null,action) => {
     switch (action.type) {
         case types.element_edited:
-            return [action.payload.index, action.payload.id]
+            return action.payload.id
         default:
             return state
     }
 }
 
-const isSelected = (state=[null,null],action) => {
+const isSelected = (state=null,action) => {
     switch (action.type) {
         case types.element_selected:
-            return [action.payload.index, action.payload.id]
+            return action.payload.id
         default:
             return state
     }
@@ -79,3 +79,4 @@ export const getAll = (state) => state.orderSections.map(
     section => getSection(state,section)
 ).filter(section => section!=null);
 export const getSectionIDs = (state) => Object.keys(state.order)
+export const getSelected = (state) => (state.isSelected===null)?null: getElement(state,state.isSelected)

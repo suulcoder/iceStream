@@ -29,8 +29,6 @@
     font-size: x-small;
 }
 .containerPlay{
-    direction: ltr;
-    transform: rotate(180deg);
     height: 700px;
     align-items: center;
     justify-content: center;

@@ -23,6 +23,7 @@ export const getElement = (state,id) => elementSelectors.getElement(state.elemen
 export const getSection = (state,index) => elementSelectors.getSection(state.elements,index)
 export const getSectionIDs = (state) => elementSelectors.getSectionIDs(state.elements)
 export const getAll = (state) => elementSelectors.getAll(state.elements)
+export const getSelected = state => elementSelectors.getSelected(state.elements)
 export const getAppState = state => appSelectors.getAppState(state.app)
 export const getPermission = (state,id) => adminSelectors.getPermission(state.admin,id)
 export const getAllPermission = (state) => adminSelectors.getAllPermissions(state.admin)
