@@ -1,5 +1,5 @@
 import './styles.css';
-import React, {Fragment} from 'react';
+import React from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import Element from '../Element'
@@ -9,7 +9,7 @@ const Playlist = ({elements, nombre,image,artist}) => (
         <div className="playlistInfo">
             <div className="titlePlaylist"><strong>Title:</strong>{nombre}</div>
             <div className="artistPlaylist"><strong>artist:</strong> {artist}</div>
-            <img src={image} className="playlistImage"></img>
+            <img alt='' src={image} className="playlistImage"></img>
         </div>
         <div className="playlist">
             {elements.map(

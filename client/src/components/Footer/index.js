@@ -7,7 +7,7 @@ const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,millisec
     <div className="footerCont">
         {(isSelected)?(
             <div className="selectedTrack">
-                <img src={image} className="footer_img"></img>
+                <img alt='' src={image} className="footer_img"></img>
                 <div className="info">
                     <div><strong>Name: </strong>{name}</div>
                     <div><strong>Album: </strong>{album}</div>

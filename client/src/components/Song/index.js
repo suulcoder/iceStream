@@ -25,7 +25,6 @@ export default connect(
         }),
     dispatch => ({
         onSubmit(id){
-            console.log(id)
             dispatch(actions.selectElement(id))
         }
     })

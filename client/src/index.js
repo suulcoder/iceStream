@@ -8,7 +8,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import reducer from './reducers';
 import { loadState, saveState } from './localStorage'
 import throttle from 'lodash/throttle'
-import * as actions from './actions/elemnts'
 
 //localStorage.clear();
 const persistedState = loadState()

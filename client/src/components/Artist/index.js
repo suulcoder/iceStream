@@ -3,10 +3,10 @@ import React, { Fragment } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 
-const Artist = ({type,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song}) => (
+const Artist = ({image}) => (
     <Fragment>
         <div className="artist">
-                <img src={image} className="image"></img>
+                <img alt='' src={image} className="image"></img>
         </div>
     </Fragment>
 )

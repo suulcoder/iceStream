@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import Header from '../Header'
 import Container from '../Container';
 import Footer from '../Footer';
-import {Client, TrackHandler, ArtistHandler } from 'spotify-sdk'; 
+import {Client, TrackHandler } from 'spotify-sdk'; 
 import {token} from '../../constants/spotify'
 import * as elementActions from '../../actions/elemnts'
 

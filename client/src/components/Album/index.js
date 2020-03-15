@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 const Album = ({type,id,title,artist,album,image}) => (
     <Fragment>
         <div className="album">
-                <img src={image} className="image"></img>
+                <img alt='' src={image} className="image"></img>
         </div>
     </Fragment> 
 )
