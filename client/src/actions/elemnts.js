@@ -1,49 +1,64 @@
 import * as types from '../types/elements'
 
-export const addSong = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song}) => ({
+export const addSong = ({playlist,trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song}) => {
+    if(image===undefined){
+        image = './default'
+    }
+    return ({
+        type: types.element_added,
+        payload:{
+            index : genre,
+            element:{
+                id: 'track_'+trackid,
+                type:'track',
+                name,
+                album,
+                mediatype,
+                genre,
+                composer,
+                milliseconds,
+                bytes,
+                unitprice,
+                artist,
+                image,
+                song
+            }
+        }
+    })
+}
+
+export const addArtist = ({artistid,name,image}) => ({
     type: types.element_added,
     payload:{
-        index : album,
+        index:name,
         element:{
-            type: 'track',
-            id:trackid,
+            type:'artist',
+            id:('artist'+String(artistid)),
             name,
-            album,
-            mediatype,
-            genre,
-            composer,
-            milliseconds,
-            bytes,
-            unitprice,
-            artist,
             image,
-            song
         }
     }
 })
 
-export const addArtist = (index,id,name) => ({
-    type: types.element_added,
-    payload:{
-        index,
-        element:{
-            id:('artist'+String(id)),
-            name,
-        }
+export const addAlbum = ({albumid,title,artist,image,album}) =>{
+    if(image===null){
+        image='./default.png'
     }
-})
-
-export const addAlbum = (index,id,tittle,artist) => ({
-    type: types.element_added,
-    payload:{
-        index,
-        element:{
-            id:('album'+String(id)),
-            tittle,
-            artist
+    return ({
+        type: types.element_added,
+        payload:{
+            index:artist,
+            element:{
+                type:'album',
+                id:'album'+albumid,
+                title,
+                artist,
+                image,
+                album
+            }
         }
-    }
-})
+    })
+} 
 
 export const updateSong = (index,id,name,album,mediaType,genre,composer,millisecons,bytes,unitePrice) => ({
     type: types.element_updated,

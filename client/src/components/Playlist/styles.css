@@ -1,0 +1,17 @@
+.playlist{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 10px;
+    overflow: auto;
+    flex-wrap: wrap;
+}
+.titlePlaylist{
+    background-color: gray;
+    color: white;
+}
+.containerPlay{
+    display: flex;
+    flex-direction: column;
+    
+}

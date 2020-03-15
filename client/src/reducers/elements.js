@@ -25,8 +25,16 @@ const byId = (state={},action) => {
 const order = (state={},action) => {
     switch (action.type) {
         case types.element_added:
-            return {...state,
-                [action.payload.index]:[action.payload.element.id]}
+            const mysection = state[action.payload.index]
+            if(mysection!==undefined){
+                if(!mysection.includes(action.payload.element.id))
+                return {...state,
+                    [action.payload.index]:[...mysection,action.payload.element.id]}
+                return state
+            }
+            return{...state,
+                [action.payload.index]:[action.payload.element.id]
+            }            
         case types.element_deleted:
             const section = state[action.payload.index].filter(id => id!==action.payload.id)
             if(section.length()===0){
