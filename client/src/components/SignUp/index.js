@@ -68,7 +68,6 @@ export default connect(
                                     .then(async(response)=>{
                                         response.json()
                                         .then(throttle(table => {
-                                            const user = table.rows
                                             if(table.rows.length===0 && table.rows.lenght===undefined){                
                                                 const request_user = new Request('http://localhost:8080/api/adduser',{
                                                     method:'POST',
