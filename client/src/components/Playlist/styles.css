@@ -1,11 +1,9 @@
 .playlist{
+    height: 150px;
     width: 200px;
-    max-height: 200px;
     display: flex;
-    margin-top: 25px;
     flex-direction: column;
     overflow: auto;
-    padding: 10px;
 }
 
 .playlistInfo{
@@ -16,79 +14,32 @@
 }
 .titlePlaylist{
     background-color: transparent;
-    color: white;
+    color: black;
     font-size: medium;
 }
 .playlistImage{
-    margin-top: 15px;
+    margin-top: 5px;
     width: 200px;
     height: 200px;
 }
 .artistPlaylist{
-    color: white;
+    color: black;
     font-size: x-small;
 }
 .containerPlay{
-    height: 700px;
-    align-items: center;
+    min-height: 500px;
+    align-items: flex-start;
     justify-content: center;
-    background-color:black;
+    background-color:white;
     border-radius: 40px;
-    border-color: gold;
+    border-color: black;
     border-style: double;
     padding: 30px;
     flex-wrap: wrap;
     display: flex;
     flex-direction: row;
-    margin-top: 55px;
+    margin-top: 35px;
+    margin-bottom: 15px;
     margin-right: 35px;
     margin-left: 35px;
-}
-@media (min-width: 520px){
-    .playlist{
-        width: 380px;
-    }
-    .playlistInfo{
-        width: 380px;
-    }
-    .playlistImage{
-        width: 300px;
-        height: 300px;
-    }
-}
-@media (min-width: 930px){
-    .playlist{
-        width: 410px;
-    }
-    .playlistInfo{
-        width: 410px;
-    }
-    .playlistImage{
-        width: 300px;
-        height: 300px;
-    }
-}
-@media (min-width: 930px){
-    .playlist{
-        width: 410px;
-    }
-    .playlistInfo{
-        width: 410px;
-    }
-    .playlistImage{
-        width: 300px;
-        height: 300px;
-    }
-}
-@media (min-width: 930px){
-    .playlist{
-        width: 450;
-    }
-    .playlistInfo{
-        width: 450px;
-    }
-    .playlistImage{
-        width: 350px;
-        height: 350px;
-    }
 }

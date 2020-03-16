@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Search from '../Search';
 import * as actions from '../../actions/app';
 import * as userActions from '../../actions/user'
+import * as elementActions from '../../actions/elemnts'
 
 const Header = ({app,role,onSubmit,logout,home}) => (
         <Fragment>
@@ -67,6 +68,8 @@ export default connect(
         logout(){
             dispatch(userActions.setUsertoNull())
             dispatch(actions.changeState(0))
+            dispatch(elementActions.selectElement(null))
+            dispatch(elementActions.editElement(null))
         },
         home(){
             dispatch(actions.changeState(1))

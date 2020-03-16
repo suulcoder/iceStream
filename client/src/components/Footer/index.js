@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 
 const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song}) => (
     <div className="footerCont">
+        <div className="empty"></div>
+        <div className="bar"></div>
         {(isSelected)?(
             <div className="selectedTrack">
                 <img alt='' src={image} className="footer_img"></img>
@@ -23,11 +25,11 @@ const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,millisec
                 </div>
             </div>
         ):(
-            <div className="selectedTrack">
+            <div className="selectedTrackNull">
             </div>
         )}
-        <div className="bar"></div>
         <div className="empty"></div>
+        <div className="bar"></div>
         <div className="footer">
             <div className="myText">IceStream</div>
             <div className="myText">Get info of the best music</div>

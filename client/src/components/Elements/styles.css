@@ -1,10 +1,14 @@
 .playlists{
     display: flex;
+    background-color: white;
+    color: black;
+    border-color: black;
+    border-style: solid;
+    border-width: 15px;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-    max-width: 1800px;
-    overflow-x: scroll;
-    margin-bottom: 350px;
-    padding: 25px;
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 250px;
 }

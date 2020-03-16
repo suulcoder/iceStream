@@ -34,10 +34,9 @@
     margin-right: 35px;
 }
 .selectedTrack{
-    min-height: 30px;
     align-items: center;
-    background-color: black;
-    color: white;
+    background-color: white;
+    color: black;
     display: flex;
     font-size: xx-small;
     justify-content: space-between;
@@ -54,4 +53,7 @@
 .footer_img{
     width: 100px;
     height: 100px;
+}
+.selectedTrackNull{
+    background-color: black;
 }
