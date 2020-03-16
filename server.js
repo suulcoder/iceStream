@@ -84,5 +84,14 @@ SQLQuery('/api/report',query.getMostColaborativeArtists)
 SQLQuery('/api/newArtist',query.addArtist,'post')
 SQLQuery('api/newAlbum',query.addAlbum,'post')
 SQLQuery('/api/newTrack',query.addTrack,'post')
+
+SQLQuery('/api/reports/commongenre',query.getMostCommonGenres)
+SQLQuery('/api/reports/commonartist',query.getMostCommonArtist)
+SQLQuery('/api/reports/longestsong',query.getLongestSongsWithArtists)
+SQLQuery('/api/reports/durationgenre',query.getDurationAverageByGenre)
+SQLQuery('/api/reports/colaborativeartist',query.getMostColaborativeArtists)
+SQLQuery('/api/reports/recentalbum',query.getRecentAlbums)
+SQLQuery('/api/reports/morealbumadded',query.getUserwithmoreAlbumsAdded)
+
 const port=8080;
 app.listen(port,()=>console.log(`Server started on port ${port}`))

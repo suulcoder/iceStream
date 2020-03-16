@@ -167,108 +167,108 @@ CREATE TABLE UserPermissions
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS canInactivateTrack;
-CREATE TABLE canInactivateTrack
+DROP TABLE IF EXISTS CanInactivateTrack;
+CREATE TABLE CanInactivateTrack
 (
     UserId INT NOT NULL,
     TrackId INT NOT NULL,
-    CONSTRAINT PK_TrackPermission PRIMARY KEY (UserId,TrackId),
+    PRIMARY KEY (UserId,TrackId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
-DROP TABLE IF EXISTS canUpdateTrack;
-CREATE TABLE canUpdateTrack
+DROP TABLE IF EXISTS CanUpdateTrack;
+CREATE TABLE CanUpdateTrack
 (
     UserId INT NOT NULL,
     TrackId INT NOT NULL,
-    CONSTRAINT PK_TrackPermission PRIMARY KEY (UserId,TrackId),
+    PRIMARY KEY (UserId,TrackId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
-DROP TABLE IF EXISTS canDeleteTrack;
-CREATE TABLE canDeleteTrack
+DROP TABLE IF EXISTS CanDeleteTrack;
+CREATE TABLE CanDeleteTrack
 (
     UserId INT NOT NULL,
     TrackId INT NOT NULL,
-    CONSTRAINT PK_TrackPermission PRIMARY KEY (UserId,TrackId),
+    PRIMARY KEY (UserId,TrackId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
-DROP TABLE IF EXISTS canUpdateArtist;
-CREATE TABLE canUpdateArtist
+DROP TABLE IF EXISTS CanUpdateArtist;
+CREATE TABLE CanUpdateArtist
 (
     UserId INT NOT NULL,
     ArtistId INT NOT NULL,
-    CONSTRAINT PK_ArtistPermission PRIMARY KEY (UserId,ArtistId),
+    PRIMARY KEY (UserId,ArtistId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS canDeleteArtist;
-CREATE TABLE canDeleteArtist
+DROP TABLE IF EXISTS CanDeleteArtist;
+CREATE TABLE CanDeleteArtist
 (
     UserId INT NOT NULL,
     ArtistId INT NOT NULL,
-    CONSTRAINT PK_ArtistPermission PRIMARY KEY (UserId,ArtistId),
+    PRIMARY KEY (UserId,ArtistId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS canUpdateAlbum;
-CREATE TABLE canUpdateAlbum
+DROP TABLE IF EXISTS CanUpdateAlbum;
+CREATE TABLE CanUpdateAlbum
 (
     UserId INT NOT NULL,
     AlbumId INT NOT NULL,
-    CONSTRAINT PK_AlbumPermission PRIMARY KEY (UserId,AlbumId),
+    PRIMARY KEY (UserId,AlbumId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AlbumId) REFERENCES Album(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS canDeleteAlbum;
-CREATE TABLE canDeleteAlbum
+DROP TABLE IF EXISTS CanDeleteAlbum;
+CREATE TABLE CanDeleteAlbum
 (
     UserId INT NOT NULL,
     AlbumId INT NOT NULL,
-    CONSTRAINT PK_AlbumPermission PRIMARY KEY (UserId,AlbumId),
+    PRIMARY KEY (UserId,AlbumId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AlbumId) REFERENCES Album(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS hasAddedAlbum;
-CREATE TABLE hasAddedAlbum
+DROP TABLE IF EXISTS HasAddedAlbum;
+CREATE TABLE HasAddedAlbum
 (
     UserId INT NOT NULL,
     AlbumId INT NOT NULL,
-    adddate TIMESTAMP,
-    CONSTRAINT PK_AlbumAdded PRIMARY KEY (UserId,AlbumId),
+    InDate TIMESTAMP NOT NULL,
+    PRIMARY KEY (UserId,AlbumId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AlbumId) REFERENCES Album(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS hasAddedArtist;
-CREATE TABLE hasAddedArtist
+DROP TABLE IF EXISTS HasAddedArtist;
+CREATE TABLE HasAddedArtist
 (
     UserId INT NOT NULL,
     ArtistId INT NOT NULL,
-    adddate TIMESTAMP,
-    CONSTRAINT PK_ArtistAdded PRIMARY KEY (UserId,ArtistId),
+    InDate TIMESTAMP,
+    PRIMARY KEY (UserId,ArtistId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS hasAddedTrack;
-CREATE TABLE hasAddedTrack
+DROP TABLE IF EXISTS HasAddedTrack;
+CREATE TABLE HasAddedTrack
 (
     UserId INT NOT NULL,
     TrackId INT NOT NULL,
-    adddate TIMESTAMP,
-    CONSTRAINT PK_TrackAdded PRIMARY KEY (UserId,TrackId),
+    InDate TIMESTAMP,
+    PRIMARY KEY (UserId,TrackId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -301,6 +301,7 @@ CREATE INDEX IFK_TrackMediaTypeId ON Track (MediaTypeId);
 ********************************************************************************/
 INSERT INTO Users (UserId,Username,email,password,role) VALUES (1,'admin','admin@iceStream.com','admin','admin');
 INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack) VALUES (1,'TRUE','TRUE','TRUE','TRUE');
+INSERT INTO HasAddedAlbum (UserId,AlbumId,InDate) VALUES (1,1,'2011/3/28');
 INSERT INTO Genre (GenreId, Name) VALUES (1,'Rock');
 INSERT INTO Genre (GenreId, Name) VALUES (2,'Jazz');
 INSERT INTO Genre (GenreId, Name) VALUES (3,'Metal');

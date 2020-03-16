@@ -31,24 +31,25 @@ module.exports = {
  getMostCommonGenres : ('SELECT g1.name, count(g1.name)\n' +
     'from track t1 join genre g1 on t1.genreid = g1.genreid\n' +
     'group by g1.name\n' +
-    'order by count(g1.name) desc'),
+    'order by count(g1.name) desc LIMIT 10'),
  getMostCommonArtist : ('SELECT ar1.name, count (ar1.name)\n' +
     'from album al1 join artist ar1 on al1.artistid = ar1.artistid\n' +
     'group by ar1.name\n' +
-    'order by count(ar1.name) desc'),
+    'order by count(ar1.name) desc LIMIT 10'),
  getLongestSongsWithArtists : ('SELECT t1.name, t1.milliseconds, a1.artistid, a1.name\n' +
     'from track t1 join artist a1 on t1.composer = a1.name\n' +
-    'order by t1.milliseconds desc'),
+    'order by t1.milliseconds desc LIMIT 10'),
  getDurationAverageByGenre : ('SELECT g1.name, avg(t1.milliseconds)\n' +
     'from track t1 join genre g1 on t1.genreid = g1.genreid\n' +
     'group by g1.name\n' +
-    'order by avg(t1.milliseconds) desc'),
+    'order by avg(t1.milliseconds) desc LIMIT 10'),
  getMostColaborativeArtists : ('SELECT ar1.name, count(ar1.name)\n' +
     'from album al1 join artist ar1 on al1.artistid = ar1.artistid join track t1 on t1.composer = ar1.name\n' +
     'group by ar1.name\n' +
-    'order by count(ar1.name) desc'),
- getUserwithmoreAlbumsAdded : "SELECT Users.Username FROM Users JOIN hasAddedAlbum ON hasAddedAlbum.UserId=Users.UserId GROUP BY UserId ORDER BY COUNT(*) DESC LIMIT 10",
- getRecentAlbums:"SELECT Album.Title as album, Artist.name as Artist FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN hasAddedAlbum ON Album.AlbumId=hasAddedAlbum.AlbumId ORDER BY Album.adddate DESC LIMIT 10", 
+    'order by count(ar1.name) desc LIMIT 10'),
+ getUserwithmoreAlbumsAdded : "SELECT * FROM hasAddedAlbum",
+ getRecentAlbums:"SELECT * FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN hasAddedAlbum ON Album.AlbumId=hasAddedAlbum.AlbumId", 
+ 
  addArtist : "INSERT INTO Artist (ArtistId, Name) VALUES ($1,$2);",
  addAlbum : "INSERT INTO Album (AlbumId, Title, ArtistId) VALUES ($1,$2,$3);",
  addTrack : "INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);",
