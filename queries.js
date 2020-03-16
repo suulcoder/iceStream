@@ -26,6 +26,8 @@ module.exports = {
         `FROM playlist`),
  getAllSongsInPlaylist : (`SELECT *\n` +
     `FROM playlist p1 join playlisttrack pt1 on p1.playlistid = pt1.playlistid join track t1 on t1.trackid = pt1.trackid`),
+ //Reports 
+
  getMostCommonGenres : ('SELECT g1.name, count(g1.name)\n' +
     'from track t1 join genre g1 on t1.genreid = g1.genreid\n' +
     'group by g1.name\n' +
@@ -45,6 +47,8 @@ module.exports = {
     'from album al1 join artist ar1 on al1.artistid = ar1.artistid join track t1 on t1.composer = ar1.name\n' +
     'group by ar1.name\n' +
     'order by count(ar1.name) desc'),
+ getUserwithmoreAlbumsAdded : "SELECT Users.Username FROM Users JOIN hasAddedAlbum ON hasAddedAlbum.UserId=Users.UserId GROUP BY UserId ORDER BY COUNT(*) DESC LIMIT 10",
+ getRecentAlbums:"SELECT Album.Title as album, Artist.name as Artist FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN hasAddedAlbum ON Album.AlbumId=hasAddedAlbum.AlbumId ORDER BY Album.adddate DESC LIMIT 10", 
  addArtist : "INSERT INTO Artist (ArtistId, Name) VALUES ($1,$2);",
  addAlbum : "INSERT INTO Album (AlbumId, Title, ArtistId) VALUES ($1,$2,$3);",
  addTrack : "INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);",
