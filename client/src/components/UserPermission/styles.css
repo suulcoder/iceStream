@@ -1,0 +1,6 @@
+.user{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    justify-content: space-between;
+}

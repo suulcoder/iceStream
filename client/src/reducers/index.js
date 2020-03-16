@@ -18,7 +18,10 @@ const reducer = combineReducers({
 export default reducer
 
 export const getUser = state => userSelectors.getUser(state.user)
+export const getUsers = (state,id) => userSelectors.getUsers(state.user,id)
+export const getAllUsers = (state) => userSelectors.getAllUsers(state.user)
 export const getReport = state => reportSelectors.getReport(state.report)
+export const getReportSection = (state,key) => reportSelectors.getReportSection(state,key)
 export const getElement = (state,id) => elementSelectors.getElement(state.elements,id)
 export const getSection = (state,index) => elementSelectors.getSection(state.elements,index)
 export const getSectionIDs = (state) => elementSelectors.getSectionIDs(state.elements)

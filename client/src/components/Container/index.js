@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import SignUp from '../SignUp';
 import Report from '../Report';
 import Elements from '../Elements';
+import Admin from '../Admin';
 
 const Header = ({app}) => (
         <div className="container">
@@ -18,7 +19,13 @@ const Header = ({app}) => (
                             <Elements></Elements>
                         </Fragment>
                     ):(
-                        <div>  </div>
+                        (app==2)?(
+                            <div></div>
+                        ):((app==3)?(
+                            <div></div>
+                        ):(
+                            <Admin></Admin>
+                        ))
                     )
                     
                 )

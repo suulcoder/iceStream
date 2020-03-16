@@ -3,13 +3,18 @@ import * as selectors from '../../reducers'
 import React from 'react';
 import { connect } from 'react-redux';
 
-const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song}) => (
+const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,onsubmit}) => (
     <div className="footerCont">
         <div className="empty"></div>
         <div className="bar"></div>
         {(isSelected)?(
             <div className="selectedTrack">
-                <img alt='' src={image} className="footer_img"></img>
+                <div className="song_and_link">
+                    <img alt='' src={image} className="footer_img"></img>
+                    <button className="link" type="submit" onClick={
+                        () => onsubmit(song)}>
+                    </button>
+                </div>
                 <div className="info">
                     <div><strong>Name: </strong>{name}</div>
                     <div><strong>Album: </strong>{album}</div>
@@ -47,7 +52,7 @@ const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,millisec
 
 export default connect(
     state=>{
-        if(selectors.getSelected(state)!==null){
+        if(selectors.getAppState(state)!==0 && selectors.getAppState(state)!==4 && selectors.getAppState(state)!==3 && selectors.getSelected(state)!==null){
             return ({
                 isSelected:true,
                 type:Object.values(selectors.getSelected(state))[0],
@@ -66,8 +71,10 @@ export default connect(
             })
         }
         return {isSelected:false}
-    }
-    
-        ,
-    undefined
+    },
+    dispatch => ({
+        onsubmit(song){
+            window.location.href = song;
+        }
+    })
 )(Footer)

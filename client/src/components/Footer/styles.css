@@ -44,6 +44,11 @@
     padding: 20px;
     width: 100%;
 }
+.song_and_link{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 .info{
     min-width: 100px;
     margin-right: 15px;
@@ -56,4 +61,12 @@
 }
 .selectedTrackNull{
     background-color: black;
+}
+.link{
+    margin-right: 5px;
+    margin-left: 5px;
+    background-image: url('./spotify.png');
+    width: 65px;
+    background-size: cover;
+    height: 25px;
 }

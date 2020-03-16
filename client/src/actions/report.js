@@ -7,3 +7,11 @@ export const changeReport = () => ({
 export const changeReportDown = () => ({
     type: types.report_changed_down
 })
+
+export const addReportSection = (key,value) => ({
+    type: types.report_section_added,
+    payload:{
+        key,
+        value
+    }
+})
