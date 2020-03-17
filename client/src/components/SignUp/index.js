@@ -85,7 +85,20 @@ export default connect(
                                                 const per_request = new Request('http://localhost:8080/api/addpermission',{
                                                 method:'POST',
                                                 headers: { 'Content-Type':'application/json'},
-                                                body: JSON.stringify({id:Object.values(data[0])[0]+1,canLogin: 'TRUE',canAddArtist: 'FALSE', canAddAlbum: 'FALSE',canAddTrack: 'FALSE',})
+                                                body: JSON.stringify({
+                                                    id:Object.values(data[0])[0]+1,
+                                                    canLogin: 'TRUE',
+                                                    canAddArtist: 'FALSE',
+                                                    canAddAlbum: 'FALSE',
+                                                    canAddTrack: 'FALSE',
+                                                    caninactivateSong: 'FALSE',
+                                                    canmodifySong:'FALSE',
+                                                    candeleteSont:'FALSE',
+                                                    canmodifyAlbum: 'FALSE',
+                                                    candeletealbum:'FALSE',
+                                                    canmodifyArtist:'FALSE',
+                                                    candeleteArtist:'FALSE'
+                                                })
                                                  })
                                                 fetch(per_request)
                                                 .then(async(response)=>{

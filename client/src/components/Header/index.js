@@ -56,6 +56,13 @@ export default connect(
         onSubmit(role){
             switch (role){
                 case 'admin':
+                    fetch('http://localhost:8080/api/user',{method:'GET'})
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(element => {
+                            this.props.onSubmit(userActions.addUser(element))
+                        });
+                    }) 
                     dispatch(actions.changeState(4))
                     break;
                 case 'client':

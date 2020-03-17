@@ -23,7 +23,7 @@ module.exports = {
  getUserByUsername : "SELECT * FROM Users INNER JOIN UserPermissions ON Users.UserId=UserPermissions.UserId WHERE Username=$1 AND password=$2 AND canLogin='TRUE'",
  checkUserByUsername : "SELECT * FROM Users WHERE Username=$1",
  addUser: "INSERT INTO Users (UserId,Username,email,password,role) VALUES ($1,$2,$3,$4,$5)",
- addUserPermission: "INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack) VALUES ($1,$2,$3,$4,$5);",
+ addUserPermission: "INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12);",
  getLastUserId : `SELECT max(Userid) FROM Users\n`,
  getLastArtistId :
     ("SELECT max(artistid)\n" +
