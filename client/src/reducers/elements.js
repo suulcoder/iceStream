@@ -64,11 +64,22 @@ const isSelected = (state=null,action) => {
     }
 }
 
+const elementOrder = (state=[],action) => {
+    switch (action.type) {
+        case types.search_element_added:
+            return [...state,action.payload]
+        default:
+            return state
+    }
+}
+
+
 const elements = combineReducers({
     order,
     byId,
     isEdited,
     isSelected,
+    elementOrder
 })
 
 export default elements;
@@ -80,3 +91,6 @@ export const getAll = (state) => state.orderSections.map(
 ).filter(section => section!=null);
 export const getSectionIDs = (state) => Object.keys(state.order)
 export const getSelected = (state) => (state.isSelected===null)?null: getElement(state,state.isSelected)
+export const getSearchedElements = (state) => state.elementOrder.map(
+    id => getElement(state,id)
+).filter(element => element!=null);

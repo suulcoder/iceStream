@@ -1,1 +1,0 @@
-export const query_changed = "QUERY_CHANGED"

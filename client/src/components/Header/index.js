@@ -60,7 +60,7 @@ export default connect(
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(element => {
-                            this.props.onSubmit(userActions.addUser(element))
+                            dispatch(userActions.addUser(element))
                         });
                     }) 
                     dispatch(actions.changeState(4))

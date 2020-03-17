@@ -27,6 +27,10 @@ const order = (state=[],action) => {
                 return state
             }
             return [...state,action.payload.userid]
+        case types.added_to_order:
+            return [...state,action.payload.userid]
+        case types.set_empty:
+            return []
         default:
             return state
     }
@@ -35,11 +39,11 @@ const order = (state=[],action) => {
 const user = combineReducers({
     currentuser,
     users,
-    order
+    order,
 })
 
 export default user;
 
 export const getUser = state => state.currentuser;
 export const getUsers = (state,id) => state.users[id]
-export const getAllUsers = (state) => state.order
+export const getAllUsers = (state) => state.order;

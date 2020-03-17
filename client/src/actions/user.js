@@ -39,3 +39,14 @@ export const addUser = ({userid,email,role,username,canlogin,canaddartist,canadd
         candeleteartist:(candeleteartist==='TRUE' || candeleteartist===true)?true:false,
     }
 })
+
+export const setEpmty = () => ({
+    type:types.set_empty
+})
+
+export const addToOrder = ({userid}) => ({
+    type:types.added_to_order,
+    payload:{
+        userid:userid
+    }
+})

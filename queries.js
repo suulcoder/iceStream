@@ -57,6 +57,11 @@ module.exports = {
  getUserwithmoreAlbumsAdded : "SELECT * FROM hasAddedAlbum",
  getRecentAlbums:"SELECT * FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN hasAddedAlbum ON Album.AlbumId=hasAddedAlbum.AlbumId", 
  
+ searchTrack:"SELECT TrackId FROM Track WHERE Name LIKE $1 LIMIT 1000",
+ searchAlbum:"SELECT AlbumId FROM Album WHERE Title LIKE $1",
+ searchArtist:"SELECT ArtistId FROM Artist WHERE Name LIKE $1",
+ searchUser:"SELECT UserId FROM Users WHERE Username LIKE $1",
+
  addArtist : "INSERT INTO Artist (ArtistId, Name) VALUES ($1,$2);",
  addAlbum : "INSERT INTO Album (AlbumId, Title, ArtistId) VALUES ($1,$2,$3);",
  addTrack : "INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);",
