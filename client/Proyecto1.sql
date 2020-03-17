@@ -1,7 +1,24 @@
-/*******************************************************************************
+﻿/*******************************************************************************
    Create Tables
 ********************************************************************************/
+DROP TABLE IF EXISTS HasAddedArtist;
+DROP TABLE IF EXISTS HasAddedAlbum;
+DROP TABLE IF EXISTS HasAddedTrack;
+DROP TABLE IF EXISTS UserPermissions;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS PlaylistTrack;
+DROP TABLE IF EXISTS Playlist;
+DROP TABLE IF EXISTS InvoiceLine;
+DROP TABLE IF EXISTS Invoice;
+DROP TABLE IF EXISTS Customer;
+DROP TABLE IF EXISTS Track;
+DROP TABLE IF EXISTS MediaType;
+DROP TABLE IF EXISTS Album;
 DROP TABLE IF EXISTS Artist;
+DROP TABLE IF EXISTS Employee;
+DROP TABLE IF EXISTS Genre;
+
+
 CREATE TABLE Artist
 (
     ArtistId INT NOT NULL,
@@ -9,7 +26,6 @@ CREATE TABLE Artist
     CONSTRAINT PK_Artist PRIMARY KEY (ArtistId)
 );
 
-DROP TABLE IF EXISTS Album;
 CREATE TABLE Album
 (
     AlbumId INT NOT NULL,
@@ -19,7 +35,6 @@ CREATE TABLE Album
     FOREIGN KEY (ArtistId) REFERENCES Artist (ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS Employee;
 CREATE TABLE Employee
 (
     EmployeeId INT NOT NULL,
@@ -41,7 +56,6 @@ CREATE TABLE Employee
     FOREIGN KEY (ReportsTo) REFERENCES Employee (EmployeeId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS Customer;
 CREATE TABLE Customer
 (
     CustomerId INT NOT NULL,
@@ -61,7 +75,6 @@ CREATE TABLE Customer
     FOREIGN KEY (SupportRepId) REFERENCES Employee (EmployeeId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS Genre;
 CREATE TABLE Genre
 (
     GenreId INT NOT NULL,
@@ -69,7 +82,6 @@ CREATE TABLE Genre
     CONSTRAINT PK_Genre PRIMARY KEY (GenreId)
 );
 
-DROP TABLE IF EXISTS Invoice;
 CREATE TABLE Invoice
 (
     InvoiceId INT NOT NULL,
@@ -85,7 +97,6 @@ CREATE TABLE Invoice
     FOREIGN KEY (CustomerId) REFERENCES Customer (CustomerId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS MediaType;
 CREATE TABLE MediaType
 (
     MediaTypeId INT NOT NULL,
@@ -93,7 +104,6 @@ CREATE TABLE MediaType
     CONSTRAINT PK_MediaType PRIMARY KEY (MediaTypeId)
 );
 
-DROP TABLE IF EXISTS Track;
 CREATE TABLE Track
 (
     TrackId INT NOT NULL,
@@ -111,7 +121,6 @@ CREATE TABLE Track
     FOREIGN KEY (MediaTypeId) REFERENCES MediaType (MediaTypeId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS InvoiceLine;
 CREATE TABLE InvoiceLine
 (
     InvoiceLineId INT NOT NULL,
@@ -124,7 +133,7 @@ CREATE TABLE InvoiceLine
     FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS Playlist;
+
 CREATE TABLE Playlist
 (
     PlaylistId INT NOT NULL,
@@ -132,7 +141,7 @@ CREATE TABLE Playlist
     CONSTRAINT PK_Playlist PRIMARY KEY (PlaylistId)
 );
 
-DROP TABLE IF EXISTS PlaylistTrack;
+
 CREATE TABLE PlaylistTrack
 (
     PlaylistId INT NOT NULL,
@@ -142,7 +151,7 @@ CREATE TABLE PlaylistTrack
     FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS Users;
+
 CREATE TABLE Users
 (
     UserId INT NOT NULL,
@@ -150,12 +159,12 @@ CREATE TABLE Users
     email VARCHAR(50),
     password VARCHAR(30),
     role VARCHAR(30),
-    UNIQUE(UserId)
-    UNIQUE(Username)
-    CONSTRAINT PK_TrackPermission PRIMARY KEY (Username),
+    UNIQUE(UserId),
+    UNIQUE(Username),
+    CONSTRAINT PK_TrackPermission PRIMARY KEY (Username)
 );
 
-DROP TABLE IF EXISTS UserPermissions;
+
 CREATE TABLE UserPermissions
 (
     UserId INT NOT NULL,
@@ -163,57 +172,26 @@ CREATE TABLE UserPermissions
     canAddArtist VARCHAR(5),
     canAddAlbum VARCHAR(5),
     canAddTrack VARCHAR(5),
+    canInactivateSong VARCHAR(5),
+    canModifiySong VARCHAR(5),
+    canDeleteSong VARCHAR(5),
+    canModifiyAlbum VARCHAR(5),
+    canDeleteAlbum VARCHAR(5),
+    canModifyArtist VARCHAR(5),
+    canDeleteArtist VARCHAR(5),
     UNIQUE (UserId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS TrackPermissions;
-CREATE TABLE TrackPermissions
-(
-    UserId INT NOT NULL,
-    TrackId INT NOT NULL,
-    canInactivate Boolean,
-    canUpdate Boolean,
-    canDelete Boolean,
-    CONSTRAINT PK_TrackPermission PRIMARY KEY (UserId,TrackId),
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
-);
-DROP TABLE IF EXISTS ArtistPermissions;
-CREATE TABLE ArtistPermissions
-(
-    UserId INT NOT NULL,
-    ArtistId INT NOT NULL,
-    canUpdate Boolean,
-    canDelete Boolean,
-    CONSTRAINT PK_ArtistPermission PRIMARY KEY (UserId,ArtistId),
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
-);
-DROP TABLE IF EXISTS AlbumPermissions;
-CREATE TABLE AlbumPermissions
-(
-    UserId INT NOT NULL,
-    AlbumId INT NOT NULL,
-    canUpdate Boolean,
-    canDelete Boolean,
-    CONSTRAINT PK_AlbumPermission PRIMARY KEY (UserId,AlbumId),
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (AlbumId) REFERENCES Album(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-DROP TABLE IF EXISTS HasAddedAlbum;
 CREATE TABLE HasAddedAlbum
 (
     UserId INT NOT NULL,
     AlbumId INT NOT NULL,
     InDate TIMESTAMP NOT NULL,
-    PRIMARY KEY (UserId,AlbumId),
     FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AlbumId) REFERENCES Album(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS HasAddedArtist;
 CREATE TABLE HasAddedArtist
 (
     UserId INT NOT NULL,
@@ -224,7 +202,6 @@ CREATE TABLE HasAddedArtist
     FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS HasAddedTrack;
 CREATE TABLE HasAddedTrack
 (
     UserId INT NOT NULL,
@@ -262,7 +239,25 @@ CREATE INDEX IFK_TrackMediaTypeId ON Track (MediaTypeId);
    Populate Tables
 ********************************************************************************/
 INSERT INTO Users (UserId,Username,email,password,role) VALUES (1,'admin','admin@iceStream.com','admin','admin');
-INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack) VALUES (1,'TRUE','TRUE','TRUE','TRUE');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (1,'TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE');
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (2,'suulcoder','suulcoder@iceStream.com','admin','client');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (2,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (3,'gdawg4','gdawg4@iceStream.com','admin','client');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (3,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (4,'gera1013','gera1013@iceStream.com','admin','client');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (4,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (5,'scont','scoder@iceStream.com','admin','client');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (5,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (6,'g654','gd68ssdg4@iceStream.com','admin','client');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (6,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (7,'gersdf013','gera1fs3@iceStream.com','admin','client');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (7,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (8,'user','suser@iceStream.com','admin','client');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (8,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (9,'user87','user87@iceStream.com','admin','client');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (9,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
+INSERT INTO Users (UserId,Username,email,password,role) VALUES (10,'thisismyuser','thisuser@iceStream.com','admin','client');
+INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (10,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
 INSERT INTO HasAddedAlbum (UserId,AlbumId,InDate) VALUES (1,1,'2011/3/28');
 INSERT INTO Genre (GenreId, Name) VALUES (1,'Rock');
 INSERT INTO Genre (GenreId, Name) VALUES (2,'Jazz');

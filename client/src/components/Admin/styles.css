@@ -1,26 +1,41 @@
 .admin{
     background-color: white;
     width: 100%;
+    min-width: 850px;
     display: flex;
     flex-direction: column;
-    border-radius: 30px;
-    overflow: auto;
+    overflow-x: scroll;
+    margin-bottom: 250px;
 }
 .element_title{
     display: flex;
     flex-direction: row;
 }
+.search_title{
+    color: black;
+    font-size: small;
+    margin-right: 10px;
+}
 .search_admin{
     display: flex;
     justify-content: flex-end;
-    margin-top: 25px;
-    margin-right: 10px;
+    align-items: center;
+    margin-top: 35px;
+    margin-bottom: 15px;
+    margin-right: 30px;
 }
 .admin_title{
-    padding: 10px;
-    font-size: small;
+    padding: 5px;
+    font-size: x-small;
+    margin-right: 5px;
+    margin-left: 5px;
+    border-color: black;
+    border-style: dotted;
+    border-width: medium;
+    margin-bottom: 20px;
 }
 .admin_bar1{
+    margin-top: 5px;   
     width: 2px;
     background-color: black;
     margin-right: 1px;
@@ -28,7 +43,7 @@
 }
 .admin_bar2{
     width: 3px;
-    background-color: green;
+    background-color: greenyellow;
     margin-right: 1px;
     margin-left: 1px;
 }
@@ -54,7 +69,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 15px;
+    min-height: 550px;
 }
 .item{
     display: flex;
+}
+.admin_supertitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-left: 15px;
+    margin-top: 25px;
+    font-size: x-large;
+    color: black;
+    padding: 20px;
 }

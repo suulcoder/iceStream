@@ -1,6 +1,6 @@
 import * as types from '../types/user'
 
-export const setUser = ({userid, username, email, role,canlogin,canaddartist,canaddalbum,canaddtrack,caninactivate,canmodify,candelete}) => ({
+export const setUser = ({userid, username, email, role,canlogin,canaddartist,canaddalbum,canaddtrack}) => ({
     type: types.verified_user_added,
     payload: {
         email,
@@ -11,9 +11,6 @@ export const setUser = ({userid, username, email, role,canlogin,canaddartist,can
         canaddartist:(canaddartist==='TRUE')?true:false,
         canaddalbum:(canaddalbum==='TRUE')?true:false,
         canaddtrack:(canaddtrack==='TRUE')?true:false,
-        caninactivate,
-        canmodify,
-        candelete
     }
 })
 
@@ -22,16 +19,23 @@ export const setUsertoNull = () => ({
     payload: null
 })
 
-export const addUser = ({userid, username, email, role,canlogin,canaddartist,canaddalbum,canaddtrack}) => ({
+export const addUser = ({userid,email,role,username,canlogin,canaddartist,canaddalbum,canaddtrack,caninactivatesong,canmodifiysong,candeletesong,canmodifiyalbum,candeletealbum,canmodifyartist,candeleteartist}) =>  ({
     type: types.user_added,
     payload: {
         email,
         role,
         username,
         userid,
-        canlogin:(canlogin==='TRUE')?true:false,
-        canaddartist:(canaddartist==='TRUE')?true:false,
-        canaddalbum:(canaddalbum==='TRUE')?true:false,
-        canaddtrack:(canaddtrack==='TRUE')?true:false
+        canlogin:(canlogin==='TRUE' || canlogin===true)?true:false,
+        canaddartist:(canaddartist==='TRUE' || canaddartist===true)?true:false,
+        canaddalbum:(canaddalbum==='TRUE' || canaddalbum===true)?true:false,
+        canaddtrack:(canaddtrack==='TRUE' || canaddtrack===true)?true:false,
+        caninactivatesong:(caninactivatesong==='TRUE' || caninactivatesong===true)?true:false,
+        canmodifiysong:(canmodifiysong==='TRUE' || canmodifiysong===true)?true:false,
+        candeletesong:(candeletesong==='TRUE' || candeletesong===true)?true:false,
+        canmodifiyalbum:(canmodifiyalbum==='TRUE' || canmodifiyalbum===true)?true:false,
+        candeletealbum:(candeletealbum==='TRUE' || candeletealbum===true)?true:false,
+        canmodifyartist:(canmodifyartist==='TRUE' || canmodifyartist===true)?true:false,
+        candeleteartist:(candeleteartist==='TRUE' || candeleteartist===true)?true:false,
     }
 })

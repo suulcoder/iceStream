@@ -51,7 +51,7 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                     }
                     else{
                         db.query(Query,values,(req,res) => {
-                            console.log(res)
+                            console.log(Query,values)
                             if(err){
                                 return response.status(400).send(err)
                             }
@@ -84,6 +84,16 @@ SQLQuery('/api/report',query.getMostColaborativeArtists)
 SQLQuery('/api/newArtist',query.addArtist,'post')
 SQLQuery('api/newAlbum',query.addAlbum,'post')
 SQLQuery('/api/newTrack',query.addTrack,'post')
+
+SQLQuery('/api/permission/update',query.UpdatePermission,'post')
+
+SQLQuery('/api/permission/track/inactivate',query.getTrackPermissionINACTIVATE,'post')
+SQLQuery('/api/permission/track/update',query.getTrackPermissionUPDATE,'post')
+SQLQuery('/api/permission/track/delete',query.getTrackPermissionDELETE,'post')
+SQLQuery('/api/permission/artist/update',query.getArtistPermissionUPDATE,'post')
+SQLQuery('/api/permission/artist/delete',query.getArtistPermissionDELETE,'post')
+SQLQuery('/api/permission/album/update',query.getAlbumPermissionUPDATE,'post')
+SQLQuery('/api/permission/album/delete',query.getAlbumPermissionDELETE,'post')
 
 SQLQuery('/api/reports/commongenre',query.getMostCommonGenres)
 SQLQuery('/api/reports/commonartist',query.getMostCommonArtist)

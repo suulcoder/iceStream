@@ -10,7 +10,7 @@ export const addSong = ({playlist,trackid,name,album,mediatype,genre,composer,mi
             index : album+"|"+image+"|"+artist,
             element:{
                 type:'track',
-                id: 'track_'+trackid,
+                id: trackid,
                 name,
                 album,
                 mediatype,
@@ -33,7 +33,7 @@ export const addArtist = ({artistid,name,image}) => ({
         index:name,
         element:{
             type:'artist',
-            id:('artist'+String(artistid)),
+            id:artistid,
             name,
             image,
         }
@@ -50,7 +50,7 @@ export const addAlbum = ({albumid,title,artist,image,album}) =>{
             index:artist,
             element:{
                 type:'album',
-                id:'album'+albumid,
+                id:albumid,
                 title,
                 artist,
                 image,

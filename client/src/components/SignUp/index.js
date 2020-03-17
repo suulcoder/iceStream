@@ -5,7 +5,7 @@ import * as actions from '../../actions/app'
 import * as userActions from '../../actions/user'
 import throttle from 'lodash/throttle';
 
-const Login = ({onSubmit}) => {
+const SignUp = ({onSubmit}) => {
     const [user,changeUser] = useState('')
     const [password,changePassword] = useState('')
     const [passwordConfirm,changePasswordComfirm] = useState('')
@@ -78,7 +78,6 @@ export default connect(
                                                 .then(async(response)=>{
                                                     response.json()
                                                     .then(throttle(table1 => {
-                                                        console.log(user)
                                                         dispatch(userActions.setUser({id:Object.values(data[0])[0]+1,user:user,email:email,password:password,role:'client'}))
                                                     },3000))
                                                 })
@@ -115,4 +114,4 @@ export default connect(
             
         }
     })
-)(Login)
+)(SignUp)

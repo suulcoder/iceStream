@@ -4,9 +4,9 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 
 const UserPermission = ({email,role,username,userid,canlogin,canaddartist,canaddalbum,canaddtrack}) => (
-    <div className="user">
-        <div className="admin_title">{username}</div>
-    </div>
+    <button className="userPermission">
+        <div >{username}</div>
+    </button>
 )
 
 export default connect(
