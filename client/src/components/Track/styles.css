@@ -1,4 +1,4 @@
-.album{
+.song_{
     display: flex;
     padding: 10px;
     flex-direction: row;
@@ -10,14 +10,13 @@
     margin-right: 25px;
     margin-left: 25px;
 }
-.album_{
+.track_{
     display: flex;
     padding: 20px;
     align-items: center;
 }
-.albumtitle{
-    margin-bottom: 10px;
-}
-.albuminfo{
-    margin-left: 25px;
+.track_info{
+    max-width: 250px;
+    margin-left: 15px;
+    margin-right: 15px;
 }

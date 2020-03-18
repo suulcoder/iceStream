@@ -1,13 +1,14 @@
 import * as types from '../types/elements'
 
-export const addSong = ({playlist,trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song}) => {
+export const addSong = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid}) => {
     if(image===undefined){
         image = './default'
     }
     return ({
         type: types.element_added,
         payload:{
-            index : album+"|"+image+"|"+artist,
+            control: true,
+            index : albumid,
             element:{
                 type:'track',
                 id: 'track'+trackid,
@@ -30,6 +31,7 @@ export const addSong = ({playlist,trackid,name,album,mediatype,genre,composer,mi
 export const addArtist = ({artistid,name,image}) => ({
     type: types.element_added,
     payload:{
+        control: false,
         index:name,
         element:{
             type:'artist',
@@ -47,6 +49,7 @@ export const addAlbum = ({albumid,title,artist,image,album}) =>{
     return ({
         type: types.element_added,
         payload:{
+            control: false,
             index:artist,
             element:{
                 type:'album',
@@ -126,4 +129,9 @@ export const editElement = (id) => ({
 export const addSearchELement = (type,id) => ({
     type: types.search_element_added,
     payload: type+id
+})
+
+export const setSearchtoNull = () => ({
+    type:types.search_setted_to_null,
+    payload: null
 })

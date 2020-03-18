@@ -57,10 +57,10 @@ module.exports = {
  getUserwithmoreAlbumsAdded : "SELECT * FROM hasAddedAlbum",
  getRecentAlbums:"SELECT * FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN hasAddedAlbum ON Album.AlbumId=hasAddedAlbum.AlbumId", 
  
- searchTrack:"SELECT TrackId FROM Track WHERE Name LIKE $1 LIMIT 1000",
- searchAlbum:"SELECT AlbumId FROM Album WHERE Title LIKE $1",
- searchArtist:"SELECT ArtistId FROM Artist WHERE Name LIKE $1",
- searchUser:"SELECT UserId FROM Users WHERE Username LIKE $1",
+ searchTrack:"SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId WHERE Track.Name LIKE $1 LIMIT 25",
+ searchAlbum:"SELECT Album.Albumid, Album.title, Artist.Name as artist FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId WHERE Album.Title LIKE $1 LIMIT 3",
+ searchArtist:"SELECT * FROM Artist WHERE Name LIKE $1 LIMIT 3",
+ searchUser:"SELECT UserId FROM Users WHERE Username LIKE $1 AND UserId<>1",
 
  addArtist : "INSERT INTO Artist (ArtistId, Name) VALUES ($1,$2);",
  addAlbum : "INSERT INTO Album (AlbumId, Title, ArtistId) VALUES ($1,$2,$3);",

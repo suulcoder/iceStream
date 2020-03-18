@@ -107,14 +107,6 @@ class AppState extends React.Component{
         .then(data => {
             this.props.onSubmit(actions.addReportSection(types.GET_USERS_WITH_MORE_ALBUMS_ADDED,data))
         })
-
-        fetch('http://localhost:8080/api/user',{method:'GET'})
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(element => {
-                this.props.onSubmit(userActions.addUser(element))
-            });
-        }) 
     }
 
     render(){

@@ -6,6 +6,7 @@ import SignUp from '../SignUp';
 import Report from '../Report';
 import Elements from '../Elements';
 import Admin from '../Admin';
+import SearchElements from '../SearchElements';
 
 const Header = ({app}) => (
         <div className="container">
@@ -20,7 +21,7 @@ const Header = ({app}) => (
                         </Fragment>
                     ):(
                         (app==2)?(
-                            <div></div>
+                            <SearchElements></SearchElements>
                         ):((app==3)?(
                             <div></div>
                         ):(

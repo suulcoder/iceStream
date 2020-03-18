@@ -1,0 +1,27 @@
+.searchElements{
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    background-color: white;
+    padding: 45px;
+}
+.result_title{
+    font-size: x-large;
+    margin-left: 25px;
+}
+.result_header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.return{
+    margin-right: 5px;
+    margin-left: 5px;
+    background-image: url('./return.png');
+    background-color: transparent;
+    border-color: transparent;
+    width: 35px;
+    height: 40px;
+    background-size: cover;
+    margin-left: 25px;
+}

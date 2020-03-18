@@ -4,7 +4,7 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import Element from '../Element'
 
-const Playlist = ({elements, nombre,image,artist}) => (
+const Playlist = ({elements, nombre,image,artist,showSongs}) => (
     <div className="containerPlay">
         <div className="playlistInfo">
             <div className="titlePlaylist"><strong>Title:</strong>{nombre}</div>
@@ -14,7 +14,7 @@ const Playlist = ({elements, nombre,image,artist}) => (
         <div className="playlist">
             {elements.map(
                 element => (
-                    <Element key={element} id={element}>
+                    <Element key={element} showSong={showSongs} id={element}>
                     </Element>
                 )
         )}
@@ -23,11 +23,12 @@ const Playlist = ({elements, nombre,image,artist}) => (
   )
 
 export default connect(
-    (state, {id})=>({
+    (state, {id,showSongs})=>({
+        showSongs,
         elements:selectors.getSection(state,id),
-        nombre: id.split('|')[0],
-        image: id.split('|')[1],
-        artist: id.split('|')[2]
+        nombre: Object.values(selectors.getElement(state,selectors.getSection(state,id)[0]))[3],
+        image: Object.values(selectors.getElement(state,selectors.getSection(state,id)[0]))[11],
+        artist: Object.values(selectors.getElement(state,selectors.getSection(state,id)[0]))[10]
     }),
     undefined
 )(Playlist)

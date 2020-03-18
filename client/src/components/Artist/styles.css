@@ -1,0 +1,40 @@
+.artist{
+    display: flex;
+    padding: 10px;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 20px;
+    border-color: black;
+    border-style: double;
+    margin-top: 25px;
+    margin-right: 25px;
+    margin-left: 25px;
+}
+.artist_{
+    display: flex;
+    padding: 20px;
+    align-items: center;
+}
+.artistinfo{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.delete{
+    background-image: url('./trash.png');
+    background-size: cover;
+    height: 27px;
+    width: 27px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.edit{
+    background-image: url('./edit.png');
+    background-size: cover;
+    height: 27px;
+    width: 27px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.artistitle{
+    margin-bottom: 10px;
+}
