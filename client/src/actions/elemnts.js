@@ -28,7 +28,7 @@ export const addSong = ({trackid,name,album,mediatype,genre,composer,millisecond
     })
 }
 
-export const addArtist = ({artistid,name,image}) => ({
+export const addArtist = ({artistid,name,image,artist}) => ({
     type: types.element_added,
     payload:{
         control: false,
@@ -38,6 +38,7 @@ export const addArtist = ({artistid,name,image}) => ({
             id:'artist'+artistid,
             name,
             image,
+            artist
         }
     }
 })

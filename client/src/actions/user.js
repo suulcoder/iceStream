@@ -1,6 +1,6 @@
 import * as types from '../types/user'
 
-export const setUser = ({userid, username, email, role,canlogin,canaddartist,canaddalbum,canaddtrack}) => ({
+export const setUser = ({userid, username, email, role,canlogin,canaddartist,canaddalbum,canaddtrack,caninactivatesong,canmodifiysong,candeletesong,canmodifiyalbum,candeletealbum,canmodifyartist,candeleteartist}) => ({
     type: types.verified_user_added,
     payload: {
         email,
@@ -11,6 +11,13 @@ export const setUser = ({userid, username, email, role,canlogin,canaddartist,can
         canaddartist:(canaddartist==='TRUE')?true:false,
         canaddalbum:(canaddalbum==='TRUE')?true:false,
         canaddtrack:(canaddtrack==='TRUE')?true:false,
+        caninactivatesong:(caninactivatesong==='TRUE')?true:false,
+        canmodifiysong:(canmodifiysong==='TRUE')?true:false,
+        candeletesong:(candeletesong==='TRUE')?true:false,
+        canmodifiyalbum:(canmodifiyalbum==='TRUE')?true:false,
+        candeletealbum:(candeletealbum==='TRUE')?true:false,
+        canmodifyartist:(canmodifyartist==='TRUE')?true:false,
+        candeleteartist:(candeleteartist==='TRUE')?true:false,
     }
 })
 

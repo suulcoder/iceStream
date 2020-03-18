@@ -8,7 +8,6 @@ import {token} from '../../constants/spotify'
 import * as elementActions from '../../actions/elemnts'
 import * as actions from '../../actions/report'
 import * as types from '../../types/reportSections'
-import * as userActions from '../../actions/user'
 
 class AppState extends React.Component{
     

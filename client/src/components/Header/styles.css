@@ -5,6 +5,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     overflow: auto;
+    width: 100%;
 }
 .tittle{
     color: black    ;

@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 
-const Album = ({albumid,title,artist,image,album,onSubmit}) => (
+const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete}) => (
     <Fragment>
         <div className="album"> 
                 <div className="album_">
@@ -18,14 +18,27 @@ const Album = ({albumid,title,artist,image,album,onSubmit}) => (
                     </div>
                 </div>
                 <div>
-                    <button className="edit" type="submit" onClick={
-                        () => onSubmit(albumid)
-                    }>
-                    </button>
-                    <button className="delete" type="submit" onClick={
-                        () => onSubmit(albumid)
-                    }>
-                    </button>
+                    {
+                        (canModify)?(
+                            <button className="edit" type="submit" onClick={
+                                () => onSubmit(albumid)
+                            }>
+                            </button>
+                        ):(
+                            <div/>
+                        )
+                    }
+                    {
+                        (canDelete)?(
+                            <button className="delete" type="submit" onClick={
+                                () => onSubmit(albumid)
+                            }>
+                            </button>
+                        ):(
+                            <div/>
+                        )
+                    }
+                    
                 </div>                
         </div>
     </Fragment>
@@ -38,6 +51,8 @@ export default connect(
         artist:Object.values(selectors.getElement(state,id))[3],
         image:Object.values(selectors.getElement(state,id))[4],
         album:Object.values(selectors.getElement(state,id))[5],
+        canModify:Object.values(selectors.getUser(state))[11],
+        canDelete:Object.values(selectors.getUser(state))[12],
     }),
     dispatch=>({
         onSubmit(album){

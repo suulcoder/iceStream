@@ -1,7 +1,7 @@
 .searchElements{
     display: flex;
     flex-direction: column;
-    min-width: 100%;
+    min-width: 96%;
     background-color: white;
     padding: 45px;
 }

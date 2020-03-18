@@ -78,7 +78,7 @@ export default connect(
                                                 .then(async(response)=>{
                                                     response.json()
                                                     .then(throttle(table1 => {
-                                                        dispatch(userActions.setUser({id:Object.values(data[0])[0]+1,user:user,email:email,password:password,role:'client'}))
+                                                        dispatch(userActions.setUser({userid:Object.values(data[0])[0]+1,username:user,email:email,password:password,role:'client'}))
                                                     },3000))
                                                 })
                                             

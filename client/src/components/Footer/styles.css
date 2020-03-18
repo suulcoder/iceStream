@@ -65,7 +65,7 @@
 .link{
     margin-right: 5px;
     margin-left: 5px;
-    background-image: url('./spotify.png');
+    background-image: url('../../public/img/spotify.png');
     width: 65px;
     background-size: cover;
     height: 25px;

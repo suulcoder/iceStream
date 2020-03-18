@@ -20,9 +20,9 @@ const Header = ({app}) => (
                             <Elements></Elements>
                         </Fragment>
                     ):(
-                        (app==2)?(
+                        (app===2)?(
                             <SearchElements></SearchElements>
-                        ):((app==3)?(
+                        ):((app===3)?(
                             <div></div>
                         ):(
                             <Admin></Admin>

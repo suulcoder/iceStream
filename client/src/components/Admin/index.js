@@ -1,12 +1,11 @@
 import './styles.css';
-import React, {useState} from 'react';
+import React from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import UserPermision from '../UserPermission'
 import CheckBox from '../CheckBox';
 
-const Admin = ({users,onSubmit}) => {
-    const [query,changeQuery] = useState('')
+const Admin = ({users}) => {
     return (
         <div className='admin'>
             <div className="admin_supertitle"><strong>ADMIN MODULE:</strong></div>
@@ -167,6 +166,5 @@ export default connect(
     }),
     dispatch => ({
         onSubmit(value){
-        console.log(value)
     }
 }))(Admin)

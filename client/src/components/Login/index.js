@@ -54,7 +54,7 @@ export default connect(
                             }
                             catch(err){
                                 dispatch(userActions.setUsertoNull())
-                                alert("USERNAME OR PASSWORD ARE INCORRECT")
+                                alert("USERNAME OR PASSWORD ARE INCORRECT TRY AGAIN!\n\nIF IT DOESN'T WORK PLEASE TALK TO ICESTREAM\nYOU ARE PROBABLY BANNED")
                             }
                         }
                     },3000))

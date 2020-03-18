@@ -20,7 +20,7 @@
     margin-right: 20px;
 }
 .delete{
-    background-image: url('./trash.png');
+    background-image: url('../../public/img/trash.png');
     background-size: cover;
     height: 27px;
     width: 27px;
@@ -28,7 +28,7 @@
     border-radius: 5px;
 }
 .edit{
-    background-image: url('./edit.png');
+    background-image: url('../../public/img/edit.png');
     background-size: cover;
     height: 27px;
     width: 27px;

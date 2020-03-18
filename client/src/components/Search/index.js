@@ -90,6 +90,7 @@ export default connect(
                                 .then((artistCollection) => {
                                     dispatch(actions.addArtist({...element,
                                     image:Object.values(Object.values(artistCollection[0])[5][0])[1],
+                                    artist:Object.values(Object.values(Object.values(artistCollection)[0])[0])[0]
                                 }))
                                 dispatch(elementActions.addSearchELement('artist',Object.values(element)[0]))
                                 });
@@ -105,7 +106,7 @@ export default connect(
                                 response.json()
                                 .then(async(data) => {
                                     data.rows.map(element => {
-                                        track.search(Object.values(element)[9], {limit: 1}).then((trackCollection) => {
+                                        track.search(Object.values(element)[1], {limit: 1}).then((trackCollection) => {
                                             dispatch(actions.addAlbum({...element,
                                             image:Object.values(Object.values(Object.values(trackCollection[0])[0])[6][0])[1],
                                             album:Object.values(Object.values(Object.values(trackCollection[0])[0])[3])[0] 

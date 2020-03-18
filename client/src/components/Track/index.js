@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 
-const Track = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,onSubmit}) => (
+const Track = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,onSubmit,canDelete,canModify,canInactivate}) => (
     <Fragment>
         <div className="song_"> 
                 <div className="track_">
@@ -25,15 +25,37 @@ const Track = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,u
                         <div><strong>Size: </strong>{((bytes/1024)/1024).toFixed(2)}Mb</div>
                     </div>
                 </div>
-                <div>
-                    <button className="edit" type="submit" onClick={
-                        () => onSubmit(trackid)
-                    }>
-                    </button>
-                    <button className="delete" type="submit" onClick={
-                        () => onSubmit(trackid)
-                    }>
-                    </button>
+                <div className="options">
+                    {
+                        (canInactivate)?(
+                            <button className="inactivate" type="submit" onClick={
+                                () => onSubmit(trackid)
+                            }>
+                            </button>
+                        ):(
+                            <div/>
+                        )
+                    }
+                    {
+                        (canModify)?(
+                            <button className="edit" type="submit" onClick={
+                                () => onSubmit(trackid)
+                            }>
+                            </button>
+                        ):(
+                            <div/>
+                        )
+                    }
+                    {
+                        (canDelete)?(
+                            <button className="delete" type="submit" onClick={
+                                () => onSubmit(trackid)
+                            }>
+                            </button>
+                        ):(
+                            <div/>
+                        )
+                    }
                 </div>                
         </div>
     </Fragment>
@@ -53,7 +75,10 @@ export default connect(
         unitprice: Object.values(selectors.getElement(state,id))[9],
         artist: Object.values(selectors.getElement(state,id))[10],
         image: Object.values(selectors.getElement(state,id))[11],
-        song: Object.values(selectors.getElement(state,id))[12], 
+        song: Object.values(selectors.getElement(state,id))[12],
+        canInactivate:Object.values(selectors.getUser(state))[8],
+        canModify:Object.values(selectors.getUser(state))[9],
+        canDelete:Object.values(selectors.getUser(state))[10],
     }),
     dispatch=>({
         onSubmit(track){

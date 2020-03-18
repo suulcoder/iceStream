@@ -1,27 +1,30 @@
 .check_button{
-    background-image: url('./check.png');
+    background-image: url('../../public/img/check.png');
     background-size: cover;
     height: 20px;
     margin-top: 25px;
     margin-bottom: 17px;
     padding: 10px;
+    background-color: transparent;
     border-radius: 50px;
 }
 .cross_button{
-    background-image: url('./cross.png');
+    background-image: url('../../public/img/cross.png');
     background-size: cover;
     height: 20px;
     margin-top: 25px;
     margin-bottom: 17px;
     padding: 10px;
+    background-color: transparent;
     border-radius: 50px;
 }
 .invalid_button{
-    background-image: url('./invalid.png');
+    background-image: url('../../public/img/invalid.png');
     background-size: cover;
     height: 20px;
     margin-top: 25px;
     margin-bottom: 17px;
     padding: 10px;
+    background-color: transparent;
     border-radius: 50px;
 }

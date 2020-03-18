@@ -9,7 +9,7 @@
     font-size: x-small;
 }
 .play{
-    background-image: url('./default.png');
+    background-image: url('../../public/img/default.png');
     background-size: cover;
     height: 20px;
     margin-right: 5px;

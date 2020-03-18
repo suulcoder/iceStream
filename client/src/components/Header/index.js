@@ -73,10 +73,10 @@ export default connect(
             }
         },
         logout(){
-            dispatch(userActions.setUsertoNull())
             dispatch(actions.changeState(0))
             dispatch(elementActions.selectElement(null))
             dispatch(elementActions.editElement(null))
+            dispatch(userActions.setUsertoNull())
         },
         home(){
             dispatch(actions.changeState(1))

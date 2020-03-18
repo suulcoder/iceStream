@@ -1,5 +1,5 @@
 import './styles.css';
-import React, { Fragment } from 'react';
+import React from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 
