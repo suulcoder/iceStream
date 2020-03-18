@@ -1,10 +1,9 @@
 .admin{
     background-color: white;
     width: 100%;
-    min-width: 850px;
     display: flex;
     flex-direction: column;
-    overflow-x: scroll;
+    overflow-x: auto;
     margin-bottom: 250px;
 }
 .element_title{

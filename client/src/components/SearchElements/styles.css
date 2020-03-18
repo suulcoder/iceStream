@@ -1,9 +1,10 @@
 .searchElements{
     display: flex;
     flex-direction: column;
-    min-width: 96%;
     background-color: white;
     padding: 45px;
+    width: 100%;
+    margin-bottom: 70px;
 }
 .result_title{
     font-size: x-large;
