@@ -1,7 +1,7 @@
 module.exports = {
  getAllUsers :`SELECT * FROM Users INNER JOIN UserPermissions ON Users.UserId=UserPermissions.UserId WHERE Users.role<>'admin'`,
  getAllArtist :`SELECT * FROM Artist`,
- getAllSongs : "SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId LIMIT 500",
+ getAllSongs : "SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid, TrackState.state as state FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId JOIN TrackState ON TrackState.Trackid=Track.Trackid LIMIT 500",
  getAllAlbum : "SELECT Artist.name as artist, Album.title,Album.Albumid FROM Album JOIN Artist ON Artist.ArtistId=Album.ArtistId",
  getAllGenre : "SELECT * FROM Genre",
  getAllMediaType : "SELECT * FROM MediaType",
@@ -57,9 +57,9 @@ module.exports = {
  getUserwithmoreAlbumsAdded : "SELECT * FROM hasAddedAlbum",
  getRecentAlbums:"SELECT * FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN hasAddedAlbum ON Album.AlbumId=hasAddedAlbum.AlbumId", 
  
- searchTrack:"SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId WHERE Track.Name LIKE $1 LIMIT 25",
- searchAlbum:"SELECT Album.Albumid, Album.title, Artist.Name as artist FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId WHERE Album.Title LIKE $1 LIMIT 3",
- searchArtist:"SELECT * FROM Artist WHERE Name LIKE $1 LIMIT 3",
+ searchTrack:"SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid, TrackState.state as state FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId JOIN TrackState ON TrackState.Trackid=Track.Trackid WHERE Track.Name ILIKE $1 LIMIT 25",
+ searchAlbum:"SELECT Album.Albumid, Album.title, Artist.Name as artist FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId WHERE Album.Title ILIKE $1 LIMIT 3",
+ searchArtist:"SELECT * FROM Artist WHERE Name ILIKE $1 LIMIT 3",
  searchUser:"SELECT UserId FROM Users WHERE Username LIKE $1 AND UserId<>1",
 
  addArtist : "INSERT INTO Artist (ArtistId, Name) VALUES ($1,$2);",

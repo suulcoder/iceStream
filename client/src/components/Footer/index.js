@@ -3,7 +3,7 @@ import * as selectors from '../../reducers'
 import React from 'react';
 import { connect } from 'react-redux';
 
-const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,onsubmit}) => (
+const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onsubmit}) => (
     <div className="footerCont">
         <div className="empty"></div>
         <div className="bar"></div>
@@ -11,9 +11,12 @@ const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,millisec
             <div className="selectedTrack">
                 <div className="song_and_link">
                     <img alt='' src={image} className="footer_img"></img>
-                    <button className="link" type="submit" onClick={
-                        () => onsubmit(song)}>
-                    </button>
+                    <div className="state">
+                        <button className="link_" type="submit" onClick={
+                            () => onsubmit(song)}>
+                        </button>
+                        <div><strong>STATE: </strong>{(state)?('ACTIVE'):('INACTIVE')}</div>
+                    </div>
                 </div>
                 <div className="info">
                     <div><strong>Name: </strong>{name}</div>
@@ -67,7 +70,8 @@ export default connect(
                 unitprice: Object.values(selectors.getSelected(state))[9],
                 artist: Object.values(selectors.getSelected(state))[10],
                 image: Object.values(selectors.getSelected(state))[11],
-                song: Object.values(selectors.getSelected(state))[12], 
+                song: Object.values(selectors.getSelected(state))[12],
+                state: Object.values(selectors.getSelected(state))[13],
             })
         }
         return {isSelected:false}

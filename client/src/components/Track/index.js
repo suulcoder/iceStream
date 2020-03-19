@@ -3,14 +3,17 @@ import React, { Fragment } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 
-const Track = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,onSubmit,canDelete,canModify,canInactivate}) => (
+const Track = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate}) => (
     <Fragment>
         <div className="song_"> 
                 <div className="track_">
                     <img alt='' src={image} className="image"></img>
-                    <button className="link" type="submit" onClick={
-                        () => onSubmit(song)}>
-                    </button>
+                    <div className="state">
+                        <button className="link_" type="submit" onClick={
+                            () => onSubmit(song)}>
+                        </button>
+                        <div className="state_" ><strong>STATE: </strong>{(state)?('ACTIVE'):('INACTIVE')}</div>
+                    </div>
                     <div className="track_info">
                         <div><strong>Name: </strong>{name}</div>
                         <div><strong>Album: </strong>{album}</div>
@@ -76,6 +79,7 @@ export default connect(
         artist: Object.values(selectors.getElement(state,id))[10],
         image: Object.values(selectors.getElement(state,id))[11],
         song: Object.values(selectors.getElement(state,id))[12],
+        state: Object.values(selectors.getElement(state,id))[13],
         canInactivate:Object.values(selectors.getUser(state))[8],
         canModify:Object.values(selectors.getUser(state))[9],
         canDelete:Object.values(selectors.getUser(state))[10],

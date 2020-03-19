@@ -1,6 +1,6 @@
 import * as types from '../types/elements'
 
-export const addSong = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid}) => {
+export const addSong = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state}) => {
     if(image===undefined){
         image = './default'
     }
@@ -22,7 +22,8 @@ export const addSong = ({trackid,name,album,mediatype,genre,composer,millisecond
                 unitprice,
                 artist,
                 image,
-                song
+                song,
+                state:(state='TRUE')?(true):(false)
             }
         }
     })

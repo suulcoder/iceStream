@@ -63,10 +63,22 @@
     background-color: black;
 }
 .link{
+    margin-left: 10px;
     margin-right: 5px;
-    margin-left: 5px;
+    margin-bottom: 5px;
     background-image: url('../../public/img/spotify.png');
     width: 65px;
     background-size: cover;
     height: 25px;
+}
+.link_{
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-image: url('../../public/img/spotify.png');
+    width: 65px;
+    background-size: cover;
+    height: 25px;
+}
+.state{
+    margin-left: 10px;
 }
