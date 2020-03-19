@@ -23,7 +23,7 @@ const SearchElements = ({elements,onSubmit}) => (
 
 export default connect(
     (state)=>({
-        elements:selectors.getSearchedElements(state),
+        elements:selectors.getSearchedElements(state).filter(element=>selectors.getElement(state,element)!==undefined),
     }),
     dispatch=>({
         onSubmit(){

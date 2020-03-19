@@ -130,10 +130,9 @@ export const updateAlbum = ({id,title,artist,image,album}) =>{
     })
 }
 
-export const deleteElement = (index,id) => ({
+export const deleteElement = (id) => ({
     type: types.element_deleted,
     payload:{
-        index,
         id
     }
 })

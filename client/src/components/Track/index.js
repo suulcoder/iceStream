@@ -4,8 +4,8 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import * as actions from '../../actions/elemnts'
 
-const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate,inactivate,reduxState}) => (
-    <Fragment>
+const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate,inactivate,reduxState,onDelete}) => (
+   <Fragment>
         <div className="song_"> 
                 <div className="track_">
                     <img alt='' src={image} className="image"></img>
@@ -53,7 +53,7 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                     {
                         (canDelete)?(
                             <button className="delete" type="submit" onClick={
-                                () => onSubmit(id)
+                                () => onDelete(id)
                             }>
                             </button>
                         ):(
@@ -102,8 +102,22 @@ export default connect(
                 .then(async(response)=>{
                     response.json()
                     .then(table => {
-                        console.log({...selectors.getElement(reduxState,id),state})
                         dispatch(actions.updateSong({...selectors.getElement(reduxState,id),state}))
+                    })
+                })
+        },
+        onDelete(id){
+            const trackid = id.split('track')[1]
+            const request = new Request('http://localhost:8080/api/actions/delete/track',{
+                method:'POST',
+                headers: { 'Content-Type':'application/json'},
+                body: JSON.stringify({id:trackid})
+            })
+            fetch(request)
+                .then(async(response)=>{
+                    response.json()
+                    .then(table => {
+                        dispatch(actions.deleteElement(id))
                     })
                 })
         }

@@ -10,7 +10,6 @@ const byId = (state={},action) => {
             delete currentState[action.payload.id]
             return currentState
         case types.element_updated:
-            console.log(action.payload.element)
             return {
                 ...state,
                 [action.payload.element.id]: {
@@ -39,12 +38,6 @@ const order = (state={},action) => {
                 }
             }
             return state       
-        case types.element_deleted:
-            const section = state[action.payload.index].filter(id => id!==action.payload.id)
-            if(section.length()===0){
-                delete state[action.payload.index]
-            }
-            return {...state,[action.payload.index]:section}
         default:
             return state
     }
