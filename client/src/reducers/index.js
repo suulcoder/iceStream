@@ -4,6 +4,7 @@ import app, * as appSelectors from './app';
 import elements, * as elementSelectors from './elements'
 import report,* as reportSelectors from './report'
 import user,* as userSelectors from './user'
+import spotify, * as spotifySelectors from './spotify'
 
 const reducer = combineReducers({
     admin,
@@ -11,6 +12,7 @@ const reducer = combineReducers({
     elements,
     report,
     user,
+    spotify
 })
 
 export default reducer
@@ -30,3 +32,4 @@ export const getAppState = state => appSelectors.getAppState(state.app)
 export const getPermission = (state,id) => adminSelectors.getPermission(state.admin,id)
 export const getAllPermission = (state) => adminSelectors.getAllPermissions(state.admin)
 export const getAdminState = state => adminSelectors.getAdminState(state.admin)
+export const getToken = state => spotifySelectors.getToken(state.spotify)

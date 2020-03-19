@@ -4,14 +4,20 @@ import Header from '../Header'
 import Container from '../Container';
 import Footer from '../Footer';
 import {Client, TrackHandler } from 'spotify-sdk'; 
-import {token} from '../../constants/spotify'
 import * as elementActions from '../../actions/elemnts'
 import * as actions from '../../actions/report'
 import * as types from '../../types/reportSections'
+import { withRouter } from "react-router";
+import * as selectors from '../../reducers'
+import * as spotifyActions from '../../actions/spotify'
 
 class AppState extends React.Component{
     
     componentDidMount(){
+        const{ location } = this.props;
+        if(Object.values(location)[2].split('&')[0].split('=')[1] && this.props.token!==Object.values(location)[2].split('&')[0].split('=')[1]){
+            this.props.setToken(Object.values(location)[2].split('&')[0].split('=')[1])
+        }
         let client = Client.instance;
         client.settings = {
             clientId: '9dd9df7b812f484c91490a594286ca76',
@@ -19,36 +25,8 @@ class AppState extends React.Component{
             scopes: ['user-follow-modify user-follow-read user-library-read user-top-read'],
             redirect_uri: 'http://localhost:8888/'
         };
-        client.token = token
+        client.token = this.props.token
         var track = new TrackHandler();
-        // var artist = new ArtistHandler();
-        // fetch('http://localhost:8080/api/artist',{method:'GET'})
-        // .then(response => response.json())
-        // .then(async(data) => {
-        // data.map(element => { 
-        //     artist.search(Object.values(element)[1]).then((artistCollection) => {
-        //     store.dispatch(actions.addArtist({...element,
-        //         image:Object.values(Object.values(artistCollection[0])[5][0])[1],
-        //     }))
-        //     });
-        //     return null
-        // });
-        // })
-
-        // fetch('http://localhost:8080/api/getalbums',{method:'GET'})
-        // .then(response => response.json())
-        // .then(async(data) => {
-        //   data.map(element => { 
-        //     track.search(Object.values(element)[0], {limit: 1}).then((trackCollection) => {
-        //       store.dispatch(actions.addAlbum({...element,
-        //         image:Object.values(Object.values(Object.values(trackCollection[0])[0])[6][0])[1],
-        //         album:Object.values(Object.values(Object.values(trackCollection[0])[0])[3])[0] 
-        //       }))
-        //     });  
-        //     return null
-        //   });
-        // })
-
         fetch('http://localhost:8080/api/getsongs',{method:'GET'})
         .then(response => response.json())
         .then(async(data) => {
@@ -119,11 +97,16 @@ class AppState extends React.Component{
     }
 }
 
-export default connect(
-    undefined,
+export default withRouter(connect(
+    state=>({
+        token: selectors.getToken(state)
+    }),
     dispatch =>({
         onSubmit(toAdd){
             dispatch(toAdd)
+        },
+        setToken(token){
+            dispatch(spotifyActions.setToken(token))
         }
     })
-)(AppState)
+)(AppState)) 

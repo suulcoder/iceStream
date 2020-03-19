@@ -70,6 +70,9 @@ const isSelected = (state=null,action) => {
 const elementOrder = (state=[],action) => {
     switch (action.type) {
         case types.search_element_added:
+            if(state.includes(action.payload)){
+                return state
+            }
             return [...state,action.payload]
         case types.search_setted_to_null:
             return []

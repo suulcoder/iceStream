@@ -1,0 +1,1 @@
+export const token_setted = 'TOKEN_SETTED'

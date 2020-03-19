@@ -6,10 +6,9 @@ import * as userActions from '../../actions/user'
 import * as actions from '../../actions/elemnts'
 import * as appActions from '../../actions/app'
 import {Client, TrackHandler,ArtistHandler } from 'spotify-sdk'; 
-import {token} from '../../constants/spotify'
 import * as elementActions from '../../actions/elemnts'
 
-const Search = ({onSubmit,app}) => {
+const Search = ({onSubmit,app,token}) => {
     const [query,changeQuery] = useState('')
     return (
         <div className="search">
@@ -19,7 +18,7 @@ const Search = ({onSubmit,app}) => {
             placeholder=" Search"
             value={query}
             onChange={e => changeQuery(e.target.value)}
-            onKeyUp={e=> onSubmit(e.target.value,app)}
+            onKeyUp={e=> onSubmit(e.target.value,app,token)}
             />
         </div>
     )
@@ -27,10 +26,11 @@ const Search = ({onSubmit,app}) => {
 
 export default connect(
     state=>({
-        app:selectors.getAppState(state)
+        app:selectors.getAppState(state),
+        token: selectors.getToken(state)
     }),
     dispatch => ({
-        onSubmit(value,app){
+        onSubmit(value,app,token){
             if(app===4){
                 if(value){
                     dispatch(userActions.setEpmty())
