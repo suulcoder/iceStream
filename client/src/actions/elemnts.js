@@ -160,3 +160,8 @@ export const setSearchtoNull = () => ({
     type:types.search_setted_to_null,
     payload: null
 })
+
+export const deleteSection = (id) => ({
+    type: types.section_deleted,
+    payload: id
+})

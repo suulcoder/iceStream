@@ -109,6 +109,8 @@ SQLQuery('/api/reports/morealbumadded',query.getUserwithmoreAlbumsAdded)
 
 SQLQuery('/api/actions/inactivate',query.UpdateTrackState,'post')
 SQLQuery('/api/actions/delete/track',query.deleteTrack,'post')
+SQLQuery('/api/actions/delete/album',query.deleteAlbum,'post')
+SQLQuery('/api/actions/delete/artist',query.deleteArtist,'post')
 
 const port=8080;
 app.listen(port,()=>console.log(`Server started on port ${port}`))

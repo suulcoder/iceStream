@@ -2,8 +2,9 @@ import './styles.css';
 import React, { Fragment } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
+import * as actions from '../../actions/elemnts'
 
-const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete}) => (
+const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelete}) => (
     <Fragment>
         <div className="artist"> 
                 <div className="artist_">
@@ -30,7 +31,7 @@ const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete}) => (
                 {
                     (canDelete)?(
                         <button className="delete" type="submit" onClick={
-                            () => onSubmit(artistid)
+                            () => onDelete(artistid)
                         }>
                         </button>
                     ):(
@@ -54,6 +55,21 @@ export default connect(
     dispatch=>({
         onSubmit(artist){
             window.location.href = artist;
+        },
+        onDelete(id){
+            const albumid = id.split('artist')[1]
+            const request = new Request('http://localhost:8080/api/actions/delete/artist',{
+                method:'POST',
+                headers: { 'Content-Type':'application/json'},
+                body: JSON.stringify({id:albumid})
+            })
+            fetch(request)
+                .then(async(response)=>{
+                    response.json()
+                    .then(table => {
+                        dispatch(actions.deleteElement(id))
+                    })
+                })
         }
     })
 )(Artist)

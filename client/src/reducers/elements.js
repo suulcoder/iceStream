@@ -37,7 +37,11 @@ const order = (state={},action) => {
                     [action.payload.index]:[action.payload.element.id]
                 }
             }
-            return state       
+            return state
+        case types.section_deleted:
+            const currentState = state
+            delete currentState[action.payload]
+            return currentState       
         default:
             return state
     }
@@ -70,6 +74,8 @@ const elementOrder = (state=[],action) => {
             return [...state,action.payload]
         case types.search_setted_to_null:
             return []
+        case types.element_deleted:
+            return state.filter(element=>element!=action.payload)
         default:
             return state
     }

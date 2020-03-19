@@ -75,4 +75,6 @@ module.exports = {
  UpdateTrack : "UPDATE Track SET Name=$2, AlbumId=$3, MediaTypeId=$4, GenreId=$5, Composer=$6, Millisecons=$7, Bytes=$8, UnitPrice=$9 WHERE TrackId=$1",
 
  deleteTrack: "DELETE FROM Track WHERE TrackId=$1;",
+ deleteAlbum: "DELETE FROM Album WHERE AlbumId=$1;",
+ deleteArtist: "DELETE FROM Artist WHERE ArtistId=$1;",
 }
