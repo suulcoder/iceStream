@@ -1,0 +1,52 @@
+.myIce{
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 800px;
+}
+.myPermissions{
+    padding: 40px;
+    margin-right: 30px;
+}
+.myPermissions_{
+    margin-top: 25px;
+    margin-bottom: 35px;
+}
+.category{
+    display: flex;
+    flex-direction: row;
+    padding: 7px;
+    margin-top: 10px;
+}
+
+.title_category{
+    color: gray;
+}
+.isTrue{
+    background-image: url('../../public/img/check.png');
+    background-color: transparent;
+    border-radius: 50px;
+    border-color: transparent;
+    background-size: cover;
+    height: 20px;
+    width: 20px;
+    margin-left: 30px;
+}
+.isFalse{
+    background-image: url('../../public/img/cross.png');
+    background-color: transparent;
+    border-color: transparent;
+    background-size: cover;
+    height: 20px;
+    width: 20px;
+    border-radius: 50px;
+    margin-left: 30px;
+}
+.addMyIce{
+    padding: 50px;
+}
+.addMyIce_{
+    font-size: xx-large;
+}

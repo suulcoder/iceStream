@@ -7,6 +7,7 @@ import Report from '../Report';
 import Elements from '../Elements';
 import Admin from '../Admin';
 import SearchElements from '../SearchElements';
+import MyIce from '../MyIce';
 
 const Header = ({app}) => (
         <div className="container">
@@ -23,7 +24,7 @@ const Header = ({app}) => (
                         (app===2)?(
                             <SearchElements></SearchElements>
                         ):((app===3)?(
-                            <div></div>
+                            <MyIce></MyIce>
                         ):(
                             <Admin></Admin>
                         ))
