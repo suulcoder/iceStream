@@ -23,7 +23,7 @@ export const addSong = ({trackid,name,album,mediatype,genre,composer,millisecond
                 artist,
                 image,
                 song,
-                state:(state='TRUE')?(true):(false)
+                state:(state==='TRUE')?(true):(false)
             }
         }
     })
@@ -65,46 +65,70 @@ export const addAlbum = ({albumid,title,artist,image,album}) =>{
     })
 } 
 
-export const updateSong = (index,id,name,album,mediaType,genre,composer,millisecons,bytes,unitePrice) => ({
+export const updateSong = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state}) => {
+    if(image===undefined){
+        image = './default'
+    }
+    return ({
+        type: types.element_updated,
+        payload:{
+            control: true,
+            index : albumid,
+            element:{
+                type:'track',
+                id,
+                name,
+                album,
+                mediatype,
+                genre,
+                composer,
+                milliseconds,
+                bytes,
+                unitprice,
+                artist,
+                image,
+                song,
+                state:(state==='TRUE')?(true):(false)
+            }
+        }
+    })
+}
+
+export const upadateArtist = ({id,name,image,artist}) => ({
     type: types.element_updated,
     payload:{
-        index,
+        control: false,
+        index:name,
         element:{
+            type:'artist',
             id,
             name,
-            album,
-            mediaType,
-            genre,
-            composer,
-            millisecons,
-            bytes,
-            unitePrice
-        }
-    }
-})
-
-export const updateArtist = (index,id,name) => ({
-    type: types.element_updated,
-    payload:{
-        index,
-        element:{
-            id,
-            name,
-        }
-    }
-})
-
-export const updateAlbum = (index,id,tittle,artist) => ({
-    type: types.element_updated,
-    payload:{
-        index,
-        element:{
-            id,
-            tittle,
+            image,
             artist
         }
     }
 })
+
+export const updateAlbum = ({id,title,artist,image,album}) =>{
+    if(image===null){
+        image='./default.png'
+    }
+    return ({
+        type: types.element_updated,
+        payload:{
+            control: false,
+            index:artist,
+            element:{
+                type:'album',
+                id,
+                title,
+                artist,
+                image,
+                album
+            }
+        }
+    })
+}
 
 export const deleteElement = (index,id) => ({
     type: types.element_deleted,

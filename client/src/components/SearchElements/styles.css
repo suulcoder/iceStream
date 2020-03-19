@@ -4,7 +4,7 @@
     background-color: white;
     padding: 45px;
     width: 100%;
-    margin-bottom: 70px;
+    margin-bottom: 170px;
 }
 .result_title{
     font-size: x-large;
@@ -18,7 +18,7 @@
 .return{
     margin-right: 5px;
     margin-left: 5px;
-    background-image: url('./return.png');
+    background-image: url('../../public/img/return.png');
     background-color: transparent;
     border-color: transparent;
     width: 35px;

@@ -10,6 +10,7 @@ const byId = (state={},action) => {
             delete currentState[action.payload.id]
             return currentState
         case types.element_updated:
+            console.log(action.payload.element)
             return {
                 ...state,
                 [action.payload.element.id]: {

@@ -107,5 +107,7 @@ SQLQuery('/api/reports/colaborativeartist',query.getMostColaborativeArtists)
 SQLQuery('/api/reports/recentalbum',query.getRecentAlbums)
 SQLQuery('/api/reports/morealbumadded',query.getUserwithmoreAlbumsAdded)
 
+SQLQuery('/api/actions/inactivate',query.UpdateTrackState,'post')
+
 const port=8080;
 app.listen(port,()=>console.log(`Server started on port ${port}`))

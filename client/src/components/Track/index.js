@@ -2,8 +2,9 @@ import './styles.css';
 import React, { Fragment } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
+import * as actions from '../../actions/elemnts'
 
-const Track = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate}) => (
+const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate,inactivate,reduxState}) => (
     <Fragment>
         <div className="song_"> 
                 <div className="track_">
@@ -32,7 +33,7 @@ const Track = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,u
                     {
                         (canInactivate)?(
                             <button className="inactivate" type="submit" onClick={
-                                () => onSubmit(trackid)
+                                () => inactivate(id,state,reduxState)
                             }>
                             </button>
                         ):(
@@ -42,7 +43,7 @@ const Track = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,u
                     {
                         (canModify)?(
                             <button className="edit" type="submit" onClick={
-                                () => onSubmit(trackid)
+                                () => onSubmit(id)
                             }>
                             </button>
                         ):(
@@ -52,7 +53,7 @@ const Track = ({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,u
                     {
                         (canDelete)?(
                             <button className="delete" type="submit" onClick={
-                                () => onSubmit(trackid)
+                                () => onSubmit(id)
                             }>
                             </button>
                         ):(
@@ -83,10 +84,29 @@ export default connect(
         canInactivate:Object.values(selectors.getUser(state))[8],
         canModify:Object.values(selectors.getUser(state))[9],
         canDelete:Object.values(selectors.getUser(state))[10],
+        reduxState:state
     }),
     dispatch=>({
         onSubmit(track){
             window.location.href = track;
+        },
+        inactivate(id,value,reduxState){
+            const trackid = id.split('track')[1]
+            const state = (value)?('FALSE'):('TRUE')
+            const request = new Request('http://localhost:8080/api/actions/inactivate',{
+                method:'POST',
+                headers: { 'Content-Type':'application/json'},
+                body: JSON.stringify({id:trackid,value:state})
+            })
+            fetch(request)
+                .then(async(response)=>{
+                    response.json()
+                    .then(table => {
+                        console.log({...selectors.getElement(reduxState,id),state})
+                        dispatch(actions.updateSong({...selectors.getElement(reduxState,id),state}))
+                    })
+                })
         }
+
     })
 )(Track)
