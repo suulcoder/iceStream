@@ -6,9 +6,8 @@ import { connect } from 'react-redux';
 const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModifyTrack,
     canDeleteTrack,canModifyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist,artists,
     mediatypes,genres,albums,
-    onSaveTrack,
-    onSaveAlbum,
-    onSaveArtist,}) => {
+    onSaveTrack,onSaveAlbum,
+    onSaveArtist,userid}) => {
     const [trackName,changeTrack] = useState('')
     const [albumName,changeAlbum] = useState((Object.values(albums[0])[0]===undefined)?(''):(Object.values(albums[0])[1]))
     const [album,changeAlbumName] = useState('')
@@ -51,7 +50,7 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
                             </div>
                         </div>
                         <button className="save" type="submit" onClick={
-                            () => onSaveAlbum(album,artist)
+                            () => onSaveAlbum(album,artist,userid)
                         }>
                         </button>
                         </Fragment>
@@ -78,7 +77,7 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
                             />
                         </div>
                         <button className="save" type="submit" onClick={
-                            () => onSaveArtist(name)
+                            () => onSaveArtist(name,userid)
                         }>
                         </button>
                         </Fragment>
@@ -190,7 +189,7 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
                         </div>
                         </div>
                         <button className="save" type="submit" onClick={
-                            () => onSaveTrack(trackName,albumName,mediaTypeName,genreName,composerName,(seconds*1000+Minutes*60000),size*1024*1024,myPrice)
+                            () => onSaveTrack(trackName,albumName,mediaTypeName,genreName,composerName,(seconds*1000+Minutes*60000),size*1024*1024,myPrice,userid)
                         }>
                         </button>
                         </Fragment>
@@ -266,9 +265,10 @@ export default connect(
         genres: selectors.getInfo(state,'genre'),
         albums: selectors.getInfo(state,'album'),
         mediatypes: selectors.getInfo(state,'mediatype'),
+        userid: Object.values(selectors.getUser(state))[3]
     }),
     dispatch => ({
-        onSaveAlbum(album,artist){
+        onSaveAlbum(album,artist,userid){
             fetch('http://localhost:8080/api/newalbumid',{method:'GET'})
             .then(response => response.json())
             .then(data => {
@@ -289,14 +289,22 @@ export default connect(
                             })
                             fetch(request1)
                             .then(async(response)=>{
-                                alert("ALBUM ADDED SUCCESSFULLY")
-                                window.location.href = 'http://localhost:3000/'
+                                const request2 = new Request('http://localhost:8080/api/useralbum',{
+                                method:'POST',
+                                headers: { 'Content-Type':'application/json'},
+                                body: JSON.stringify({userid:userid,id:Object.values(data[0])[0]+1,inDate:new Date()})
+                                })
+                                fetch(request2)
+                                .then(async(response)=>{
+                                    alert("ALBUM ADDED SUCCESSFULLY")
+                                    window.location.href = 'http://localhost:3000/'
+                                })
                             })
                         })
                 })
             })
         },
-        onSaveArtist(value){
+        onSaveArtist(value,userid){
             fetch('http://localhost:8080/api/newartistid',{method:'GET'})
             .then(response => response.json())
             .then(data => {
@@ -307,13 +315,21 @@ export default connect(
                 })
                 fetch(request)
                 .then(async(response)=>{
+                    const request1 = new Request('http://localhost:8080/api/userartist',{
+                    method:'POST',
+                    headers: { 'Content-Type':'application/json'},
+                    body: JSON.stringify({userid:userid,id:Object.values(data[0])[0]+1,inDate:new Date()})
+                })
+                fetch(request1)
+                .then(async(response)=>{
                     alert("ARTIST ADDED SUCCESSFULLY")
                     window.location.href = 'http://localhost:3000/'
+                })
                 })
         
             })
         },
-        onSaveTrack(name,album,mediatype,genre,composer,milliseconds,bytes,unitprice){
+        onSaveTrack(name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,userid){
             fetch('http://localhost:8080/api/newtrackid',{method:'GET'})
             .then(response => response.json())
             .then(data => {
@@ -354,8 +370,16 @@ export default connect(
                                                         })
                                                         fetch(request4)
                                                         .then(async(response)=>{
-                                                            alert("TRACK ADDED SUCCESSFULLY")
-                                                            window.location.href = 'http://localhost:3000/'
+                                                            const request5 = new Request('http://localhost:8080/api/usertrack',{
+                                                                method:'POST',
+                                                                headers: { 'Content-Type':'application/json'},
+                                                                body: JSON.stringify({userid:userid, id:Object.values(data[0])[0]+1,inDate:new Date()})
+                                                            })
+                                                            fetch(request5)
+                                                            .then(async(response)=>{
+                                                                alert("TRACK ADDED SUCCESSFULLY")
+                                                                window.location.href = 'http://localhost:3000/'
+                                                            })
                                                         })
                                                     })
                                                 })

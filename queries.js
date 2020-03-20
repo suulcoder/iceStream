@@ -61,7 +61,7 @@ module.exports = {
     'from album al1 join artist ar1 on al1.artistid = ar1.artistid join track t1 on t1.composer = ar1.name\n' +
     'group by ar1.name\n' +
     'order by count(ar1.name) desc LIMIT 10'),
- getUserwithmoreAlbumsAdded : "SELECT * FROM hasAddedAlbum",
+ getUserwithmoreAlbumsAdded : "SELECT Users.Username,count(Users.username) FROM hasAddedAlbum JOIN Users ON Users.userid=hasAddedAlbum.userid group by Users.username order by count(Users.username) DESC LIMIT 10",
  getRecentAlbums:"SELECT * FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN hasAddedAlbum ON Album.AlbumId=hasAddedAlbum.AlbumId", 
  
  searchTrack:"SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid, TrackState.state as state FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId JOIN TrackState ON TrackState.Trackid=Track.Trackid WHERE Track.Name ILIKE $1 LIMIT 1",
@@ -70,6 +70,10 @@ module.exports = {
  searchUser:"SELECT UserId FROM Users WHERE Username LIKE $1 AND UserId<>1",
 
  addArtist : "INSERT INTO Artist (ArtistId, Name) VALUES ($1,$2);",
+
+ addUserAlbum : " INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES ($1,$2,$3)",
+ addUserArtist : " INSERT INTO hasAddedArtist (UserId,ArtistId,InDate) VALUES ($1,$2,$3)",
+ addUserTrack : " INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES ($1,$2,$3)",
  addAlbum : "INSERT INTO Album (AlbumId, Title, ArtistId) VALUES ($1,$2,$3);",
  addTrack : "INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);",
  addUser : "INSERT INTO Users (UserId,Username,email,password,role) VALUES ($1,$2,$3,$4,$5);",
