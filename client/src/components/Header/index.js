@@ -21,7 +21,13 @@ const Header = ({app,role,onSubmit,logout,home}) => (
                         <Login></Login>
                     ) : (
                         <div className="headerContainer">
-                            <Search></Search>
+                            {
+                                (app!==3)?(
+                                    <Search></Search>
+                                ):(
+                                    <Fragment></Fragment>
+                                )
+                            }
                             <div className="buttons">
                                 {(app===1)?(
                                     <button className="button" type="submit" onClick={

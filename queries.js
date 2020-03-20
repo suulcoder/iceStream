@@ -29,6 +29,12 @@ module.exports = {
  getLastArtistId :
     ("SELECT max(artistid)\n" +
         "from artist"),
+ getLastTrackId :
+ ("SELECT max(trackid)\n" +
+   "from Track"),
+ getLastAlbumId :
+   ("SELECT max(albumid)\n" +
+      "from album"),
  getAllPlaylistInfo : 
     (`SELECT playlistid\n` +
         `FROM playlist`),

@@ -10,12 +10,12 @@ import Artist from '../Artist';
 const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModifyTrack, canDeleteTrack,canModifyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist,
 artists,mediatypes,genres,albums,onSaveTrack,onSaveAlbum,onSaveArtist}) => {
     const [trackName,changeTrack] = useState('')
-    const [albumName,changeAlbum] = useState('')
-    const [artistName,changeArtist] = useState('')
+    const [albumName,changeAlbum] = useState((Object.values(albums[0])[0]===undefined)?(''):(Object.values(albums[0])[1]))
+    const [artistName,changeArtist] = useState((Object.values(artists[0])[0]===undefined)?(''):(Object.values(artists[0])[1]))
     const [album,changeAlbumName] = useState('')
-    const [artist,changeArtistName] = useState('')
-    const [genreName,changeGenre] = useState('')
-    const [mediaTypeName,changeMediaType] = useState('')
+    const [artist,changeArtistName] = useState((Object.values(artists[0])[0]===undefined)?(''):(Object.values(artists[0])[1]))
+    const [genreName,changeGenre] = useState((Object.values(genres[0])[0]===undefined)?(''):(Object.values(genres[0])[1]))
+    const [mediaTypeName,changeMediaType] = useState((Object.values(mediatypes[0])[0]===undefined)?(''):(Object.values(mediatypes[0])[1]))
     const [composerName,changeComposer] = useState('')
     const [Minutes,changeMinutes] = useState('0')
     const [seconds,changeSeconds] = useState('0')
@@ -79,7 +79,7 @@ artists,mediatypes,genres,albums,onSaveTrack,onSaveAlbum,onSaveArtist}) => {
                     )
                 }
                 <button className="save" type="submit" onClick={
-                    () => onSaveAlbum(name)
+                    () => onSaveArtist(name)
                 }>
                 </button>
                 </div>
@@ -269,6 +269,113 @@ export default connect(
         mediatypes: selectors.getInfo(state,'mediatype'),
     }),
     dispatch => ({
-        onSubmit(value){
-    }
+        onSaveAlbum(album,artist){
+            fetch('http://localhost:8080/api/newalbumid',{method:'GET'})
+            .then(response => response.json())
+            .then(data => {
+                const request = new Request('http://localhost:8080/api/actions/update/getArtistID',{
+                    method:'POST',
+                    headers: { 'Content-Type':'application/json'},
+                    body: JSON.stringify({artist:artist})
+                })
+                fetch(request)
+                    .then(async(response)=>{
+                        response.json()
+                        .then(table => {
+                            const artistid = Object.values(table.rows[0])[0]
+                            const request1 = new Request('http://localhost:8080/api/newAlbum',{
+                                method:'POST',
+                                headers: { 'Content-Type':'application/json'},
+                                body: JSON.stringify({id:Object.values(data[0])[0]+1,album:album,artist:artistid})
+                            })
+                            fetch(request1)
+                            .then(async(response)=>{
+                                alert("ALBUM ADDED SUCCESSFULLY")
+                                window.location.href = 'http://localhost:3000/'
+                            })
+                        })
+                })
+            })
+        },
+        onSaveArtist(value){
+            fetch('http://localhost:8080/api/newartistid',{method:'GET'})
+            .then(response => response.json())
+            .then(data => {
+                const request = new Request('http://localhost:8080/api/newArtist',{
+                    method:'POST',
+                    headers: { 'Content-Type':'application/json'},
+                    body: JSON.stringify({id:Object.values(data[0])[0]+1,name:value})
+                })
+                fetch(request)
+                .then(async(response)=>{
+                    alert("ARTIST ADDED SUCCESSFULLY")
+                    window.location.href = 'http://localhost:3000/'
+                })
+        
+            })
+        },
+        onSaveTrack(name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist){
+            fetch('http://localhost:8080/api/newtrackid',{method:'GET'})
+            .then(response => response.json())
+            .then(data => {
+                const request = new Request('http://localhost:8080/api/actions/update/getArtistID',{
+                    method:'POST',
+                    headers: { 'Content-Type':'application/json'},
+                    body: JSON.stringify({artist:artist})
+                })
+                fetch(request)
+                .then(async(response)=>{
+                    response.json()
+                    .then(table => {
+                        const artistid = Object.values(table.rows[0])[0]
+                        const request1 = new Request('http://localhost:8080/api/actions/update/getAlbumID',{
+                            method:'POST',
+                            headers: { 'Content-Type':'application/json'},
+                            body: JSON.stringify({id:album})
+                        })
+                        fetch(request1)
+                            .then(async(response)=>{
+                                response.json()
+                                .then(table => {
+                                    const albumid = Object.values(table.rows[0])[0]
+                                    const request2 = new Request('http://localhost:8080/api/actions/update/medieaID',{
+                                        method:'POST',
+                                        headers: { 'Content-Type':'application/json'},
+                                        body: JSON.stringify({id:mediatype})
+                                    })
+                                    fetch(request2)
+                                        .then(async(response)=>{
+                                            response.json()
+                                            .then(table => {
+                                                const mediatypeid = Object.values(table.rows[0])[0]
+                                                const request3 = new Request('http://localhost:8080/api/actions/update/genereID',{
+                                                    method:'POST',
+                                                    headers: { 'Content-Type':'application/json'},
+                                                    body: JSON.stringify({id:genre})
+                                                })
+                                                fetch(request3)
+                                                    .then(async(response)=>{
+                                                        response.json()
+                                                        .then(table => {
+                                                            const genreid = Object.values(table.rows[0])[0]
+                                                            const request4 = new Request('http://localhost:8080/api/newTrack',{
+                                                                method:'POST',
+                                                                headers: { 'Content-Type':'application/json'},
+                                                                body: JSON.stringify({id:Object.values(data[0])[0]+1,name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:bytes,unitprice:unitprice})
+                                                            })
+                                                            fetch(request4)
+                                                            .then(async(response)=>{
+                                                                alert("ALBUM ADDED SUCCESSFULLY")
+                                                                window.location.href = 'http://localhost:3000/'
+                                                            })
+                                                        })
+                                                    })
+                                            })
+                                        })
+                                })
+                            })
+                    })
+                })
+            })
+        } 
 }))(MyIce)
