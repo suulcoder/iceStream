@@ -16,6 +16,8 @@ const info = (state={}, action) => {
     switch (action.type){
         case types.report_section_added:
             return {...state,[action.payload.key]:action.payload.value}
+        case types.report_sections_to_null:
+            return {}
         default:
             return state
     }

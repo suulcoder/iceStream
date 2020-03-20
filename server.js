@@ -69,6 +69,8 @@ const SQLQuery = (apiRoute,Query,method='get') => {
 SQLQuery('/api/user',query.getAllUsers)
 SQLQuery('/api/artist',query.getAllArtist)
 SQLQuery('/api/genre',query.getAllGenre)
+SQLQuery('/api/album',query.getJustAllAlbum)
+SQLQuery('api/mediatype',query.getAllMediaType)
 SQLQuery('/api/checkuser',query.getUserByUsername,'post')
 SQLQuery('/api/checkusername',query.checkUserByUsername,'post')
 SQLQuery('/api/adduser',query.addUser,'post')
@@ -111,6 +113,13 @@ SQLQuery('/api/actions/inactivate',query.UpdateTrackState,'post')
 SQLQuery('/api/actions/delete/track',query.deleteTrack,'post')
 SQLQuery('/api/actions/delete/album',query.deleteAlbum,'post')
 SQLQuery('/api/actions/delete/artist',query.deleteArtist,'post')
+
+SQLQuery('/api/actions/update/getAlbumID',query.selectAlbumID,'post')
+SQLQuery('/api/actions/update/getArtistID',query.selectARtistID,'post')
+
+SQLQuery('/api/actions/update/artist',query.UpdateArtist,'post')
+SQLQuery('/api/actions/update/album',query.UpdateAlbum,'post')
+
 
 const port=8080;
 app.listen(port,()=>console.log(`Server started on port ${port}`))

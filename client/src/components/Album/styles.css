@@ -21,3 +21,11 @@
 .albuminfo{
     margin-left: 25px;
 }
+.select{
+    max-width: 200px;
+    padding: 5px 10px 5px 10px;
+    font-size: small;
+    margin-top: 15px;
+    border-radius: 50px;
+    margin-left: 10px;
+}

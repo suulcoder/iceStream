@@ -17,6 +17,8 @@ const byId = (state={},action) => {
                   ...action.payload.element,
                 },
               };
+        case types.byID_to_null:
+            return {}
         default:
             return state
     }
@@ -41,7 +43,9 @@ const order = (state={},action) => {
         case types.section_deleted:
             const currentState = state
             delete currentState[action.payload]
-            return currentState       
+            return currentState      
+        case types.byID_to_null:
+            return [] 
         default:
             return state
     }
@@ -99,4 +103,5 @@ export const getAll = (state) => state.orderSections.map(
 ).filter(section => section!=null);
 export const getSectionIDs = (state) => Object.keys(state.order)
 export const getSelected = (state) => (state.isSelected===null)?null: getElement(state,state.isSelected)
+export const getEdited = state => state.isEdited
 export const getSearchedElements = (state) => state.elementOrder

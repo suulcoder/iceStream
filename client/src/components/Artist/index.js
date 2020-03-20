@@ -1,10 +1,12 @@
 import './styles.css';
-import React, { Fragment } from 'react';
+import React, { Fragment,useState } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import * as actions from '../../actions/elemnts'
 
-const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelete}) => (
+const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelete,isEdited,onUpdate,onEdit,element}) => {
+    const [artistName,changeName] = useState(name)  
+    return (
     <Fragment>
         <div className="artist"> 
                 <div className="artist_">
@@ -14,18 +16,36 @@ const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelet
                     </button>
                     <div className="artistinfo">
                         <div className="artistitle"><strong>ARTIST:</strong></div>
-                        <div><strong>Name: </strong> {name}</div>
+                        {
+                            (isEdited)?(
+                                <div><strong>Name:</strong>
+                                    <input
+                                    className="input_"
+                                    type="text"
+                                    placeholder="Artist Name"
+                                    value={artistName}
+                                    onChange={e => changeName(e.target.value)}
+                                    />
+                                </div>
+                            ):(
+                                <div><strong>Name:</strong> {name}</div>
+                            )
+                        }
+                        
                     </div>
                 </div>
                 <div>
                 {
-                    (canModify)?(
+                    (canModify && !isEdited)?(
                         <button className="edit" type="submit" onClick={
-                            () => onSubmit(artistid)
+                            () => onEdit(artistid)
                         }>
                         </button>
                     ):(
-                        <div/>
+                        <button className="save" type="submit" onClick={
+                            () => onUpdate(artistid,artistName,element)
+                        }>
+                        </button>
                     )
                 }
                 {
@@ -41,33 +61,54 @@ const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelet
                 </div>                
         </div>
     </Fragment>
-)
+)}
 
 export default connect(
-    (state, {id})=>({
+    (state, {id,isEdited})=>({
         artistid:Object.values(selectors.getElement(state,id))[1],
         name:Object.values(selectors.getElement(state,id))[2],
         image:Object.values(selectors.getElement(state,id))[3],
         artist:Object.values(selectors.getElement(state,id))[4],
         canModify:Object.values(selectors.getUser(state))[13],
         canDelete:Object.values(selectors.getUser(state))[14],
+        isEdited,
+        element:selectors.getElement(state,id)
     }),
     dispatch=>({
         onSubmit(artist){
             window.location.href = artist;
         },
         onDelete(id){
-            const albumid = id.split('artist')[1]
+            const artistid = id.split('artist')[1]
             const request = new Request('http://localhost:8080/api/actions/delete/artist',{
                 method:'POST',
                 headers: { 'Content-Type':'application/json'},
-                body: JSON.stringify({id:albumid})
+                body: JSON.stringify({id:artistid})
             })
             fetch(request)
                 .then(async(response)=>{
                     response.json()
                     .then(table => {
                         dispatch(actions.deleteElement(id))
+                    })
+                })
+        },
+        onEdit(id){
+            dispatch(actions.editElement(id))
+        },
+        onUpdate(id,name,element){
+            const artistid = id.split('artist')[1]
+            const request = new Request('http://localhost:8080/api/actions/update/artist',{
+                method:'POST',
+                headers: { 'Content-Type':'application/json'},
+                body: JSON.stringify({id:artistid,name:name})
+            })
+            fetch(request)
+                .then(async(response)=>{
+                    response.json()
+                    .then(table => {
+                        dispatch(actions.upadateArtist({...element,name}))
+                        dispatch(actions.editElement(null))
                     })
                 })
         }

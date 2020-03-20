@@ -4,7 +4,7 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import * as actions from '../../actions/elemnts'
 
-const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate,inactivate,reduxState,onDelete}) => (
+const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate,inactivate,reduxState,onDelete,isEdited,onEdit,element,onUpdate}) => (
    <Fragment>
         <div className="song_"> 
                 <div className="track_">
@@ -41,13 +41,16 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                         )
                     }
                     {
-                        (canModify)?(
+                        (canModify && !isEdited)?(
                             <button className="edit" type="submit" onClick={
-                                () => onSubmit(id)
+                                () => onEdit(id)
                             }>
                             </button>
                         ):(
-                            <div/>
+                            <button className="save" type="submit" onClick={
+                                () => onUpdate()
+                            }>
+                            </button>
                         )
                     }
                     {
@@ -66,7 +69,7 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
 )
 
 export default connect(
-    (state, {id})=>({
+    (state, {id,isEdited})=>({
         type:Object.values(selectors.getElement(state,id))[0],
         id:Object.values(selectors.getElement(state,id))[1],
         name:Object.values(selectors.getElement(state,id))[2],
@@ -84,7 +87,9 @@ export default connect(
         canInactivate:Object.values(selectors.getUser(state))[8],
         canModify:Object.values(selectors.getUser(state))[9],
         canDelete:Object.values(selectors.getUser(state))[10],
-        reduxState:state
+        reduxState:state,
+        isEdited,
+        element:selectors.getElement(state,id),
     }),
     dispatch=>({
         onSubmit(track){
@@ -120,7 +125,10 @@ export default connect(
                         dispatch(actions.deleteElement(id))
                     })
                 })
-        }
+        },
+        onEdit(id){
+            dispatch(actions.editElement(id))
+        },
 
     })
 )(Track)

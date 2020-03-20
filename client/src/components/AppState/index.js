@@ -10,6 +10,7 @@ import * as types from '../../types/reportSections'
 import { withRouter } from "react-router";
 import * as selectors from '../../reducers'
 import * as spotifyActions from '../../actions/spotify'
+import * as appActions from '../../actions/app'
 
 class AppState extends React.Component{
     
@@ -27,6 +28,9 @@ class AppState extends React.Component{
         };
         client.token = this.props.token
         var track = new TrackHandler();
+        this.props.onSubmit(elementActions.setToNull())
+        this.props.onSubmit(appActions.setToNull())
+        this.props.onSubmit(actions.setToNull())
         fetch('http://localhost:8080/api/getsongs',{method:'GET'})
         .then(response => response.json())
         .then(async(data) => {
@@ -39,6 +43,30 @@ class AppState extends React.Component{
             });  
             return null
             });
+        })
+
+        fetch('http://localhost:8080/api/artist',{method:'GET'})
+        .then(response => response.json())
+        .then(data => {
+            this.props.onSubmit(appActions.addSection('artist',data))
+        })
+
+        fetch('http://localhost:8080/api/genre',{method:'GET'})
+        .then(response => response.json())
+        .then(data => {
+            this.props.onSubmit(appActions.addSection('genre',data))
+        })
+
+        fetch('http://localhost:8080/api/album',{method:'GET'})
+        .then(response => response.json())
+        .then(data => {
+            this.props.onSubmit(appActions.addSection('album',data))
+        })
+
+        fetch('http://localhost:8080/api/mediatype',{method:'GET'})
+        .then(response => response.json())
+        .then(data => {
+            this.props.onSubmit(appActions.addSection('medyatype',data))
         })
 
         fetch('http://localhost:8080/api/reports/commongenre',{method:'GET'})

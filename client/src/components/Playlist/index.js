@@ -4,7 +4,7 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import Element from '../Element'
 
-const Playlist = ({elements, nombre,image,artist,showSongs}) => (
+const Playlist = ({elements, nombre,image,artist,showSongs,isEdited}) => (
     <div className="containerPlay">
         <div className="playlistInfo">
             <div className="titlePlaylist"><strong>Title:</strong>{nombre}</div>

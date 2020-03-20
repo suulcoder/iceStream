@@ -15,3 +15,7 @@ export const addReportSection = (key,value) => ({
         value
     }
 })
+
+export const setToNull = () => ({
+    type: types.report_sections_to_null
+})

@@ -36,6 +36,22 @@
     margin-right: 5px;
     border-radius: 5px;
 }
+.save{
+    background-image: url('../../public/img/save.png');
+    background-size: cover;
+    height: 27px;
+    width: 27px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
 .artistitle{
     margin-bottom: 10px;
+}
+.input_{
+    border-radius: 20px;
+    font-size: small;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-left: 15px;
+    padding: 7px;
 }

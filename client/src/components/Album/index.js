@@ -1,10 +1,13 @@
 import './styles.css';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import * as actions from '../../actions/elemnts'
 
-const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,onDelete}) => (
+const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,onDelete,onUpdate,isEdited,element,artists,onEdit}) => {
+    const [albumName,changeAlbum] = useState(title)
+    const [artistName,changeArtist] = useState(artist)
+    return (
     <Fragment>
         <div className="album"> 
                 <div className="album_">
@@ -14,19 +17,48 @@ const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,on
                     </button>
                     <div className="albuminfo">
                         <div className="albumtitle"><strong>ALBUM:</strong></div>
-                        <div><strong>Title: </strong> {title}</div>
-                        <div><strong>Artist: </strong> {artist}</div>
+                        {
+                            (isEdited)?(
+                                <Fragment>
+                                    <div><strong>Title:</strong>
+                                        <input
+                                        className="input_"
+                                        type="text"
+                                        placeholder="Artist Name"
+                                        value={albumName}
+                                        onChange={e => changeAlbum(e.target.value)}
+                                        />
+                                    </div>
+                                    <div><strong>Artist:</strong>
+                                        <select value={artistName} className="select_" onChange={e=>{
+                                        return changeArtist(e.target.value)}} className="select" id="B" name="artist">
+                                        {artists.map(artist => (
+                                            <option key={Object.values(artist)[0]} value={Object.values(artist)[1]}>{Object.values(artist)[1]}</option>
+                                        ))}
+                                        </select>
+                                    </div>
+                                </Fragment>
+                            ):(
+                                <Fragment>
+                                    <div><strong>Title: </strong> {title}</div>
+                                    <div><strong>Artist: </strong> {artist}</div>
+                                </Fragment>
+                            )
+                        }
                     </div>
                 </div>
                 <div>
                     {
-                        (canModify)?(
+                        (canModify && !isEdited)?(
                             <button className="edit" type="submit" onClick={
-                                () => onSubmit(albumid)
+                                () => onEdit(albumid)
                             }>
                             </button>
                         ):(
-                            <div/>
+                            <button className="save" type="submit" onClick={
+                                () => onUpdate(albumid,albumName,artistName,element)
+                            }>
+                            </button>
                         )
                     }
                     {
@@ -43,10 +75,10 @@ const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,on
                 </div>                
         </div>
     </Fragment>
-)
+)}
 
 export default connect(
-    (state, {id})=>({
+    (state, {id,isEdited})=>({
         albumid:Object.values(selectors.getElement(state,id))[1],
         title:Object.values(selectors.getElement(state,id))[2],
         artist:Object.values(selectors.getElement(state,id))[3],
@@ -54,6 +86,9 @@ export default connect(
         album:Object.values(selectors.getElement(state,id))[5],
         canModify:Object.values(selectors.getUser(state))[11],
         canDelete:Object.values(selectors.getUser(state))[12],
+        isEdited,
+        element:selectors.getElement(state,id),
+        artists: selectors.getInfo(state,'artist')
     }),
     dispatch=>({
         onSubmit(album){
@@ -72,6 +107,38 @@ export default connect(
                     .then(table => {
                         dispatch(actions.deleteElement(id))
                         dispatch(actions.deleteSection(albumid))
+                    })
+                })
+        },
+        onEdit(id){
+            dispatch(actions.editElement(id))
+        },
+        onUpdate(id,title,artist,element){
+            const albumid = id.split('album')[1]
+            const request = new Request('http://localhost:8080/api/actions/update/getArtistID',{
+                method:'POST',
+                headers: { 'Content-Type':'application/json'},
+                body: JSON.stringify({artist:artist})
+            })
+            fetch(request)
+                .then(async(response)=>{
+                    response.json()
+                    .then(table => {
+                        const artistid = Object.values(table.rows[0])[0]
+                        const request = new Request('http://localhost:8080/api/actions/update/album',{
+                            method:'POST',
+                            headers: { 'Content-Type':'application/json'},
+                            body: JSON.stringify({id:albumid,name:title,artistid:artistid})
+                        })
+                        fetch(request)
+                            .then(async(response)=>{
+                                response.json()
+                                .then(table => {
+                                    console.log({...element,title,artist})
+                                    dispatch(actions.updateAlbum({...element,title,artist}))
+                                    dispatch(actions.editElement(null))
+                                })
+                            })
                     })
                 })
         }
