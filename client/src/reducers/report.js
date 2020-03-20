@@ -31,4 +31,4 @@ const report = combineReducers({
 export default report
 
 export const getReport = state => state.index;
-export const getReportSection = (state,key) => state.info[key]
+export const getReportSection = (state,key) => (state.info[key]===undefined)?([]):(state.info[key])

@@ -78,7 +78,7 @@ module.exports = {
  UpdateUser : "UPDATE Users SET Username=$3, email=$3, password=$4,role=$5 WHERE UserId=$1;",
  UpdatePermission : "UPDATE UserPermissions SET canlogin=$2, canaddartist=$3, canaddalbum=$4, canaddtrack=$5, caninactivatesong=$6, canmodifiysong=$7, candeletesong=$8, canmodifiyalbum=$9, candeletealbum=$10, canmodifyartist=$11, candeleteartist=$12 WHERE UserId=$1;", 
  UpdateAlbum : "UPDATE Album SET Title=$2, ArtistId=$3 where AlbumID=$1",
- UpdateTrack : "UPDATE Track SET Name=$2, AlbumId=$3, MediaTypeId=$4, GenreId=$5, Composer=$6, Millisecons=$7, Bytes=$8, UnitPrice=$9 WHERE TrackId=$1",
+ UpdateTrack : "UPDATE Track SET Name=$2, AlbumId=$3, MediaTypeId=$4, GenreId=$5, Composer=$6, Milliseconds=$7, Bytes=$8, UnitPrice=$9 WHERE TrackId=$1",
  
  deleteTrack: "DELETE FROM Track WHERE TrackId=$1;",
  deleteAlbum: "DELETE FROM Album WHERE AlbumId=$1;",

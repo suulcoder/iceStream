@@ -119,7 +119,7 @@ SQLQuery('/api/actions/update/genereID',query.selectGenreID,'post')
 
 SQLQuery('/api/actions/update/artist',query.UpdateArtist,'post')
 SQLQuery('/api/actions/update/album',query.UpdateAlbum,'post')
-
+SQLQuery('/api/actions/update/track',query.UpdateTrack,'post')
 
 const port=8080;
 app.listen(port,()=>console.log(`Server started on port ${port}`))

@@ -175,7 +175,7 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                         ):(
                             (canModify)?(
                                 <button className="save" type="submit" onClick={
-                                    () => onUpdate(id,trackName,albumName,mediaTypeName,genreName,composerName,(seconds*1000+Minutes*60000),size*1024,myPrice,artistName,image,song,albumid,state)
+                                    () => onUpdate(id,trackName,albumName,mediaTypeName,genreName,composerName,(seconds*1000+Minutes*60000),size*1024*1024,myPrice,artistName,image,song,albumid,state)
                                 }>
                                 </button>
                             ):(
@@ -290,7 +290,7 @@ export default connect(
                                     const request2 = new Request('http://localhost:8080/api/actions/update/medieaID',{
                                         method:'POST',
                                         headers: { 'Content-Type':'application/json'},
-                                        body: JSON.stringify({id:album})
+                                        body: JSON.stringify({id:mediatype})
                                     })
                                     fetch(request2)
                                         .then(async(response)=>{
@@ -300,25 +300,23 @@ export default connect(
                                                 const request3 = new Request('http://localhost:8080/api/actions/update/genereID',{
                                                     method:'POST',
                                                     headers: { 'Content-Type':'application/json'},
-                                                    body: JSON.stringify({id:album})
+                                                    body: JSON.stringify({id:genre})
                                                 })
                                                 fetch(request3)
                                                     .then(async(response)=>{
                                                         response.json()
                                                         .then(table => {
                                                             const genreid = Object.values(table.rows[0])[0]
-                                                            const request = new Request('http://localhost:8080/api/actions/update/track',{
+                                                            const request4 = new Request('http://localhost:8080/api/actions/update/track',{
                                                                 method:'POST',
                                                                 headers: { 'Content-Type':'application/json'},
                                                                 body: JSON.stringify({id:id,name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:bytes,unitprice:unitprice})
                                                             })
-                                                            fetch(request)
+                                                            fetch(request4)
                                                                 .then(async(response)=>{
-                                                                    response.json()
-                                                                    .then(table => {
-                                                                        dispatch(actions.updateAlbum({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state}))
+                                                                        dispatch(actions.updateSong({id:trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state}))
                                                                         dispatch(actions.editElement(null))
-                                                                    })
+                                                                    
                                                                 })
                                                         })
                                                     })

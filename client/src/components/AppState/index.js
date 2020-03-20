@@ -29,7 +29,6 @@ class AppState extends React.Component{
         client.token = this.props.token
         var track = new TrackHandler();
         this.props.onSubmit(elementActions.setToNull())
-        this.props.onSubmit(appActions.setToNull())
         this.props.onSubmit(actions.setToNull())
         fetch('http://localhost:8080/api/getsongs',{method:'GET'})
         .then(response => response.json())

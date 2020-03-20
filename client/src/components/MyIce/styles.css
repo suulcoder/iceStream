@@ -2,12 +2,15 @@
     background-color: white;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     width: 100%;
+    align-items: flex-start;
+    justify-content: center;
     min-height: 800px;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
 }
 .myPermissions{
-    padding: 40px;
+    padding: 30px;
     margin-right: 30px;
 }
 .myPermissions_{
@@ -17,10 +20,9 @@
 .category{
     display: flex;
     flex-direction: row;
-    padding: 7px;
+    padding: 5px;
     margin-top: 10px;
 }
-
 .title_category{
     color: gray;
 }
@@ -32,7 +34,7 @@
     background-size: cover;
     height: 20px;
     width: 20px;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 .isFalse{
     background-image: url('../../public/img/cross.png');
@@ -42,11 +44,35 @@
     height: 20px;
     width: 20px;
     border-radius: 50px;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 .addMyIce{
-    padding: 50px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    overflow: auto;
 }
 .addMyIce_{
     font-size: xx-large;
+}
+.add_title{
+    font-size: x-large;
+    margin-top: 20px;
+    padding: 10px;
+}
+.GrayBar{
+    margin-top: 20px;
+    height: 1px;
+    background-color: gray;
+}
+@media (max-width: 1140px){
+    .addMyIce{
+        width: 100%;
+    }
+    .myPermissions{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }

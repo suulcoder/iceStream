@@ -30,4 +30,4 @@ const app = combineReducers({
 export default app
 
 export const getAppState = state => state.appState;
-export const getSection = (state,id) => state.info[id]
+export const getSection = (state,id) => (state.info[id]===undefined)?([]):(state.info[id])
