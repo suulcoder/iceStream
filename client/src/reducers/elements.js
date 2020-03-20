@@ -79,7 +79,7 @@ const elementOrder = (state=[],action) => {
         case types.search_setted_to_null:
             return []
         case types.element_deleted:
-            return state.filter(element=>element!=action.payload)
+            return state.filter(element=>element!==action.payload)
         default:
             return state
     }

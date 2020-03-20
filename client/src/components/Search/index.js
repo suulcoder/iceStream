@@ -88,10 +88,14 @@ export default connect(
                             data.rows.map(element => { 
                                 artist.search(Object.values(element)[1])
                                 .then((artistCollection) => {
+                                    if(artistCollection[0]===undefined){
+                                        dispatch(actions.addArtist({...element}))
+                                    }
+                                    else{
                                     dispatch(actions.addArtist({...element,
                                     image:Object.values(Object.values(artistCollection[0])[5][0])[1],
                                     artist:Object.values(Object.values(Object.values(artistCollection)[0])[0])[0]
-                                }))
+                                }))}
                                 dispatch(elementActions.addSearchELement('artist',Object.values(element)[0]))
                                 });
                                 return null
@@ -107,10 +111,14 @@ export default connect(
                                 .then(async(data) => {
                                     data.rows.map(element => {
                                         track.search(Object.values(element)[1], {limit: 1}).then((trackCollection) => {
+                                            if (trackCollection[0]===undefined){
+                                                dispatch(actions.addAlbum({...element}))
+                                            }
+                                            else{
                                             dispatch(actions.addAlbum({...element,
                                             image:Object.values(Object.values(Object.values(trackCollection[0])[0])[6][0])[1],
                                             album:Object.values(Object.values(Object.values(trackCollection[0])[0])[3])[0] 
-                                        }))
+                                        }))}
                                         dispatch(elementActions.addSearchELement('album',Object.values(element)[0]))
                                         });  
                                         return null
@@ -127,10 +135,14 @@ export default connect(
                                 .then(async(data) => {
                                     data.rows.map(element => {
                                     track.search(Object.values(element)[0], {limit: 1}).then((trackCollection) => {
+                                            if(trackCollection[0]===undefined){
+                                                dispatch(elementActions.addSong({...element}))
+                                            }
+                                            else{
                                             dispatch(elementActions.addSong({...element,
                                             image:Object.values(Object.values(Object.values(trackCollection[0])[0])[6][0])[1],
                                             song:Object.values(Object.values(trackCollection[0])[7])[0]
-                                            }))
+                                            }))}
                                             dispatch(elementActions.addSearchELement('track',Object.values(element)[2]))
                                     });
                                     return null

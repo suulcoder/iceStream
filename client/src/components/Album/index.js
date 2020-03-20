@@ -30,7 +30,7 @@ const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,on
                                         />
                                     </div>
                                     <div><strong>Artist:</strong>
-                                        <select value={artistName} className="select_" onChange={e=>{
+                                        <select value={artistName} onChange={e=>{
                                         return changeArtist(e.target.value)}} className="select" id="B" name="artist">
                                         {artists.map(artist => (
                                             <option key={Object.values(artist)[0]} value={Object.values(artist)[1]}>{Object.values(artist)[1]}</option>

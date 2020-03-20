@@ -7,7 +7,6 @@ import * as actions from '../../actions/elemnts'
 const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate,albumid,inactivate,reduxState,onDelete,isEdited,onEdit,element,onUpdate,artists,genres,mediatypes,albums}) => {
   const [trackName,changeTrack] = useState(name)
   const [albumName,changeAlbum] = useState(album)
-  const [artistName,changeArtist] = useState(artist)
   const [genreName,changeGenre] = useState(genre)
   const [mediaTypeName,changeMediaType] = useState(mediatype)
   const [composerName,changeComposer] = useState(composer)
@@ -40,23 +39,24 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                                         />
                                     </div>
                                     <div><strong>Album:</strong>
-                                        <select value={albumName} className="select_" onChange={e=>{
+                                        <select value={albumName}  onChange={e=>{
                                         return changeAlbum(e.target.value)}} className="select" id="B" name="artist">
                                         {albums.map(element => (
                                             <option key={Object.values(element)[0]} value={Object.values(element)[1]}>{Object.values(element)[1]}</option>
                                         ))}
                                         </select>
                                     </div>
-                                    <div><strong>Artist:</strong>
-                                        <select value={artistName} className="select_" onChange={e=>{
-                                        return changeArtist(e.target.value)}} className="select" id="B" name="artist">
-                                        {artists.map(element => (
-                                            <option key={Object.values(element)[0]} value={Object.values(element)[1]}>{Object.values(element)[1]}</option>
-                                        ))}
-                                        </select>
+                                    <div><strong>Composer: </strong>
+                                        <input
+                                        className="input_"
+                                        type="text"
+                                        placeholder="Composer"
+                                        value={composerName}
+                                        onChange={e => changeComposer(e.target.value)}
+                                        />
                                     </div>
                                     <div><strong>Genre:</strong>
-                                        <select value={genreName} className="select_" onChange={e=>{
+                                        <select value={genreName}  onChange={e=>{
                                         return changeGenre(e.target.value)}} className="select" id="B" name="artist">
                                         {genres.map(element => (
                                             <option key={Object.values(element)[0]} value={Object.values(element)[1]}>{Object.values(element)[1]}</option>
@@ -78,18 +78,9 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                         {
                             (isEdited)?(
                                 <Fragment>
-                                    <div><strong>Composer: </strong>
-                                        <input
-                                        className="input_"
-                                        type="text"
-                                        placeholder="Composer"
-                                        value={composerName}
-                                        onChange={e => changeComposer(e.target.value)}
-                                        />
-                                    </div>
                                     <div><strong>MediaType:</strong>
                                     </div>
-                                        <select value={mediaTypeName} className="select_" onChange={e=>{
+                                        <select value={mediaTypeName} onChange={e=>{
                                         return changeMediaType(e.target.value)}} className="select" id="B" name="artist">
                                         {mediatypes.map(element => (
                                             <option key={Object.values(element)[0]} value={Object.values(element)[1]}>{Object.values(element)[1]}</option>
@@ -175,7 +166,7 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                         ):(
                             (canModify)?(
                                 <button className="save" type="submit" onClick={
-                                    () => onUpdate(id,trackName,albumName,mediaTypeName,genreName,composerName,(seconds*1000+Minutes*60000),size*1024*1024,myPrice,artistName,image,song,albumid,state)
+                                    () => onUpdate(id,trackName,albumName,mediaTypeName,genreName,composerName,(seconds*1000+Minutes*60000),size*1024*1024,myPrice,artist,image,song,state)
                                 }>
                                 </button>
                             ):(
@@ -265,60 +256,48 @@ export default connect(
         onEdit(id){
             dispatch(actions.editElement(id))
         },
-        onUpdate(trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state){
+        onUpdate(trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state){
             const id = trackid.split('track')[1]
-            const request = new Request('http://localhost:8080/api/actions/update/getArtistID',{
+            const request1 = new Request('http://localhost:8080/api/actions/update/getAlbumID',{
                 method:'POST',
                 headers: { 'Content-Type':'application/json'},
-                body: JSON.stringify({artist:artist})
+                body: JSON.stringify({id:album})
             })
-            fetch(request)
+            fetch(request1)
                 .then(async(response)=>{
                     response.json()
                     .then(table => {
-                        const artistid = Object.values(table.rows[0])[0]
-                        const request1 = new Request('http://localhost:8080/api/actions/update/getAlbumID',{
+                        const albumid = Object.values(table.rows[0])[0]
+                        const request2 = new Request('http://localhost:8080/api/actions/update/medieaID',{
                             method:'POST',
                             headers: { 'Content-Type':'application/json'},
-                            body: JSON.stringify({id:album})
+                            body: JSON.stringify({id:mediatype})
                         })
-                        fetch(request1)
+                        fetch(request2)
                             .then(async(response)=>{
                                 response.json()
                                 .then(table => {
-                                    const albumid = Object.values(table.rows[0])[0]
-                                    const request2 = new Request('http://localhost:8080/api/actions/update/medieaID',{
+                                    const mediatypeid = Object.values(table.rows[0])[0]
+                                    const request3 = new Request('http://localhost:8080/api/actions/update/genereID',{
                                         method:'POST',
                                         headers: { 'Content-Type':'application/json'},
-                                        body: JSON.stringify({id:mediatype})
+                                        body: JSON.stringify({id:genre})
                                     })
-                                    fetch(request2)
+                                    fetch(request3)
                                         .then(async(response)=>{
                                             response.json()
                                             .then(table => {
-                                                const mediatypeid = Object.values(table.rows[0])[0]
-                                                const request3 = new Request('http://localhost:8080/api/actions/update/genereID',{
+                                                const genreid = Object.values(table.rows[0])[0]
+                                                const request4 = new Request('http://localhost:8080/api/actions/update/track',{
                                                     method:'POST',
                                                     headers: { 'Content-Type':'application/json'},
-                                                    body: JSON.stringify({id:genre})
+                                                    body: JSON.stringify({id:id,name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:bytes,unitprice:unitprice})
                                                 })
-                                                fetch(request3)
+                                                fetch(request4)
                                                     .then(async(response)=>{
-                                                        response.json()
-                                                        .then(table => {
-                                                            const genreid = Object.values(table.rows[0])[0]
-                                                            const request4 = new Request('http://localhost:8080/api/actions/update/track',{
-                                                                method:'POST',
-                                                                headers: { 'Content-Type':'application/json'},
-                                                                body: JSON.stringify({id:id,name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:bytes,unitprice:unitprice})
-                                                            })
-                                                            fetch(request4)
-                                                                .then(async(response)=>{
-                                                                        dispatch(actions.updateSong({id:trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state}))
-                                                                        dispatch(actions.editElement(null))
-                                                                    
-                                                                })
-                                                        })
+                                                            dispatch(actions.updateSong({id:trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state}))
+                                                            dispatch(actions.editElement(null))
+                                                        
                                                     })
                                             })
                                         })
