@@ -66,23 +66,21 @@ const SQLQuery = (apiRoute,Query,method='get') => {
     }
     return null
 }
+
+SQLQuery('/api/media',query.getAllMediaType)
 SQLQuery('/api/user',query.getAllUsers)
 SQLQuery('/api/artist',query.getAllArtist)
 SQLQuery('/api/genre',query.getAllGenre)
 SQLQuery('/api/album',query.getJustAllAlbum)
-SQLQuery('api/mediatype',query.getAllMediaType)
 SQLQuery('/api/checkuser',query.getUserByUsername,'post')
 SQLQuery('/api/checkusername',query.checkUserByUsername,'post')
 SQLQuery('/api/adduser',query.addUser,'post')
 SQLQuery('/api/addpermission',query.addUserPermission,'post')
 SQLQuery('/api/newuserid',query.getLastUserId)
-SQLQuery('/api/getPlaylists',query.getAllPlaylistInfo)
 SQLQuery('/api/getsongs',query.getAllSongs),
 SQLQuery('/api/getalbums',query.getAllAlbum)
-SQLQuery('/api/report/mostColaborative',query.getMostColaborativeArtists)
-SQLQuery('/api/report',query.getMostColaborativeArtists)
 SQLQuery('/api/newArtist',query.addArtist,'post')
-SQLQuery('api/newAlbum',query.addAlbum,'post')
+SQLQuery('/api/newAlbum',query.addAlbum,'post')
 SQLQuery('/api/newTrack',query.addTrack,'post')
 
 SQLQuery('/api/search/track',query.searchTrack,'post')
@@ -116,6 +114,8 @@ SQLQuery('/api/actions/delete/artist',query.deleteArtist,'post')
 
 SQLQuery('/api/actions/update/getAlbumID',query.selectAlbumID,'post')
 SQLQuery('/api/actions/update/getArtistID',query.selectARtistID,'post')
+SQLQuery('/api/actions/update/medieaID',query.selectMediaID,'post')
+SQLQuery('/api/actions/update/genereID',query.selectGenreID,'post')
 
 SQLQuery('/api/actions/update/artist',query.UpdateArtist,'post')
 SQLQuery('/api/actions/update/album',query.UpdateAlbum,'post')

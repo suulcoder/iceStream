@@ -9,6 +9,7 @@
     margin-top: 25px;
     margin-right: 25px;
     margin-left: 25px;
+    overflow: auto;
 }
 .album_{
     display: flex;
@@ -26,6 +27,8 @@
     padding: 5px 10px 5px 10px;
     font-size: small;
     margin-top: 15px;
+    margin-bottom: 15px;
     border-radius: 50px;
     margin-left: 10px;
+    min-width: 200px;
 }

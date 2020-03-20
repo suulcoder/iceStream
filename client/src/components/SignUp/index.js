@@ -21,7 +21,7 @@ const SignUp = ({onSubmit}) => {
             />
             <input
                 className="email"
-                type="text"
+                type="email"
                 placeholder="email"
                 value={email}
                 onChange={e=>changeEmail(e.target.value)}

@@ -63,10 +63,10 @@ class AppState extends React.Component{
             this.props.onSubmit(appActions.addSection('album',data))
         })
 
-        fetch('http://localhost:8080/api/mediatype',{method:'GET'})
+        fetch('http://localhost:8080/api/media',{method:'GET'})
         .then(response => response.json())
         .then(data => {
-            this.props.onSubmit(appActions.addSection('medyatype',data))
+            this.props.onSubmit(appActions.addSection('mediatype',data))
         })
 
         fetch('http://localhost:8080/api/reports/commongenre',{method:'GET'})

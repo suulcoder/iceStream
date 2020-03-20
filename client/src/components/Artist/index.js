@@ -42,10 +42,15 @@ const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelet
                         }>
                         </button>
                     ):(
-                        <button className="save" type="submit" onClick={
-                            () => onUpdate(artistid,artistName,element)
-                        }>
-                        </button>
+                        (canModify)?(
+                            <button className="save" type="submit" onClick={
+                                () => onUpdate(artistid,artistName,element)
+                            }>
+                            </button>
+                        ):(
+                            <Fragment></Fragment>
+                        )
+                        
                     )
                 }
                 {

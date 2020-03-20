@@ -1,10 +1,21 @@
 import './styles.css';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import * as actions from '../../actions/elemnts'
 
-const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate,inactivate,reduxState,onDelete,isEdited,onEdit,element,onUpdate}) => (
+const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate,albumid,inactivate,reduxState,onDelete,isEdited,onEdit,element,onUpdate,artists,genres,mediatypes,albums}) => {
+  const [trackName,changeTrack] = useState(name)
+  const [albumName,changeAlbum] = useState(album)
+  const [artistName,changeArtist] = useState(artist)
+  const [genreName,changeGenre] = useState(genre)
+  const [mediaTypeName,changeMediaType] = useState(mediatype)
+  const [composerName,changeComposer] = useState(composer)
+  const [Minutes,changeMinutes] = useState(Math.floor(milliseconds / 60000))
+  const [seconds,changeSeconds] = useState(((milliseconds % 60000) / 1000).toFixed(0))
+  const [size,changeSize] = useState(((bytes/1024)/1024).toFixed(2))
+  const [myPrice,changePrice] = useState(unitprice)
+  return(
    <Fragment>
         <div className="song_"> 
                 <div className="track_">
@@ -16,17 +27,132 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                         <div className="state_" ><strong>STATE: </strong>{(state)?('ACTIVE'):('INACTIVE')}</div>
                     </div>
                     <div className="track_info">
-                        <div><strong>Name: </strong>{name}</div>
-                        <div><strong>Album: </strong>{album}</div>
-                        <div><strong>Artist: </strong>{artist}</div>
-                        <div><strong>Genre: </strong>{genre}</div>
+                        {
+                            (isEdited)?(
+                                <Fragment>
+                                    <div><strong>Name:</strong>
+                                        <input
+                                        className="input_"
+                                        type="text"
+                                        placeholder="Track"
+                                        value={trackName}
+                                        onChange={e => changeTrack(e.target.value)}
+                                        />
+                                    </div>
+                                    <div><strong>Album:</strong>
+                                        <select value={albumName} className="select_" onChange={e=>{
+                                        return changeAlbum(e.target.value)}} className="select" id="B" name="artist">
+                                        {albums.map(element => (
+                                            <option key={Object.values(element)[0]} value={Object.values(element)[1]}>{Object.values(element)[1]}</option>
+                                        ))}
+                                        </select>
+                                    </div>
+                                    <div><strong>Artist:</strong>
+                                        <select value={artistName} className="select_" onChange={e=>{
+                                        return changeArtist(e.target.value)}} className="select" id="B" name="artist">
+                                        {artists.map(element => (
+                                            <option key={Object.values(element)[0]} value={Object.values(element)[1]}>{Object.values(element)[1]}</option>
+                                        ))}
+                                        </select>
+                                    </div>
+                                    <div><strong>Genre:</strong>
+                                        <select value={genreName} className="select_" onChange={e=>{
+                                        return changeGenre(e.target.value)}} className="select" id="B" name="artist">
+                                        {genres.map(element => (
+                                            <option key={Object.values(element)[0]} value={Object.values(element)[1]}>{Object.values(element)[1]}</option>
+                                        ))}
+                                        </select>
+                                    </div>
+                                </Fragment>
+                            ):(
+                                <Fragment>
+                                    <div><strong>Name: </strong>{name}</div>
+                                    <div><strong>Album: </strong>{album}</div>
+                                    <div><strong>Artist: </strong>{artist}</div>
+                                    <div><strong>Genre: </strong>{genre}</div>
+                                </Fragment>
+                            )
+                        }
                     </div>
                     <div className="track_info">
-                        <div><strong>Composer: </strong>{composer}</div>
-                        <div><strong>MediaType: </strong>{mediatype}</div>
-                        <div><strong>Duration: </strong>{Math.floor(milliseconds / 60000) + ":" + ((milliseconds % 60000) / 1000).toFixed(0)}</div>
-                        <div><strong>Price: </strong>${unitprice}</div>
-                        <div><strong>Size: </strong>{((bytes/1024)/1024).toFixed(2)}Mb</div>
+                        {
+                            (isEdited)?(
+                                <Fragment>
+                                    <div><strong>Composer: </strong>
+                                        <input
+                                        className="input_"
+                                        type="text"
+                                        placeholder="Composer"
+                                        value={composerName}
+                                        onChange={e => changeComposer(e.target.value)}
+                                        />
+                                    </div>
+                                    <div><strong>MediaType:</strong>
+                                    </div>
+                                        <select value={mediaTypeName} className="select_" onChange={e=>{
+                                        return changeMediaType(e.target.value)}} className="select" id="B" name="artist">
+                                        {mediatypes.map(element => (
+                                            <option key={Object.values(element)[0]} value={Object.values(element)[1]}>{Object.values(element)[1]}</option>
+                                        ))}
+                                        </select> 
+                                    <div><strong>Duration: </strong>
+                                        <div className="duration_">
+                                            <input
+                                            className="duration"
+                                            type="number"
+                                            min="0"
+                                            max="59"
+                                            placeholder="Duration"
+                                            value={Minutes}
+                                            onChange={e => changeMinutes(e.target.value)}
+                                            />
+                                            <div> {' : '} </div>
+                                            <input
+                                            className="duration"
+                                            type="number"
+                                            min="0"
+                                            max="59"
+                                            placeholder="Duration"
+                                            value={seconds}
+                                            onChange={e => changeSeconds(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div><strong>Price: </strong> $
+                                        <input
+                                        className="duration"
+                                        type="number"
+                                        min="0"
+                                        max="2000"
+                                        step="0.01"
+                                        placeholder="Duration"
+                                        value={myPrice}
+                                        onChange={e => changePrice(e.target.value)}
+                                        />
+                                    </div>
+                                    <div><strong>Size: </strong> Mb
+                                        <input
+                                        className="duration"
+                                        type="number"
+                                        min="0"
+                                        max="1024"
+                                        step="0.01"
+                                        placeholder="Duration"
+                                        value={size}
+                                        onChange={e => changeSize(e.target.value)}
+                                        />
+                                    </div>                                                            
+                                </Fragment>
+                            ):(
+                                <Fragment>
+                                    <div><strong>Composer: </strong>{composer}</div>
+                                    <div><strong>MediaType: </strong>{mediatype}</div>
+                                    <div><strong>Duration: </strong>{Math.floor(milliseconds / 60000) + ":" + ((milliseconds % 60000) / 1000).toFixed(0)}</div>
+                                    <div><strong>Price: </strong>${unitprice}</div>
+                                    <div><strong>Size: </strong>{((bytes/1024)/1024).toFixed(2)}Mb</div>
+                                </Fragment>
+                            )
+                        }
                     </div>
                 </div>
                 <div className="options">
@@ -47,10 +173,15 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                             }>
                             </button>
                         ):(
-                            <button className="save" type="submit" onClick={
-                                () => onUpdate()
-                            }>
-                            </button>
+                            (canModify)?(
+                                <button className="save" type="submit" onClick={
+                                    () => onUpdate(id,trackName,albumName,mediaTypeName,genreName,composerName,(seconds*1000+Minutes*60000),size*1024,myPrice,artistName,image,song,albumid,state)
+                                }>
+                                </button>
+                            ):(
+                                <Fragment></Fragment>
+                            )
+                            
                         )
                     }
                     {
@@ -66,7 +197,7 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                 </div>                
         </div>
     </Fragment>
-)
+)}
 
 export default connect(
     (state, {id,isEdited})=>({
@@ -84,12 +215,17 @@ export default connect(
         image: Object.values(selectors.getElement(state,id))[11],
         song: Object.values(selectors.getElement(state,id))[12],
         state: Object.values(selectors.getElement(state,id))[13],
+        albumid: Object.values(selectors.getElement(state,id))[14],
         canInactivate:Object.values(selectors.getUser(state))[8],
         canModify:Object.values(selectors.getUser(state))[9],
         canDelete:Object.values(selectors.getUser(state))[10],
         reduxState:state,
         isEdited,
         element:selectors.getElement(state,id),
+        artists: selectors.getInfo(state,'artist'),
+        genres: selectors.getInfo(state,'genre'),
+        albums: selectors.getInfo(state,'album'),
+        mediatypes: selectors.getInfo(state,'mediatype'),
     }),
     dispatch=>({
         onSubmit(track){
@@ -129,6 +265,69 @@ export default connect(
         onEdit(id){
             dispatch(actions.editElement(id))
         },
-
+        onUpdate(trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state){
+            const id = trackid.split('track')[1]
+            const request = new Request('http://localhost:8080/api/actions/update/getArtistID',{
+                method:'POST',
+                headers: { 'Content-Type':'application/json'},
+                body: JSON.stringify({artist:artist})
+            })
+            fetch(request)
+                .then(async(response)=>{
+                    response.json()
+                    .then(table => {
+                        const artistid = Object.values(table.rows[0])[0]
+                        const request1 = new Request('http://localhost:8080/api/actions/update/getAlbumID',{
+                            method:'POST',
+                            headers: { 'Content-Type':'application/json'},
+                            body: JSON.stringify({id:album})
+                        })
+                        fetch(request1)
+                            .then(async(response)=>{
+                                response.json()
+                                .then(table => {
+                                    const albumid = Object.values(table.rows[0])[0]
+                                    const request2 = new Request('http://localhost:8080/api/actions/update/medieaID',{
+                                        method:'POST',
+                                        headers: { 'Content-Type':'application/json'},
+                                        body: JSON.stringify({id:album})
+                                    })
+                                    fetch(request2)
+                                        .then(async(response)=>{
+                                            response.json()
+                                            .then(table => {
+                                                const mediatypeid = Object.values(table.rows[0])[0]
+                                                const request3 = new Request('http://localhost:8080/api/actions/update/genereID',{
+                                                    method:'POST',
+                                                    headers: { 'Content-Type':'application/json'},
+                                                    body: JSON.stringify({id:album})
+                                                })
+                                                fetch(request3)
+                                                    .then(async(response)=>{
+                                                        response.json()
+                                                        .then(table => {
+                                                            const genreid = Object.values(table.rows[0])[0]
+                                                            const request = new Request('http://localhost:8080/api/actions/update/track',{
+                                                                method:'POST',
+                                                                headers: { 'Content-Type':'application/json'},
+                                                                body: JSON.stringify({id:id,name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:bytes,unitprice:unitprice})
+                                                            })
+                                                            fetch(request)
+                                                                .then(async(response)=>{
+                                                                    response.json()
+                                                                    .then(table => {
+                                                                        dispatch(actions.updateAlbum({trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state}))
+                                                                        dispatch(actions.editElement(null))
+                                                                    })
+                                                                })
+                                                        })
+                                                    })
+                                            })
+                                        })
+                                })
+                            })
+                    })
+                })
+        }
     })
 )(Track)

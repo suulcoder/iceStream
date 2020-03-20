@@ -24,7 +24,7 @@ const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,on
                                         <input
                                         className="input_"
                                         type="text"
-                                        placeholder="Artist Name"
+                                        placeholder="Title"
                                         value={albumName}
                                         onChange={e => changeAlbum(e.target.value)}
                                         />
@@ -55,10 +55,15 @@ const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,on
                             }>
                             </button>
                         ):(
-                            <button className="save" type="submit" onClick={
-                                () => onUpdate(albumid,albumName,artistName,element)
-                            }>
-                            </button>
+                            (canModify)?(
+                                <button className="save" type="submit" onClick={
+                                    () => onUpdate(albumid,albumName,artistName,element)
+                                }>
+                                </button>
+                            ):(
+                                <Fragment></Fragment>
+                            )
+                            
                         )
                     }
                     {
@@ -134,7 +139,6 @@ export default connect(
                             .then(async(response)=>{
                                 response.json()
                                 .then(table => {
-                                    console.log({...element,title,artist})
                                     dispatch(actions.updateAlbum({...element,title,artist}))
                                     dispatch(actions.editElement(null))
                                 })

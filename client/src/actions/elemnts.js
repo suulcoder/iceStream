@@ -23,7 +23,8 @@ export const addSong = ({trackid,name,album,mediatype,genre,composer,millisecond
                 artist,
                 image,
                 song,
-                state:(state==='TRUE')?(true):(false)
+                state:(state==='TRUE')?(true):(false),
+                albumid
             }
         }
     })
@@ -59,7 +60,7 @@ export const addAlbum = ({albumid,title,artist,image,album}) =>{
                 title,
                 artist,
                 image,
-                album
+                album,
             }
         }
     })

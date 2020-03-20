@@ -9,6 +9,7 @@
     margin-top: 25px;
     margin-right: 25px;
     margin-left: 25px;
+    overflow: auto;
 }
 .track_{
     display: flex;
@@ -16,7 +17,7 @@
     align-items: center;
 }
 .track_info{
-    max-width: 250px;
+    max-width: 200px;
     margin-left: 15px;
     margin-right: 15px;
 }
@@ -36,4 +37,19 @@
 .state_{
     margin-top: 5px;
     font-size: xx-small;
+}
+.duration{
+    border-radius: 20px;
+    font-size: small;
+    max-width: 50px;
+    margin-right: 5px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    margin-left: 15px;
+    padding: 7px;
+}
+.duration_{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

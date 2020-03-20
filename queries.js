@@ -70,6 +70,8 @@ module.exports = {
  
  selectAlbumID : "SELECT AlbumId FROM Album WHERE title=$1",
  selectARtistID : "SELECT ArtistID From Artist WHERE name=$1",
+ selectMediaID : "SELECT MediaTypeId From MediaType WHERE Name=$1",
+ selectGenreID : "SELECT GenreId From Genre WHERE name=$1",
 
  UpdateArtist : "UPDATE Artist SET Name=$2 WHERE Artistid=$1;",
  UpdateTrackState: "UPDATE TrackState SET state=$2 WHERE trackid=$1",
