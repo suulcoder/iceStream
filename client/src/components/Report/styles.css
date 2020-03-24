@@ -1,18 +1,28 @@
 .report{
-    background-color: black;
-    opacity: 80%;
+    background-color: rgb(39, 39, 39);
+    opacity: 90%;
     width: 100%;
+    font-family: 'Trebuchet MS', sans-serif;
     height: 180px;
     display: flex;
     justify-content: space-between;
     padding: 5px;
 }   
+
 .reportbutton{
+    cursor: pointer;
     font-size: xx-large;
     background-color: transparent;
     border-color: transparent;
     color: white;
 }
+
+.reportbutton:hover {
+    background: rgb(192, 192, 192);
+    color: rgb(168, 129, 13);
+    opacity: 20%;
+}
+
 @media (min-width: 450px){
     .report{
         height: 250px;
@@ -23,3 +33,113 @@
         height: 500px;
     }
 }
+
+.number {
+    color: white;
+    text-transform: capitalize;
+}
+
+.header1 {
+    margin: 0rem;
+    margin-top: 1rem;
+    color: rgb(218, 169, 22);
+    text-transform: none;
+    font-size: 3rem;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.n{
+    font-size: 4rem;
+}
+
+.report__info6 {
+    width: 100%;
+    height: 100%;
+}
+
+.recent__albums {
+    display: flex ;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.recent__albums h1 {
+    font-size: 3rem;
+    margin-bottom: 0rem;
+    align-self: center;
+    color: white;
+    flex: 1;
+}
+
+.images__container {
+    padding-left: 6rem;
+    padding-right: 6rem;
+    display: flex;
+    flex-direction: row;
+    flex: 3;
+}
+
+.images__container img {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    flex: 1;
+    height: 20rem;
+}
+
+.titles__container {
+    align-content: center;
+    justify-content: center;
+    padding-left: 6rem;
+    padding-right: 6rem;
+    display: flex;
+    flex-direction: row;
+    flex: 0.5;
+}
+
+.titles__container div {
+    color: rgb(155, 116, 0);
+    font-size: 2rem;
+    text-align: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    flex: 1;
+    height: 2rem;
+}
+
+.info__container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-self: center;
+    overflow: scroll;
+    scrollbar-width: none;
+    width: 85rem;
+}
+
+.report__info8 h1, .report__info6 h1 {
+    font-size: 3rem;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    align-self: center;
+    justify-content: center;
+    align-content: center;
+    display: grid;
+    width: 100%;
+    color: white;
+}
+
+.info__container div {
+    color: rgb(255, 191, 0);
+    font-size: 4rem;
+    text-align: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 4rem;
+    flex: 1;
+    overflow: visible;
+    white-space: nowrap;
+}
+

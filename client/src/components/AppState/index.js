@@ -65,6 +65,21 @@ class AppState extends React.Component{
         .then(response => response.json())
         .then(data => {
             this.props.onSubmit(appActions.addSection('album',data))
+            data.rows.map(element => {
+                track.search(Object.values(element)[1], {limit: 1}).then((trackCollection) => {
+                    if(trackCollection[0] === undefined){
+                        this.props.onSubmit(actions.addAlbum({...element}))
+                    }
+                    else {
+                        this.props.onSubmit(actions.addAlbum({
+                            ...element, 
+                            image: Object.values(Object.values(Object.values(trackCollection[0])[0])[6][0])[1],
+                            album: Object.values(Object.values(Object.values(trackCollection[0])[0])[3])[0],
+                        }))
+                    }
+                });
+                return null
+            })
         })
 
         fetch('http://localhost:8080/api/media',{method:'GET'})
@@ -104,7 +119,30 @@ class AppState extends React.Component{
             this.props.onSubmit(actions.addReportSection(types.GET_MORE_COLABORATIVE_ARTIST,data))
         })
 
+        fetch('http://localhost:8080/api/reports/moretrackadded',{method:'GET'})
+        .then(response => response.json())
+        .then(data => {
+            this.props.onSubmit(actions.addReportSection(types.GET_USERS_WITH_MORE_TRACK_ADDED,data))
+        })
 
+        fetch('http://localhost:8080/api/reports/playlistduration',{method:'GET'})
+        .then(response => response.json())
+        .then(data => {
+            this.props.onSubmit(actions.addReportSection(types.GET_PLAYLIST_BY_DURATION,data))
+        })
+
+        fetch('http://localhost:8080/api/reports/playlist_artist',{method:'GET'})
+        .then(response => response.json())
+        .then(data => {
+            this.props.onSubmit(actions.addReportSection(types.GET_PLAYLIST_BY_ARTIST_COUNT,data))
+        })
+
+        fetch('http://localhost:8080/api/reports/artist_genre',{method:'GET'})
+        .then(response => response.json())
+        .then(data => {
+            this.props.onSubmit(actions.addReportSection(types.GET_ARTIST_BY_GENRE_COUNT,data))
+        })
+        
         fetch('http://localhost:8080/api/reports/recentalbum',{method:'GET'})
         .then(response => response.json())
         .then(data => {

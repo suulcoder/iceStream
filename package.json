@@ -7,10 +7,7 @@
     "start": "node server.js",
     "server": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/suulcoder/iceStream.git"
-  },
+  "repository": "git+https://github.com/suulcoder/iceStream.git",
   "author": "SuulCoder",
   "license": "MIT",
   "bugs": {

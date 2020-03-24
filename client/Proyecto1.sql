@@ -265,7 +265,7 @@ INSERT INTO Users (UserId,Username,email,password,role) VALUES (9,'user87','user
 INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (9,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
 INSERT INTO Users (UserId,Username,email,password,role) VALUES (10,'thisismyuser','thisuser@iceStream.com','admin','client');
 INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (10,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
-INSERT INTO HasAddedAlbum (UserId,AlbumId,InDate) VALUES (1,1,'2011/3/28');
+
 INSERT INTO Genre (GenreId, Name) VALUES (1,'Rock');
 INSERT INTO Genre (GenreId, Name) VALUES (2,'Jazz');
 INSERT INTO Genre (GenreId, Name) VALUES (3,'Metal');
@@ -963,7 +963,6 @@ INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (5,39,'2020-02-17 10:04
 INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (5,40,'2020-02-18 10:04:24.081');
 INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (5,41,'2020-02-19 10:04:24.081');
 INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,42,'2020-01-20 10:04:24.081');
-
 
 INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES (1,'For Those About To Rock (We Salute You)', 1, 1, 1,'Angus Young, Malcolm Young, Brian Johnson', 343719, 11170334, 0.99);
 INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Milliseconds, Bytes, UnitPrice) VALUES (2,'Balls to the Wall', 2, 2, 1, 342562, 5510424, 0.99);
@@ -4468,6 +4467,48 @@ INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milli
 INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES (3501,'L''orfeo, Act 3, Sinfonia (Orchestra)', 345, 2, 24,'Claudio Monteverdi', 66639, 1189062, 0.99);
 INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES (3502,'Quintet for Horn, Violin, 2 Violas, and Cello in E Flat Major, K. 407/386c: III. Allegro', 346, 2, 24,'Wolfgang Amadeus Mozart', 221331, 3665114, 0.99);
 INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES (3503,'Koyaanisqatsi', 347, 2, 10,'Philip Glass', 206005, 3305164, 0.99);
+
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,2,'2020-03-20 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,3,'2020-03-19 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,4,'2020-03-18 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,5,'2020-03-17 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (6,6,'2020-03-16 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (7,7,'2020-03-15 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (8,8,'2020-03-14 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (9,9,'2020-03-13 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (9,10,'2020-03-12 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (8,11,'2020-03-11 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (7,12,'2020-03-10 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (6,13,'2020-03-09 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,14,'2020-03-08 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,15,'2020-03-07 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,16,'2020-03-06 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,17,'2020-03-05 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,18,'2020-03-04 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,19,'2020-03-03 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,20,'2020-03-02 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,21,'2020-03-01 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,22,'2020-02-20 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,23,'2020-01-20 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,24,'2020-02-19 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,25,'2020-02-18 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,26,'2020-02-17 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,27,'2020-02-05 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,28,'2020-02-06 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,29,'2020-02-07 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,30,'2020-02-08 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,31,'2020-02-09 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,32,'2020-02-10 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,33,'2020-02-11 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,34,'2020-01-12 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,35,'2020-01-13 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,36,'2020-01-14 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,37,'2020-01-15 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,38,'2020-01-16 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,39,'2020-02-17 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,40,'2020-02-18 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,41,'2020-02-19 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,42,'2020-01-20 10:04:24.081');
 
 INSERT INTO Employee (EmployeeId, LastName, FirstName, Title, BirthDate, HireDate, Address, City, State, Country, PostalCode, Phone, Fax, Email) VALUES (1,'Adams','Andrew','General Manager', '1962/2/18', '2002/8/14','11120 Jasper Ave NW','Edmonton','AB','Canada','T5K 2N1','+1 (780) 428-9482','+1 (780) 428-3457','andrew@chinookcorp.com');
 INSERT INTO Employee (EmployeeId, LastName, FirstName, Title, ReportsTo, BirthDate, HireDate, Address, City, State, Country, PostalCode, Phone, Fax, Email) VALUES (2,'Edwards','Nancy','Sales Manager', 1, '1958/12/8', '2002/5/1','825 8 Ave SW','Calgary','AB','Canada','T2P 2T3','+1 (403) 262-3443','+1 (403) 262-3322','nancy@chinookcorp.com');
