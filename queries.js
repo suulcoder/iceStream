@@ -1,7 +1,7 @@
 module.exports = {
    getAllUsers :`SELECT * FROM Users INNER JOIN UserPermissions ON Users.UserId=UserPermissions.UserId WHERE Users.role<>'admin'`,
    getAllArtist :`SELECT * FROM Artist`,
-   getAllSongs : "SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid, TrackState.state as state FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId JOIN TrackState ON TrackState.Trackid=Track.Trackid LIMIT 500",
+   getAllSongs : "SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid, TrackState.state as state FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId JOIN TrackState ON TrackState.Trackid=Track.Trackid LIMIT 300",
    getAllAlbum : "SELECT Artist.name as artist, Album.title,Album.Albumid FROM Album JOIN Artist ON Artist.ArtistId=Album.ArtistId",
    getJustAllAlbum : "SELECT * FROM Album",
    getAllGenre : "SELECT * FROM Genre",
@@ -81,6 +81,7 @@ module.exports = {
    addAlbum : "INSERT INTO Album (AlbumId, Title, ArtistId) VALUES ($1,$2,$3);",
    addTrack : "INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);",
    addUser : "INSERT INTO Users (UserId,Username,email,password,role) VALUES ($1,$2,$3,$4,$5);",
+   addtrackstate: "INSERT INTO TrackState (trackid,state) VALUES ($1,'TRUE')",
    
    selectAlbumID : "SELECT AlbumId FROM Album WHERE title=$1",
    selectARtistID : "SELECT ArtistID From Artist WHERE name=$1",

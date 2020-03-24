@@ -50,7 +50,9 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                         return response.status(400).send(err)
                     }
                     else{
+                        console.log("her")
                         db.query(Query,values,(req,res) => {
+                            console.log(Query,values)
                             if(err){
                                 return response.status(400).send(err)
                             }
@@ -106,6 +108,7 @@ SQLQuery('/api/permission/artist/update',query.getArtistPermissionUPDATE,'post')
 SQLQuery('/api/permission/artist/delete',query.getArtistPermissionDELETE,'post')
 SQLQuery('/api/permission/album/update',query.getAlbumPermissionUPDATE,'post')
 SQLQuery('/api/permission/album/delete',query.getAlbumPermissionDELETE,'post')
+SQLQuery('/api/trackstate',query.addtrackstate,'post')
 
 SQLQuery('/api/reports/commongenre',query.getMostCommonGenres)
 SQLQuery('/api/reports/commonartist',query.getMostCommonArtist)
