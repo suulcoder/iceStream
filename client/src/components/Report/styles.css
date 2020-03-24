@@ -131,15 +131,9 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-self: center;
-<<<<<<< HEAD
     overflow: auto;
     width: 50rem;
     margin-bottom: 25px;
-=======
-    overflow: scroll;
-    overflow-y: hidden;
-    width: 85rem;
->>>>>>> b05636bda568946c80ac7e6911bba98830d8621b
 }
 
 .report__info8 h1, .report__info6 h1 {
@@ -163,7 +157,6 @@
     overflow: visible;
     white-space: nowrap;
 }
-<<<<<<< HEAD
 .info_{
     padding: 3rem;
     border-color: white;
@@ -175,9 +168,3 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
-=======
-
-.info__container div div {
-    margin-bottom: 2rem;
-}
->>>>>>> b05636bda568946c80ac7e6911bba98830d8621b

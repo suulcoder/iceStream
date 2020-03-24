@@ -50,7 +50,6 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                         return response.status(400).send(err)
                     }
                     else{
-                        console.log("her")
                         db.query(Query,values,(req,res) => {
                             console.log(Query,values)
                             if(err){

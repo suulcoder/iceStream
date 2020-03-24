@@ -256,11 +256,7 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                     <h1>{'Artistas Por Playlist'}</h1>
                                     <div className="info__container">
                                         {info6.map(playlist =>
-<<<<<<< HEAD
                                             <div key={playlist.name} className="info_">{playlist.name}<div>{playlist.count + (playlist.count > 1 ? ' artistas' : ' artista')}</div></div>
-=======
-                                            <div key={playlist.name}>{playlist.name}<div key={playlist.name + playlist.count}>{playlist.count + (playlist.count > 1 ? ' artistas' : ' artista')}</div></div>
->>>>>>> b05636bda568946c80ac7e6911bba98830d8621b
                                         )}
                                     </div>
                                 </div>
@@ -324,11 +320,7 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                     <h1>{'Duración Total por Playlist (DD:HH:MM)'}</h1>
                                     <div className="info__container">
                                         {info8.map(playlist =>
-<<<<<<< HEAD
                                             <div key={playlist.name} className="info_">{playlist.name}<div>{functions.MStoTIME(playlist.duration)}</div></div>
-=======
-                                            <div key={playlist.name}>{playlist.name}<div key={playlist.name + playlist.duration}>{functions.MStoTIME(playlist.duration)}</div></div>
->>>>>>> b05636bda568946c80ac7e6911bba98830d8621b
                                         )}
                                     </div>
                                 </div>
