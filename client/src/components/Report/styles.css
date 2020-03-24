@@ -1,12 +1,11 @@
 .report{
     background-color: rgb(39, 39, 39);
     opacity: 90%;
-    width: 100%;
     font-family: 'Trebuchet MS', sans-serif;
-    height: 180px;
     display: flex;
     justify-content: space-between;
     padding: 5px;
+    scale: 0.4;
 }   
 
 .reportbutton{
@@ -22,15 +21,28 @@
     color: white;
     opacity: 20%;
 }
-
-@media (min-width: 450px){
-    .report{
-        height: 250px;
-    }
-}
-@media (min-width: 900px){
+@media (min-width: 500px){
     .report{
         height: 500px;
+        scale: 0.4;
+    }
+}
+@media (min-width: 650px){
+    .report{
+        height: 500px;
+        scale: 0.5;
+    }
+}
+@media (min-width: 800px){
+    .report{
+        height: 500px;
+        scale: 0.6;
+    }
+}
+@media (min-width: 1070px){
+    .report{
+        height: 500px;
+        scale: 0.8;
     }
 }
 
@@ -44,7 +56,7 @@
     margin-top: 1rem;
     color: rgb(218, 169, 22);
     text-transform: none;
-    font-size: 3rem;
+    font-size: 1rem;
     font-family: Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -53,12 +65,16 @@
 }
 
 .report__info6 {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
     height: 100%;
 }
 
 .recent__albums {
-    display: flex ;
+    display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
@@ -99,7 +115,7 @@
 
 .titles__container div {
     color: rgb(155, 116, 0);
-    font-size: 2rem;
+    font-size: 1rem;
     text-align: center;
     padding-left: 2rem;
     padding-right: 2rem;
@@ -108,15 +124,22 @@
 }
 
 .info__container {
+    display: flex;
     padding-left: 2rem;
     padding-right: 2rem;
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-self: center;
+<<<<<<< HEAD
+    overflow: auto;
+    width: 50rem;
+    margin-bottom: 25px;
+=======
     overflow: scroll;
     overflow-y: hidden;
     width: 85rem;
+>>>>>>> b05636bda568946c80ac7e6911bba98830d8621b
 }
 
 .report__info8 h1, .report__info6 h1 {
@@ -128,21 +151,33 @@
     align-content: center;
     display: grid;
     width: 100%;
+    font-size: xx-large;
     color: white;
 }
 
 .info__container div {
     color: rgb(255, 191, 0);
-    font-size: 4rem;
+    font-size: 1rem;
     text-align: center;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    padding-top: 4rem;
     flex: 1;
     overflow: visible;
     white-space: nowrap;
 }
+<<<<<<< HEAD
+.info_{
+    padding: 3rem;
+    border-color: white;
+    border-style: double;
+    border-width: 4px;
+    border-radius: 50px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+=======
 
 .info__container div div {
     margin-bottom: 2rem;
 }
+>>>>>>> b05636bda568946c80ac7e6911bba98830d8621b
