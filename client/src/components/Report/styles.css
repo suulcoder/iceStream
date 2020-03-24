@@ -19,7 +19,7 @@
 
 .reportbutton:hover {
     background: rgb(192, 192, 192);
-    color: rgb(168, 129, 13);
+    color: white;
     opacity: 20%;
 }
 
@@ -115,7 +115,7 @@
     flex-wrap: nowrap;
     align-self: center;
     overflow: scroll;
-    scrollbar-width: none;
+    overflow-y: hidden;
     width: 85rem;
 }
 
@@ -143,3 +143,6 @@
     white-space: nowrap;
 }
 
+.info__container div div {
+    margin-bottom: 2rem;
+}

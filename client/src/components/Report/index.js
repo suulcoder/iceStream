@@ -19,11 +19,6 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
         {
             (index === 0) ? 
                 <div className="report__info1">
-                    {/* <div className="n">{info1[0] === undefined ? ' ' : info1[0].name + ' ' + info1[0].count}</div>
-                    <div className="n">{info1[1] === undefined ? ' ' : info1[1].name + ' ' + info1[1].count}</div>
-                    <div className="n">{info1[2] === undefined ? ' ' : info1[2].name + ' ' + info1[2].count}</div>
-                    <div className="n">{info1[3] === undefined ? ' ' : info1[3].name + ' ' + info1[3].count}</div>
-                    <div className="n">{info1[4] === undefined ? ' ' : info1[4].name + ' ' + info1[4].count}</div> */}
                     {info1[0] === undefined ? ' ' : <HorizontalBar data={
                                 {
                                     labels: [info1[0].name, info1[1].name, info1[2].name, info1[3].name, info1[4].name],
@@ -261,7 +256,7 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                     <h1>{'Artistas Por Playlist'}</h1>
                                     <div className="info__container">
                                         {info6.map(playlist =>
-                                            <div>{playlist.name}<div>{playlist.count + (playlist.count > 1 ? ' artistas' : ' artista')}</div></div>
+                                            <div key={playlist.name}>{playlist.name}<div key={playlist.name + playlist.count}>{playlist.count + (playlist.count > 1 ? ' artistas' : ' artista')}</div></div>
                                         )}
                                     </div>
                                 </div>
@@ -325,7 +320,7 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                     <h1>{'Duración Total por Playlist (DD:HH:MM)'}</h1>
                                     <div className="info__container">
                                         {info8.map(playlist =>
-                                            <div>{playlist.name}<div>{functions.MStoTIME(playlist.duration)}</div></div>
+                                            <div key={playlist.name}>{playlist.name}<div key={playlist.name + playlist.duration}>{functions.MStoTIME(playlist.duration)}</div></div>
                                         )}
                                     </div>
                                 </div>
