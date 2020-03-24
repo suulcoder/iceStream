@@ -96,7 +96,7 @@ const elements = combineReducers({
 
 export default elements;
 
-export const getElement = (state, id) => state.byId[id];
+export const getElement = (state, id) => (state.byId[id]===undefined)?{}: state.byId[id];
 export const getSection = (state, index) => state.order[index]
 export const getAll = (state) => state.orderSections.map(
     section => getSection(state,section)
