@@ -84,6 +84,7 @@ export default connect(
             window.location.href = artist;
         },
         onDelete(id){
+            alert("ALL ALBUMS WILL BE DELETED TOO")
             const artistid = id.split('artist')[1]
             const request = new Request('http://localhost:8080/api/actions/delete/artist',{
                 method:'POST',

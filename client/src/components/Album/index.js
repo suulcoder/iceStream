@@ -100,6 +100,7 @@ export default connect(
             window.location.href = album;
         },
         onDelete(id){
+            alert("ALL TRACKS WILL BE DELETED TOO")
             const albumid = id.split('album')[1]
             const request = new Request('http://localhost:8080/api/actions/delete/album',{
                 method:'POST',

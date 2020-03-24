@@ -55,7 +55,7 @@ const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,millisec
 
 export default connect(
     state=>{
-        if(selectors.getAppState(state)!==0 && selectors.getAppState(state)!==4 && selectors.getAppState(state)!==3 && selectors.getSelected(state)!==null){
+        if(selectors.getAppState(state)!==0 && selectors.getAppState(state)!==4 && selectors.getAppState(state)!==3 && selectors.getSelected(state)!==null && selectors.getSelected(state)!==undefined){
             return ({
                 isSelected:true,
                 type:Object.values(selectors.getSelected(state))[0],

@@ -377,8 +377,16 @@ export default connect(
                                                             })
                                                             fetch(request5)
                                                             .then(async(response)=>{
-                                                                alert("TRACK ADDED SUCCESSFULLY")
-                                                                window.location.href = 'http://localhost:3000/'
+                                                                const request5 = new Request('http://localhost:8080/api/trackstate',{
+                                                                    method:'POST',
+                                                                    headers: { 'Content-Type':'application/json'},
+                                                                    body: JSON.stringify({id:Object.values(data[0])[0]+1})
+                                                                })
+                                                                fetch(request5)
+                                                                .then(async(response)=>{
+                                                                    alert("TRACK ADDED SUCCESSFULLY")
+                                                                    window.location.href = 'http://localhost:3000/'
+                                                                })
                                                             })
                                                         })
                                                     })

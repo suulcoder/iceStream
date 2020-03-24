@@ -79,7 +79,10 @@ export const addAlbum = ({albumid,title,artist,image,album}) =>{
     })
 } 
 
-export const updateSong = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state}) => {
+export const updateSong = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,albumid,state,trackid}) => {
+    if(trackid){
+        id=trackid
+    }
     if(image===undefined){
         image = './default'
     }

@@ -30,7 +30,7 @@ class AppState extends React.Component{
         var track = new TrackHandler();
         this.props.onSubmit(elementActions.setToNull())
         //this.props.onSubmit(appActions.setToNull())
-        this.props.onSubmit(actions.setToNull())
+        //this.props.onSubmit(actions.setToNull())
         fetch('http://localhost:8080/api/getsongs',{method:'GET'})
         .then(response => response.json())
         .then(async(data) => {
@@ -38,9 +38,14 @@ class AppState extends React.Component{
             track.search(Object.values(element)[9], {limit: 1}).then((trackCollection) => {
                 if(trackCollection[0]===undefined){
                     this.props.onSubmit(elementActions.addSong({...element}))
+                    this.props.onSubmit(elementActions.updateSong({...element}))
                 }
                 else{
                 this.props.onSubmit(elementActions.addSong({...element,
+                    image:Object.values(Object.values(Object.values(trackCollection[0])[0])[6][0])[1],
+                    song:Object.values(Object.values(trackCollection[0])[7])[0]
+                    }))
+                this.props.onSubmit(elementActions.updateSong({...element,
                     image:Object.values(Object.values(Object.values(trackCollection[0])[0])[6][0])[1],
                     song:Object.values(Object.values(trackCollection[0])[7])[0]
                     }))}

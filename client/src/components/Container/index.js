@@ -37,11 +37,8 @@ const Header = ({app}) => (
 )
 
 export default connect(
-    state=>{
-        console.log(state)
-        return ({
+    state=>({
             app: selectors.getAppState(state),
-        })
-    },
+    }),
     undefined
 )(Header)
