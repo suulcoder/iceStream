@@ -50,8 +50,16 @@ export default connect(
                             try{
                                 const data = table.rows 
                                 dispatch(userActions.setUser(data[0]))
-                                dispatch(actions.changeState(1))
-                                window.location.href = 'https://accounts.spotify.com/authorize?client_id=9dd9df7b812f484c91490a594286ca76&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&scope=user-read-private%20user-read-email&response_type=token&state=123'                               
+                                const request1 = new Request('http://localhost:8080/api/login',{
+                                    method:'POST',
+                                    headers: { 'Content-Type':'application/json'},
+                                    body: JSON.stringify({user:user})
+                                })
+                                fetch(request1)
+                                .then(async(response)=>{
+                                    dispatch(actions.changeState(1))
+                                    window.location.href = 'https://accounts.spotify.com/authorize?client_id=9dd9df7b812f484c91490a594286ca76&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&scope=user-read-private%20user-read-email&response_type=token&state=123'                               
+                                })
                             }
                             catch(err){
                                 dispatch(userActions.setUsertoNull())

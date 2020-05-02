@@ -70,7 +70,8 @@ class AppState extends React.Component{
         .then(response => response.json())
         .then(data => {
             this.props.onSubmit(appActions.addSection('album',data))
-            data.rows.map(element => {
+            console.log(data)
+            data.map(element => {
                 track.search(Object.values(element)[1], {limit: 1}).then((trackCollection) => {
                     if(trackCollection[0] === undefined){
                         this.props.onSubmit(actions.addAlbum({...element}))

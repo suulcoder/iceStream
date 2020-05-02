@@ -80,7 +80,7 @@ module.exports = {
    addUserTrack : " INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES ($1,$2,$3)",
    addAlbum : "INSERT INTO Album (AlbumId, Title, ArtistId) VALUES ($1,$2,$3);",
    addTrack : "INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);",
-   addUser : "INSERT INTO Users (UserId,Username,email,password,role) VALUES ($1,$2,$3,$4,$5);",
+   addUser : "INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES ($1,$2,$3,$4,$5,'True');",
    addtrackstate: "INSERT INTO TrackState (trackid,state) VALUES ($1,'TRUE')",
    
    selectAlbumID : "SELECT AlbumId FROM Album WHERE title=$1",
@@ -95,6 +95,9 @@ module.exports = {
    UpdateAlbum : "UPDATE Album SET Title=$2, ArtistId=$3 where AlbumID=$1",
    UpdateTrack : "UPDATE Track SET Name=$2, AlbumId=$3, MediaTypeId=$4, GenreId=$5, Composer=$6, Milliseconds=$7, Bytes=$8, UnitPrice=$9 WHERE TrackId=$1",
    
+   Login: "UPDATE Users SET isLogged='True' WHERE Username=$1;",
+   Logout: "UPDATE Users SET isLogged='False' WHERE Username=$1;", 
+
    deleteTrack: "DELETE FROM Track WHERE TrackId=$1;",
    deleteAlbum: "DELETE FROM Album WHERE AlbumId=$1;",
    deleteArtist: "DELETE FROM Artist WHERE ArtistId=$1;",

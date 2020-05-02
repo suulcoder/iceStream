@@ -134,5 +134,9 @@ SQLQuery('/api/actions/update/artist',query.UpdateArtist,'post')
 SQLQuery('/api/actions/update/album',query.UpdateAlbum,'post')
 SQLQuery('/api/actions/update/track',query.UpdateTrack,'post')
 
+SQLQuery('/api/login',query.Login,'post')
+SQLQuery('/api/logout',query.Logout,'post')
+
+
 const port=8080;
 app.listen(port,()=>console.log(`Server started on port ${port}`))
