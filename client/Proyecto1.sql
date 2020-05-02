@@ -1,6 +1,7 @@
 ﻿/*******************************************************************************
    Create Tables
 ********************************************************************************/
+DROP TABLE IF EXISTS binnacle;
 DROP TABLE IF EXISTS HasAddedArtist;
 DROP TABLE IF EXISTS HasAddedAlbum;
 DROP TABLE IF EXISTS HasAddedTrack;
@@ -166,6 +167,7 @@ CREATE TABLE Users
     email VARCHAR(50),
     password VARCHAR(30),
     role VARCHAR(30),
+    isLogged VARCHAR(10),
     UNIQUE(UserId),
     UNIQUE(Username),
     CONSTRAINT PK_TrackPermission PRIMARY KEY (Username)
@@ -219,93 +221,240 @@ CREATE TABLE HasAddedTrack
     FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
-CREATE TABLE HasUpdatedAlbum
+CREATE TABLE Binnacle
 (
-    UserId INT NOT NULL,
-    AlbumId INT NOT NULL,
-    InDate TIMESTAMP NOT NULL,
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (AlbumId) REFERENCES Album(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE HasUpdatedArtist
-(
-    UserId INT NOT NULL,
-    ArtistId INT NOT NULL,
+    Id INT NOT NULL,
+    element VARCHAR(20),
+    action VARCHAR(50),
     InDate TIMESTAMP,
-    PRIMARY KEY (UserId,ArtistId),
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
+    userId INT
 );
 
-CREATE TABLE HasUpdatedTrack
-(
-    UserId INT NOT NULL,
-    TrackId INT NOT NULL,
-    InDate TIMESTAMP,
-    PRIMARY KEY (UserId,TrackId),
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
-);
+DROP FUNCTION IF EXISTS CreateUser;
 
-
-CREATE TABLE HasDeletedAlbum
-(
-    UserId INT NOT NULL,
-    AlbumId INT NOT NULL,
-    InDate TIMESTAMP NOT NULL,
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (AlbumId) REFERENCES Album(AlbumId) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE HasDeletedArtist
-(
-    UserId INT NOT NULL,
-    ArtistId INT NOT NULL,
-    InDate TIMESTAMP,
-    PRIMARY KEY (UserId,ArtistId),
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (ArtistId) REFERENCES Artist(ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE HasDeletedTrack
-(
-    UserId INT NOT NULL,
-    TrackId INT NOT NULL,
-    InDate TIMESTAMP,
-    PRIMARY KEY (UserId,TrackId),
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE HasPlayedTrack
-(
-    UserId INT NOT NULL,
-    TrackId INT NOT NULL,
-    InDate TIMESTAMP,
-    PRIMARY KEY (UserId,TrackId),
-    FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (TrackId) REFERENCES Track(TrackId) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TRIGGER CreatingUserOne
-	AFTER INSERT ON User
-	FOR EACH ROW
-	WHEN NEW.role='admin'
-BEGIN
-	INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (NEW.UserId,'TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE','TRUE');
-END;
-
-
-CREATE TRIGGER CreatingUserTwo
-	AFTER INSERT ON User
-	FOR EACH ROW
-	WHEN NEW.role='client'
+CREATE FUNCTION CreateUser()
+RETURNS TRIGGER AS 
+$BODY$
 BEGIN
 	INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES (NEW.UserId,'TRUE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE','FALSE');
-	INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (NEW.UserID,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NEW.email, NULL);	
-END;
+	INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (NEW.UserID,New.Username,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NEW.email, NULL);	
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+
+CREATE TRIGGER CreatingUser
+	AFTER INSERT ON Users
+	FOR EACH ROW
+	EXECUTE PROCEDURE CreateUser();
+
+DROP FUNCTION IF EXISTS UpdateTrack;
+
+CREATE FUNCTION UpdateTrack()
+RETURNS TRIGGER AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','UPDATE',CURRENT_DATE,currentUser);
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+
+CREATE TRIGGER UpdatingTrack
+	AFTER UPDATE ON Track
+	FOR EACH ROW
+	EXECUTE PROCEDURE UpdateTrack();
+
+
+DROP FUNCTION IF EXISTS CreateTrack;
+
+CREATE FUNCTION CreateTrack()
+RETURNS TRIGGER AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','CREATE',CURRENT_DATE,currentUser);
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+CREATE TRIGGER CreatingTrack
+	AFTER INSERT ON Track
+	FOR EACH ROW
+	EXECUTE PROCEDURE CreateTrack();
+
+
+DROP FUNCTION IF EXISTS DeleteTrack;
+
+CREATE FUNCTION DeleteTrack()
+RETURNS TRIGGER AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','DELETE',CURRENT_DATE,currentUser);
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+
+CREATE TRIGGER DeletingTrack
+	AFTER DELETE ON Track
+	FOR EACH ROW
+	EXECUTE PROCEDURE DeleteTrack();
+
+
+
+DROP FUNCTION IF EXISTS PlayTrack;
+
+CREATE FUNCTION PlayTrack(trackId INT)
+RETURNS INT AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','PLAY',CURRENT_DATE,currentUser);
+	RETURN 0;
+END
+$BODY$
+language plpgsql;
+
+
+DROP FUNCTION IF EXISTS UpdateAlbum;
+
+CREATE FUNCTION UpdateAlbum()
+RETURNS TRIGGER AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','UPDATE',CURRENT_DATE,currentUser);
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+
+CREATE TRIGGER UpdatingAlbum
+	AFTER UPDATE ON Album
+	FOR EACH ROW
+	EXECUTE PROCEDURE UpdateAlbum();
+
+
+DROP FUNCTION IF EXISTS CreateAlbum;
+
+CREATE FUNCTION CreateAlbum()
+RETURNS TRIGGER AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','CREATE',CURRENT_DATE,currentUser);
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+
+CREATE TRIGGER CreatingAlbum
+	AFTER INSERT ON Album
+	FOR EACH ROW
+	EXECUTE PROCEDURE CreateAlbum();
+
+
+DROP FUNCTION IF EXISTS DeleteAlbum;
+
+CREATE FUNCTION DeleteAlbum()
+RETURNS TRIGGER AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','DELETE',CURRENT_DATE,currentUser);
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+
+CREATE TRIGGER DeletingAlbum
+	AFTER DELETE ON Album
+	FOR EACH ROW
+	EXECUTE PROCEDURE DeleteAlbum();
+
+
+
+
+
+DROP FUNCTION IF EXISTS UpdateArtist;
+
+CREATE FUNCTION UpdateArtist()
+RETURNS TRIGGER AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','UPDATE',CURRENT_DATE,currentUser);
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+
+CREATE TRIGGER UpdatingArtist
+	AFTER UPDATE ON Artist
+	FOR EACH ROW
+	EXECUTE PROCEDURE UpdateArtist();
+
+
+DROP FUNCTION IF EXISTS CreateArtist;
+
+CREATE FUNCTION CreateArtist()
+RETURNS TRIGGER AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','CREATE',CURRENT_DATE,currentUser);
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+
+CREATE TRIGGER CreatingArtist
+	AFTER INSERT ON Artist
+	FOR EACH ROW
+	EXECUTE PROCEDURE CreateArtist();
+
+
+DROP FUNCTION IF EXISTS DeleteArtist;
+
+CREATE FUNCTION DeleteArtist()
+RETURNS TRIGGER AS 
+$BODY$
+DECLARE currentUser INT;
+BEGIN
+	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','DELETE',CURRENT_DATE,currentUser);
+	RETURN NEW;
+END
+$BODY$
+language plpgsql;
+
+
+CREATE TRIGGER DeletingArtist
+	AFTER DELETE ON Artist
+	FOR EACH ROW
+	EXECUTE PROCEDURE DeleteArtist();
+
 
 
 /*******************************************************************************
@@ -335,76 +484,16 @@ CREATE INDEX IFK_TrackMediaTypeId ON Track (MediaTypeId);
 /*******************************************************************************
    Populate Tables
 ********************************************************************************/
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (1,'admin','admin@iceStream.com','admin','admin');
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (2,'suulcoder','suulcoder@iceStream.com','admin','client');
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (3,'gdawg4','gdawg4@iceStream.com','admin','client');
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (4,'gera1013','gera1013@iceStream.com','admin','client');
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (5,'scont','scoder@iceStream.com','admin','client');
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (6,'g654','gd68ssdg4@iceStream.com','admin','client');
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (7,'gersdf013','gera1fs3@iceStream.com','admin','client');
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (8,'user','suser@iceStream.com','admin','client');
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (9,'user87','user87@iceStream.com','admin','client');
-INSERT INTO Users (UserId,Username,email,password,role) VALUES (10,'thisismyuser','thisuser@iceStream.com','admin','client');
-
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (1,'Luís','Gonçalves','Embraer - Empresa Brasileira de Aeronáutica S.A.','Av. Brigadeiro Faria Lima, 2170','São José dos Campos','SP','Brazil','12227-000','+55 (12) 3923-5555','+55 (12) 3923-5566','luisg@embraer.com.br', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (2,'Leonie','Köhler','Theodor-Heuss-Straße 34','Stuttgart','Germany','70174','+49 0711 2842222','leonekohler@surfeu.de', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (3,'François','Tremblay','1498 rue Bélanger','Montréal','QC','Canada','H2G 1A7','+1 (514) 721-4711','ftremblay@gmail.com', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (4,'Bjørn','Hansen','Ullevålsveien 14','Oslo','Norway','0171','+47 22 44 22 22','bjorn.hansen@yahoo.no', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (5,'František','Wichterlová','JetBrains s.r.o.','Klanova 9/506','Prague','Czech Republic','14700','+420 2 4172 5555','+420 2 4172 5555','frantisekw@jetbrains.com', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (6,'Helena','Holý','Rilská 3174/6','Prague','Czech Republic','14300','+420 2 4177 0449','hholy@gmail.com', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (7,'Astrid','Gruber','Rotenturmstraße 4, 1010 Innere Stadt','Vienne','Austria','1010','+43 01 5134505','astrid.gruber@apple.at', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (8,'Daan','Peeters','Grétrystraat 63','Brussels','Belgium','1000','+32 02 219 03 03','daan_peeters@apple.be', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (9,'Kara','Nielsen','Sønder Boulevard 51','Copenhagen','Denmark','1720','+453 3331 9991','kara.nielsen@jubii.dk', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (10,'Eduardo','Martins','Woodstock Discos','Rua Dr. Falcão Filho, 155','São Paulo','SP','Brazil','01007-010','+55 (11) 3033-5446','+55 (11) 3033-4564','eduardo@woodstock.com.br', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (11,'Alexandre','Rocha','Banco do Brasil S.A.','Av. Paulista, 2022','São Paulo','SP','Brazil','01310-200','+55 (11) 3055-3278','+55 (11) 3055-8131','alero@uol.com.br', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (12,'Roberto','Almeida','Riotur','Praça Pio X, 119','Rio de Janeiro','RJ','Brazil','20040-020','+55 (21) 2271-7000','+55 (21) 2271-7070','roberto.almeida@riotur.gov.br', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (13,'Fernanda','Ramos','Qe 7 Bloco G','Brasília','DF','Brazil','71020-677','+55 (61) 3363-5547','+55 (61) 3363-7855','fernadaramos4@uol.com.br', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (14,'Mark','Philips','Telus','8210 111 ST NW','Edmonton','AB','Canada','T6G 2C7','+1 (780) 434-4554','+1 (780) 434-5565','mphilips12@shaw.ca', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (15,'Jennifer','Peterson','Rogers Canada','700 W Pender Street','Vancouver','BC','Canada','V6C 1G8','+1 (604) 688-2255','+1 (604) 688-8756','jenniferp@rogers.ca', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (16,'Frank','Harris','Google Inc.','1600 Amphitheatre Parkway','Mountain View','CA','USA','94043-1351','+1 (650) 253-0000','+1 (650) 253-0000','fharris@google.com', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (17,'Jack','Smith','Microsoft Corporation','1 Microsoft Way','Redmond','WA','USA','98052-8300','+1 (425) 882-8080','+1 (425) 882-8081','jacksmith@microsoft.com', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (18,'Michelle','Brooks','627 Broadway','New York','NY','USA','10012-2612','+1 (212) 221-3546','+1 (212) 221-4679','michelleb@aol.com', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email, SupportRepId) VALUES (19,'Tim','Goyer','Apple Inc.','1 Infinite Loop','Cupertino','CA','USA','95014','+1 (408) 996-1010','+1 (408) 996-1011','tgoyer@apple.com', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (20,'Dan','Miller','541 Del Medio Avenue','Mountain View','CA','USA','94040-111','+1 (650) 644-3358','dmiller@comcast.com', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (21,'Kathy','Chase','801 W 4th Street','Reno','NV','USA','89503','+1 (775) 223-7665','kachase@hotmail.com', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (22,'Heather','Leacock','120 S Orange Ave','Orlando','FL','USA','32801','+1 (407) 999-7788','hleacock@gmail.com', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (23,'John','Gordon','69 Salem Street','Boston','MA','USA','2113','+1 (617) 522-1333','johngordon22@yahoo.com', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (24,'Frank','Ralston','162 E Superior Street','Chicago','IL','USA','60611','+1 (312) 332-3232','fralston@gmail.com', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (25,'Victor','Stevens','319 N. Frances Street','Madison','WI','USA','53703','+1 (608) 257-0597','vstevens@yahoo.com', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (26,'Richard','Cunningham','2211 W Berry Street','Fort Worth','TX','USA','76110','+1 (817) 924-7272','ricunningham@hotmail.com', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (27,'Patrick','Gray','1033 N Park Ave','Tucson','AZ','USA','85719','+1 (520) 622-4200','patrick.gray@aol.com', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (28,'Julia','Barnett','302 S 700 E','Salt Lake City','UT','USA','84102','+1 (801) 531-7272','jubarnett@gmail.com', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (29,'Robert','Brown','796 Dundas Street West','Toronto','ON','Canada','M6J 1V1','+1 (416) 363-8888','robbrown@shaw.ca', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (30,'Edward','Francis','230 Elgin Street','Ottawa','ON','Canada','K2P 1L7','+1 (613) 234-3322','edfrancis@yachoo.ca', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (31,'Martha','Silk','194A Chain Lake Drive','Halifax','NS','Canada','B3S 1C5','+1 (902) 450-0450','marthasilk@gmail.com', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (32,'Aaron','Mitchell','696 Osborne Street','Winnipeg','MB','Canada','R3L 2B9','+1 (204) 452-6452','aaronmitchell@yahoo.ca', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (33,'Ellie','Sullivan','5112 48 Street','Yellowknife','NT','Canada','X1A 1N6','+1 (867) 920-2233','ellie.sullivan@shaw.ca', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, Phone, Email, SupportRepId) VALUES (34,'João','Fernandes','Rua da Assunção 53','Lisbon','Portugal','+351 (213) 466-111','jfernandes@yahoo.pt', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, Phone, Email, SupportRepId) VALUES (35,'Madalena','Sampaio','Rua dos Campeões Europeus de Viena, 4350','Porto','Portugal','+351 (225) 022-448','masampaio@sapo.pt', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (36,'Hannah','Schneider','Tauentzienstraße 8','Berlin','Germany','10789','+49 030 26550280','hannah.schneider@yahoo.de', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (37,'Fynn','Zimmermann','Berger Straße 10','Frankfurt','Germany','60316','+49 069 40598889','fzimmermann@yahoo.de', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (38,'Niklas','Schröder','Barbarossastraße 19','Berlin','Germany','10779','+49 030 2141444','nschroder@surfeu.de', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (39,'Camille','Bernard','4, Rue Milton','Paris','France','75009','+33 01 49 70 65 65','camille.bernard@yahoo.fr', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (40,'Dominique','Lefebvre','8, Rue Hanovre','Paris','France','75002','+33 01 47 42 71 71','dominiquelefebvre@gmail.com', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (41,'Marc','Dubois','11, Place Bellecour','Lyon','France','69002','+33 04 78 30 30 30','marc.dubois@hotmail.com', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (42,'Wyatt','Girard','9, Place Louis Barthou','Bordeaux','France','33000','+33 05 56 96 96 96','wyatt.girard@yahoo.fr', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (43,'Isabelle','Mercier','68, Rue Jouvence','Dijon','France','21000','+33 03 80 73 66 99','isabelle_mercier@apple.fr', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (44,'Terhi','Hämäläinen','Porthaninkatu 9','Helsinki','Finland','00530','+358 09 870 2000','terhi.hamalainen@apple.fi', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Email, SupportRepId) VALUES (45,'Ladislav','Kovács','Erzsébet krt. 58.','Budapest','Hungary','H-1073','ladislav_kovacs@apple.hu', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, Phone, Email, SupportRepId) VALUES (46,'Hugh','O''Reilly','3 Chatham Street','Dublin','Dublin','Ireland','+353 01 6792424','hughoreilly@apple.ie', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (47,'Lucas','Mancini','Via Degli Scipioni, 43','Rome','RM','Italy','00192','+39 06 39733434','lucas.mancini@yahoo.it', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (48,'Johannes','Van der Berg','Lijnbaansgracht 120bg','Amsterdam','VV','Netherlands','1016','+31 020 6223130','johavanderberg@yahoo.nl', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (49,'Stanislaw','Wójcik','Ordynacka 10','Warsaw','Poland','00-358','+48 22 828 37 39','stanislaw.wójcik@wp.pl', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (50,'Enrique','Muñoz','C/ San Bernardo 85','Madrid','Spain','28015','+34 914 454 454','enrique_munoz@yahoo.es', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (51,'Joakim','Johansson','Celsiusg. 9','Stockholm','Sweden','11230','+46 08-651 52 52','joakim.johansson@yahoo.se', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (52,'Emma','Jones','202 Hoxton Street','London','United Kingdom','N1 5LH','+44 020 7707 0707','emma_jones@hotmail.com', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (53,'Phil','Hughes','113 Lupus St','London','United Kingdom','SW1V 3EN','+44 020 7976 5722','phil.hughes@gmail.com', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (54,'Steve','Murray','110 Raeburn Pl','Edinburgh ','United Kingdom','EH4 1HH','+44 0131 315 3300','steve.murray@yahoo.uk', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, State, Country, PostalCode, Phone, Email, SupportRepId) VALUES (55,'Mark','Taylor','421 Bourke Street','Sidney','NSW','Australia','2010','+61 (02) 9332 3633','mark.taylor@yahoo.au', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (56,'Diego','Gutiérrez','307 Macacha Güemes','Buenos Aires','Argentina','1106','+54 (0)11 4311 4333','diego.gutierrez@yahoo.ar', 4);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, Phone, Email, SupportRepId) VALUES (57,'Luis','Rojas','Calle Lira, 198','Santiago','Chile','+56 (0)2 635 4444','luisrojas@yahoo.cl', 5);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (58,'Manoj','Pareek','12,Community Centre','Delhi','India','110017','+91 0124 39883988','manoj.pareek@rediff.com', 3);
-INSERT INTO Customer (CustomerId, FirstName, LastName, Address, City, Country, PostalCode, Phone, Email, SupportRepId) VALUES (59,'Puja','Srivastava','3,Raj Bhavan Road','Bangalore','India','560001','+91 080 22289999','puja_srivastava@yahoo.in', 3);
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (61,'admin','admin@iceStream.com','admin','admin','False');
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (62,'suulcoder','suulcoder@iceStream.com','admin','client','False');
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (63,'gdawg4','gdawg4@iceStream.com','admin','client','False');
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (64,'gera1013','gera1013@iceStream.com','admin','client','False');
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (65,'scont','scoder@iceStream.com','admin','client','False');
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (66,'g654','gd68ssdg4@iceStream.com','admin','client','False');
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (67,'gersdf013','gera1fs3@iceStream.com','admin','client','False');
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (68,'user','suser@iceStream.com','admin','client','False');
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (69,'user87','user87@iceStream.com','admin','client','False');
+INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES (60,'thisismyuser','thisuser@iceStream.com','admin','client','False');
 
 INSERT INTO Genre (GenreId, Name) VALUES (1,'Rock');
 INSERT INTO Genre (GenreId, Name) VALUES (2,'Jazz');
@@ -1062,47 +1151,47 @@ INSERT INTO Album (AlbumId, Title, ArtistId) VALUES (345,'Monteverdi: L''Orfeo',
 INSERT INTO Album (AlbumId, Title, ArtistId) VALUES (346,'Mozart: Chamber Music', 274);
 INSERT INTO Album (AlbumId, Title, ArtistId) VALUES (347,'Koyaanisqatsi (Soundtrack from the Motion Picture)', 275);
 
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,2,'2020-03-20 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (3,3,'2020-03-19 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (4,4,'2020-03-18 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (5,5,'2020-03-17 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (6,6,'2020-03-16 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (7,7,'2020-03-15 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (8,8,'2020-03-14 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (9,9,'2020-03-13 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (9,10,'2020-03-12 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (8,11,'2020-03-11 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (7,12,'2020-03-10 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (6,13,'2020-03-09 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (5,14,'2020-03-08 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (4,15,'2020-03-07 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (3,16,'2020-03-06 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,17,'2020-03-05 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,18,'2020-03-04 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,19,'2020-03-03 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,20,'2020-03-02 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,21,'2020-03-01 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,22,'2020-02-20 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,23,'2020-01-20 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,24,'2020-02-19 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,25,'2020-02-18 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,26,'2020-02-17 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,27,'2020-02-05 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (3,28,'2020-02-06 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (3,29,'2020-02-07 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (3,30,'2020-02-08 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (3,31,'2020-02-09 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (3,32,'2020-02-10 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (3,33,'2020-02-11 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (3,34,'2020-01-12 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (4,35,'2020-01-13 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (4,36,'2020-01-14 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (4,37,'2020-01-15 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (4,38,'2020-01-16 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (5,39,'2020-02-17 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (5,40,'2020-02-18 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (5,41,'2020-02-19 10:04:24.081');
-INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (2,42,'2020-01-20 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,2,'2020-03-20 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (63,3,'2020-03-19 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (64,4,'2020-03-18 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (65,5,'2020-03-17 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (66,6,'2020-03-16 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (67,7,'2020-03-15 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (68,8,'2020-03-14 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (69,9,'2020-03-13 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (69,10,'2020-03-12 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (68,11,'2020-03-11 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (67,12,'2020-03-10 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (66,13,'2020-03-09 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (65,14,'2020-03-08 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (64,15,'2020-03-07 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (63,16,'2020-03-06 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,17,'2020-03-05 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,18,'2020-03-04 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,19,'2020-03-03 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,20,'2020-03-02 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,21,'2020-03-01 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,22,'2020-02-20 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,23,'2020-01-20 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,24,'2020-02-19 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,25,'2020-02-18 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,26,'2020-02-17 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,27,'2020-02-05 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (63,28,'2020-02-06 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (63,29,'2020-02-07 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (63,30,'2020-02-08 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (63,31,'2020-02-09 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (63,32,'2020-02-10 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (63,33,'2020-02-11 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (63,34,'2020-01-12 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (64,35,'2020-01-13 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (64,36,'2020-01-14 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (64,37,'2020-01-15 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (64,38,'2020-01-16 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (65,39,'2020-02-17 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (65,40,'2020-02-18 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (65,41,'2020-02-19 10:04:24.081');
+INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES (62,42,'2020-01-20 10:04:24.081');
 
 INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES (1,'For Those About To Rock (We Salute You)', 1, 1, 1,'Angus Young, Malcolm Young, Brian Johnson', 343719, 11170334, 0.99);
 INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Milliseconds, Bytes, UnitPrice) VALUES (2,'Balls to the Wall', 2, 2, 1, 342562, 5510424, 0.99);
@@ -4608,47 +4697,47 @@ INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milli
 INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES (3502,'Quintet for Horn, Violin, 2 Violas, and Cello in E Flat Major, K. 407/386c: III. Allegro', 346, 2, 24,'Wolfgang Amadeus Mozart', 221331, 3665114, 0.99);
 INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES (3503,'Koyaanisqatsi', 347, 2, 10,'Philip Glass', 206005, 3305164, 0.99);
 
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,2,'2020-03-20 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,3,'2020-03-19 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,4,'2020-03-18 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,5,'2020-03-17 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (6,6,'2020-03-16 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (7,7,'2020-03-15 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (8,8,'2020-03-14 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (9,9,'2020-03-13 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (9,10,'2020-03-12 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (8,11,'2020-03-11 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (7,12,'2020-03-10 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (6,13,'2020-03-09 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,14,'2020-03-08 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,15,'2020-03-07 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,16,'2020-03-06 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,17,'2020-03-05 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,18,'2020-03-04 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,19,'2020-03-03 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,20,'2020-03-02 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,21,'2020-03-01 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,22,'2020-02-20 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,23,'2020-01-20 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,24,'2020-02-19 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,25,'2020-02-18 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,26,'2020-02-17 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,27,'2020-02-05 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,28,'2020-02-06 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,29,'2020-02-07 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,30,'2020-02-08 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,31,'2020-02-09 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,32,'2020-02-10 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,33,'2020-02-11 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (3,34,'2020-01-12 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,35,'2020-01-13 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,36,'2020-01-14 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,37,'2020-01-15 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (4,38,'2020-01-16 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,39,'2020-02-17 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,40,'2020-02-18 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (5,41,'2020-02-19 10:04:24.081');
-INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (2,42,'2020-01-20 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,2,'2020-03-20 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (63,3,'2020-03-19 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (64,4,'2020-03-18 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (65,5,'2020-03-17 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (66,6,'2020-03-16 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (67,7,'2020-03-15 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (68,8,'2020-03-14 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (69,9,'2020-03-13 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (69,10,'2020-03-12 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (68,11,'2020-03-11 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (67,12,'2020-03-10 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (66,13,'2020-03-09 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (65,14,'2020-03-08 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (64,15,'2020-03-07 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (63,16,'2020-03-06 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,17,'2020-03-05 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,18,'2020-03-04 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,19,'2020-03-03 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,20,'2020-03-02 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,21,'2020-03-01 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,22,'2020-02-20 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,23,'2020-01-20 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,24,'2020-02-19 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,25,'2020-02-18 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,26,'2020-02-17 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,27,'2020-02-05 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (63,28,'2020-02-06 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (63,29,'2020-02-07 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (63,30,'2020-02-08 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (63,31,'2020-02-09 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (63,32,'2020-02-10 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (63,33,'2020-02-11 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (63,34,'2020-01-12 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (64,35,'2020-01-13 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (64,36,'2020-01-14 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (64,37,'2020-01-15 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (64,38,'2020-01-16 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (65,39,'2020-02-17 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (65,40,'2020-02-18 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (65,41,'2020-02-19 10:04:24.081');
+INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES (62,42,'2020-01-20 10:04:24.081');
 
 INSERT INTO Employee (EmployeeId, LastName, FirstName, Title, BirthDate, HireDate, Address, City, State, Country, PostalCode, Phone, Fax, Email) VALUES (1,'Adams','Andrew','General Manager', '1962/2/18', '2002/8/14','11120 Jasper Ave NW','Edmonton','AB','Canada','T5K 2N1','+1 (780) 428-9482','+1 (780) 428-3457','andrew@chinookcorp.com');
 INSERT INTO Employee (EmployeeId, LastName, FirstName, Title, ReportsTo, BirthDate, HireDate, Address, City, State, Country, PostalCode, Phone, Fax, Email) VALUES (2,'Edwards','Nancy','Sales Manager', 1, '1958/12/8', '2002/5/1','825 8 Ave SW','Calgary','AB','Canada','T2P 2T3','+1 (403) 262-3443','+1 (403) 262-3322','nancy@chinookcorp.com');
