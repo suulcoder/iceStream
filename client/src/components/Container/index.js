@@ -23,10 +23,23 @@ const Header = ({app}) => (
                     ):(
                         (app===2)?(
                             <SearchElements></SearchElements>
-                        ):((app===3)?(
-                            <MyIce></MyIce>
                         ):(
-                            <Admin></Admin>
+                            (app===3)?(
+                                <MyIce></MyIce>
+                            ):(
+                                (app===4)?(
+                                    <Admin></Admin>
+                                ):(
+                                    (app===5)?(
+                                        <Fragment></Fragment>
+                                    ):(
+                                        (app==6)?(
+                                            <Fragment></Fragment>
+                                        ):(
+                                            <Fragment></Fragment>
+                                        )
+                                )
+                            )
                         ))
                     )
                     

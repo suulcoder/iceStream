@@ -5,6 +5,7 @@ const cart = (state={}, action) => {
         case types.ADD_TO_CART:
             return {...state,[action.payload.id]:action.payload.quantity}
         case types.REMOVE_FROM_CART:
+            console.log("here")
             const currentState = state;
             delete currentState[action.payload]
             return currentState

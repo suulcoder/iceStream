@@ -8,7 +8,7 @@ import * as actions from '../../actions/app';
 import * as userActions from '../../actions/user'
 import * as elementActions from '../../actions/elemnts'
 
-const Header = ({app,role,onSubmit,logout,home,user}) => (
+const Header = ({app,role,onSubmit,logout,home,user,simulate,onBinnacle,onCart}) => (
         <Fragment>
             <div className="header">
                 <div className="tittle">
@@ -30,11 +30,38 @@ const Header = ({app,role,onSubmit,logout,home,user}) => (
                             }
                             <div className="buttons">
                                 {(app===1)?(
-                                    <button className="button" type="submit" onClick={
-                                        () => onSubmit(role,app)
-                                    }>
-                                        {(role==='admin')?'ADMIN':'myIce'}
-                                    </button>
+                                    (role==='admin')?(
+                                        <Fragment>
+                                            <button className="button" type="submit" onClick={
+                                                () => onSubmit(role,app)
+                                            }>
+                                                {'ADMIN'}
+                                            </button>
+                                            <button className="button" type="submit" onClick={
+                                                () => onBinnacle(role,app)
+                                            }>
+                                                {'BINNACLE'}
+                                            </button>
+                                            <button className="button" type="submit" onClick={
+                                                () => simulate(role,app)
+                                            }>
+                                                {'SIMULATE'}
+                                            </button>
+                                        </Fragment>
+                                    ):(
+                                        <Fragment>
+                                            <button className="button" type="submit" onClick={
+                                                () => onSubmit(role,app)
+                                            }>
+                                                {'MY ICE'}
+                                            </button>
+                                            <button className="button" type="submit" onClick={
+                                                () => onCart(role,app)
+                                            }>
+                                                {'CART'}
+                                            </button>
+                                        </Fragment>
+                                    )
                                 ):(
                                     <button className="button" type="submit" onClick={home}>
                                         {'HOME'}
@@ -95,6 +122,15 @@ export default connect(
         },
         home(){
             dispatch(actions.changeState(1))
+        },
+        onBinnacle(){
+            dispatch(actions.changeState(5))
+        },
+        simulate(){
+            dispatch(actions.changeState(6))
+        },
+        onCart(){
+            dispatch(actions.changeState(7))
         }
     })
 )(Header)
