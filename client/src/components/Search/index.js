@@ -25,12 +25,10 @@ const Search = ({onSubmit,app,token}) => {
 }
 
 export default connect(
-    state=>{
-        console.log(state)
-        return ({
+    state=>({
         app:selectors.getAppState(state),
         token: selectors.getToken(state)
-    })},
+    }),
     dispatch => ({
         onSubmit(value,app,token){
             if(app===4){

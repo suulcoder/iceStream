@@ -10,6 +10,7 @@ import * as types from '../../types/reportSections'
 import { withRouter } from "react-router";
 import * as selectors from '../../reducers'
 import * as spotifyActions from '../../actions/spotify'
+import * as cartActions from '../../actions/cart'
 import * as appActions from '../../actions/app'
 
 class AppState extends React.Component{
@@ -88,6 +89,15 @@ class AppState extends React.Component{
                 return null
             })
         })
+
+        fetch('http://localhost:8080/api/cart',{method:'GET'})
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(element => {
+                this.props.onSubmit(cartActions.addToCart({id:element.trackid,quantity:element.quantity}))
+            });
+        })
+
 
         fetch('http://localhost:8080/api/media',{method:'GET'})
         .then(response => response.json())

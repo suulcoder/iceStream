@@ -1,9 +1,10 @@
 import './styles.css';
 import * as selectors from '../../reducers'
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import * as actions from '../../actions/cart'
 
-const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onsubmit}) => (
+const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onsubmit,addToCart,inCart,removeFromCart}) => (
     <div className="footerCont">
         <div className="empty"></div>
         <div className="bar"></div>
@@ -15,12 +16,23 @@ const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,mill
                         {
                             (isBought)?(
                                 <button className="link_" type="submit" onClick={
-                                    () => onSubmit(song)}>
+                                    () => onsubmit(song)}>
                                 </button>
                             ):(
-                                <button className="link__" type="submit" onClick={
-                                    () => onSubmit(song)}>
-                                </button>
+                                <Fragment>
+                                {
+                                    (inCart)?(
+                                        <button className="link____" type="submit" onClick={
+                                            () => removeFromCart(id)}>
+                                        </button>
+                                    ):(
+                                        <button className="link__" type="submit" onClick={
+                                            () => addToCart(id)}>
+                                        </button>
+                                    )
+        
+                                }  
+                                </Fragment>
                             )
 
                         }          
@@ -64,11 +76,12 @@ const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,mill
 
 export default connect(
     state=>{
-        if(selectors.getAppState(state)!==0 && selectors.getAppState(state)!==4 && selectors.getAppState(state)!==3 && selectors.getSelected(state)!==null && selectors.getSelected(state)!==undefined){
+        console.log(state)
+        if(selectors.getAppState(state)!==0 && selectors.getSelected(state).id && selectors.getAppState(state)!==4 && selectors.getAppState(state)!==3 && selectors.getSelected(state)!==null && selectors.getSelected(state)!==undefined){
             return ({
                 isSelected:true,
                 type:Object.values(selectors.getSelected(state))[0],
-                id:Object.values(selectors.getSelected(state))[1],
+                id:Object.values(selectors.getSelected(state))[1].substring(5),
                 name:Object.values(selectors.getSelected(state))[2],
                 album:Object.values(selectors.getSelected(state))[3],
                 mediatype: Object.values(selectors.getSelected(state))[4],
@@ -81,7 +94,8 @@ export default connect(
                 image: Object.values(selectors.getSelected(state))[11],
                 song: Object.values(selectors.getSelected(state))[12],
                 state: Object.values(selectors.getSelected(state))[13],
-                isBought: selectors.getBought(state).includes(selectors.getElement(state,id).trackid)
+                isBought: selectors.getBought(state).includes(selectors.getSelected(state).id.substring(5)),
+                inCart : selectors.getAllCartId(state).includes(selectors.getSelected(state).id.substring(5))
             })
         }
         return {isSelected:false}
@@ -90,6 +104,12 @@ export default connect(
         onsubmit(song){
             window.location.href = song;
         },
+        addToCart(id){
+            dispatch(actions.addToCart(id,1))
+        },
+        removeFromCart(id){
+            dispatch(actions.removeFromCart(id))
+        }
         
     })
 )(Footer)

@@ -230,6 +230,13 @@ CREATE TABLE Binnacle
     userId INT
 );
 
+CREATE TABLE Cart
+(
+    trackId INT NOT NULL,
+    quantity INT,
+    PRIMARY KEY (trackId)
+);
+
 DROP FUNCTION IF EXISTS CreateUser;
 
 CREATE FUNCTION CreateUser()
@@ -258,7 +265,7 @@ DECLARE currentUser INT;
 BEGIN
 	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
 	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','UPDATE',CURRENT_DATE,currentUser);
-	RETURN NEW;
+	RETURN NEW;	
 END
 $BODY$
 language plpgsql;

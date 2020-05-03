@@ -8,7 +8,7 @@ const Song = ({id,name,type,onSubmit,state}) => (
     <Fragment>
         <div className="track">
             <button className="play" type="submit" onClick={
-                () => onSubmit(id,type,state)
+                () => onSubmit(id,)
             }>
             </button>
             <div className="trackname">{name}</div>
@@ -19,11 +19,9 @@ const Song = ({id,name,type,onSubmit,state}) => (
 
 export default connect(
     (state, {id})=>({
-            id:Object.values(selectors.getElement(state,id))[1],
-            name:Object.values(selectors.getElement(state,id))[2],
-            milliseconds: Object.values(selectors.getElement(state,id))[7],
-            type: Object.values(selectors.getElement(state,id))[0],
-            state,
+            id:selectors.getElement(state,id).id,
+            name:(selectors.getElement(state,id))?selectors.getElement(state,id).name:'',
+            milliseconds: (selectors.getElement(state,id))?selectors.getElement(state,id).milliseconds:'',
         }),
     dispatch => ({
         onSubmit(id,type,state){

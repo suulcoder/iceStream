@@ -82,6 +82,7 @@ SQLQuery('/api/newartistid',query.getLastArtistId)
 SQLQuery('/api/newalbumid',query.getLastAlbumId)
 SQLQuery('/api/newtrackid',query.getLastTrackId)
 SQLQuery('/api/boughtTracks',query.getBoughtTracks)
+SQLQuery('/api/cart',query.getCart)
 
 SQLQuery('/api/getsongs',query.getAllSongs),
 SQLQuery('/api/getalbums',query.getAllAlbum)

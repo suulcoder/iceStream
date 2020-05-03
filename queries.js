@@ -41,6 +41,7 @@ module.exports = {
    getAllSongsInPlaylist : (`SELECT *\n` +
       `FROM playlist p1 join playlisttrack pt1 on p1.playlistid = pt1.playlistid join track t1 on t1.trackid = pt1.trackid`),
    getBoughtTracks: ("SELECT q.trackid FROM invoiceline as q JOIN invoice as i ON q.invoiceid=i.invoiceid, Users WHERE i.customerid=users.userid AND users.isLogged='True'"),
+   getCart: "SELECT * FROM Cart",
 
    //Reports 
   
