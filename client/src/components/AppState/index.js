@@ -31,6 +31,7 @@ class AppState extends React.Component{
         this.props.onSubmit(elementActions.setToNull())
         //this.props.onSubmit(appActions.setToNull())
         //this.props.onSubmit(actions.setToNull())
+
         fetch('http://localhost:8080/api/getsongs',{method:'GET'})
         .then(response => response.json())
         .then(async(data) => {
@@ -160,6 +161,7 @@ class AppState extends React.Component{
         .then(data => {
             this.props.onSubmit(actions.addReportSection(types.GET_USERS_WITH_MORE_ALBUMS_ADDED,data))
         })
+
     }
 
     render(){

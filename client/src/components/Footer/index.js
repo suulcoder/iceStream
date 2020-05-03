@@ -3,7 +3,7 @@ import * as selectors from '../../reducers'
 import React from 'react';
 import { connect } from 'react-redux';
 
-const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onsubmit}) => (
+const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onsubmit}) => (
     <div className="footerCont">
         <div className="empty"></div>
         <div className="bar"></div>
@@ -12,9 +12,18 @@ const Footer = ({isSelected,type,id,name,album,mediatype,genre,composer,millisec
                 <div className="song_and_link">
                     <img alt='' src={image} className="footer_img"></img>
                     <div className="state">
-                        <button className="link_" type="submit" onClick={
-                            () => onsubmit(song)}>
-                        </button>
+                        {
+                            (isBought)?(
+                                <button className="link_" type="submit" onClick={
+                                    () => onSubmit(song)}>
+                                </button>
+                            ):(
+                                <button className="link__" type="submit" onClick={
+                                    () => onSubmit(song)}>
+                                </button>
+                            )
+
+                        }          
                         <div><strong>STATE: </strong>{(state)?('ACTIVE'):('INACTIVE')}</div>
                     </div>
                 </div>
@@ -72,6 +81,7 @@ export default connect(
                 image: Object.values(selectors.getSelected(state))[11],
                 song: Object.values(selectors.getSelected(state))[12],
                 state: Object.values(selectors.getSelected(state))[13],
+                isBought: selectors.getBought(state).includes(selectors.getElement(state,id).trackid)
             })
         }
         return {isSelected:false}
@@ -79,6 +89,7 @@ export default connect(
     dispatch => ({
         onsubmit(song){
             window.location.href = song;
-        }
+        },
+        
     })
 )(Footer)

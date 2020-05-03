@@ -11,9 +11,9 @@ const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelet
         <div className="artist"> 
                 <div className="artist_">
                     <img alt='' src={image} className="image"></img>
-                    <button className="link" type="submit" onClick={
+                    {/* <button className="link" type="submit" onClick={
                         () => onSubmit(artist)}>
-                    </button>
+                    </button> */}
                     <div className="artistinfo">
                         <div className="artistitle"><strong>ARTIST:</strong></div>
                         {

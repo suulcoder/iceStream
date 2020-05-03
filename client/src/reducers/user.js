@@ -36,10 +36,20 @@ const order = (state=[],action) => {
     }
 }
 
+const bought = (state=[],action) => {
+    switch (action.payload) {
+        case types.addBoughtTrack:
+            return [...state,action.payload]
+        default:
+            return state
+    }
+}
+
 const user = combineReducers({
     currentuser,
     users,
     order,
+    bought
 })
 
 export default user;
@@ -47,3 +57,4 @@ export default user;
 export const getUser = state => state.currentuser;
 export const getUsers = (state,id) => state.users[id]
 export const getAllUsers = (state) => state.order;
+export const getBought = state => state.bought;

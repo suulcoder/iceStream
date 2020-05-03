@@ -40,7 +40,7 @@ const Header = ({app,role,onSubmit,logout,home,user}) => (
                                         {'HOME'}
                                     </button>
                                 )}
-                                <button className="button" type="submit" onClick={logout(user)}>
+                                <button className="button" type="submit" onClick={()=>logout(user)}>
                                     {'LOG OUT'}
                                 </button>
                             </div>
@@ -86,14 +86,12 @@ export default connect(
                 body: JSON.stringify({user:user})
             })
             fetch(request1)
-            .then(async(response)=>{
-                dispatch(actions.changeState(1))
-            window.location.href = 'https://accounts.spotify.com/authorize?client_id=9dd9df7b812f484c91490a594286ca76&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&scope=user-read-private%20user-read-email&response_type=token&state=123'                               
+            .then(async(response)=>{    
+                dispatch(actions.changeState(0))
+                dispatch(elementActions.selectElement(null))
+                dispatch(elementActions.editElement(null))
+                dispatch(userActions.setUsertoNull())
             })
-            dispatch(actions.changeState(0))
-            dispatch(elementActions.selectElement(null))
-            dispatch(elementActions.editElement(null))
-            dispatch(userActions.setUsertoNull())
         },
         home(){
             dispatch(actions.changeState(1))

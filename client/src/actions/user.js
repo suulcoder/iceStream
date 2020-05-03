@@ -26,6 +26,11 @@ export const setUsertoNull = () => ({
     payload: null
 })
 
+export const addBoughtTrack = (id) => ({
+    type:types.addBoughtTrack,
+    payload: id
+})
+
 export const addUser = ({userid,email,role,username,canlogin,canaddartist,canaddalbum,canaddtrack,caninactivatesong,canmodifiysong,candeletesong,canmodifiyalbum,candeletealbum,canmodifyartist,candeleteartist}) =>  ({
     type: types.user_added,
     payload: {

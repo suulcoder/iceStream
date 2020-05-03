@@ -12,9 +12,9 @@ const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,on
         <div className="album"> 
                 <div className="album_">
                     <img alt='' src={image} className="image"></img>
-                    <button className="link" type="submit" onClick={
+                    {/* <button className="link" type="submit" onClick={
                         () => onSubmit(album)}>
-                    </button>
+                    </button> */}
                     <div className="albuminfo">
                         <div className="albumtitle"><strong>ALBUM:</strong></div>
                         {

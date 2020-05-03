@@ -79,6 +79,22 @@
     background-size: cover;
     height: 25px;
 }
+.link__{
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-image: url('../../public/img/cart.png');
+    width: 65px;
+    height: 64px;
+    background-size: cover;
+}
+.play_{
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-image: url('../../public/img/default.png');
+    width: 65px;
+    height: 64px;
+    background-size: cover;
+}
 .state{
     margin-left: 10px;
 }

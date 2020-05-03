@@ -51,6 +51,7 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                     }
                     else{
                         db.query(Query,values,(req,res) => {
+                            console.log(Query,values)
                             if(err){
                                 return response.status(400).send(err)
                             }
@@ -80,6 +81,7 @@ SQLQuery('/api/newuserid',query.getLastUserId)
 SQLQuery('/api/newartistid',query.getLastArtistId)
 SQLQuery('/api/newalbumid',query.getLastAlbumId)
 SQLQuery('/api/newtrackid',query.getLastTrackId)
+SQLQuery('/api/boughtTracks',query.getBoughtTracks)
 
 SQLQuery('/api/getsongs',query.getAllSongs),
 SQLQuery('/api/getalbums',query.getAllAlbum)

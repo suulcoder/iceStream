@@ -4,7 +4,7 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import * as actions from '../../actions/elemnts'
 
-const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onSubmit,canDelete,canModify,canInactivate,albumid,inactivate,reduxState,onDelete,isEdited,onEdit,element,onUpdate,artists,genres,mediatypes,albums}) => {
+const Track = ({id,name,album,mediatype,genre,select,composer,milliseconds,bytes,unitprice,artist,image,song,state,canDelete,canModify,canInactivate,inactivate,reduxState,onDelete,isEdited,onEdit,element,onUpdate,artists,genres,mediatypes,albums}) => {
   const [trackName,changeTrack] = useState(name)
   const [albumName,changeAlbum] = useState(album)
   const [genreName,changeGenre] = useState(genre)
@@ -20,9 +20,9 @@ const Track = ({id,name,album,mediatype,genre,composer,milliseconds,bytes,unitpr
                 <div className="track_">
                     <img alt='' src={image} className="image"></img>
                     <div className="state">
-                        <button className="link_" type="submit" onClick={
-                            () => onSubmit(song)}>
-                        </button>
+                        <button className="play_" type="submit" onClick={
+                            () => select(id)}>
+                        </button>      
                         <div className="state_" ><strong>STATE: </strong>{(state)?('ACTIVE'):('INACTIVE')}</div>
                     </div>
                     <div className="track_info">
@@ -216,11 +216,11 @@ export default connect(
         artists: selectors.getInfo(state,'artist'),
         genres: selectors.getInfo(state,'genre'),
         albums: selectors.getInfo(state,'album'),
-        mediatypes: selectors.getInfo(state,'mediatype'),
+        mediatypes: selectors.getInfo(state,'mediatype')
     }),
     dispatch=>({
-        onSubmit(track){
-            window.location.href = track;
+        select(id){
+            dispatch(actions.selectElement(id))
         },
         inactivate(id,value,reduxState){
             const trackid = id.split('track')[1]

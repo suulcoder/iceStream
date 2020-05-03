@@ -40,6 +40,8 @@ module.exports = {
           `FROM playlist`),
    getAllSongsInPlaylist : (`SELECT *\n` +
       `FROM playlist p1 join playlisttrack pt1 on p1.playlistid = pt1.playlistid join track t1 on t1.trackid = pt1.trackid`),
+   getBoughtTracks: ("SELECT q.trackid FROM invoiceline as q JOIN invoice as i ON q.invoiceid=i.invoiceid, Users WHERE i.customerid=users.userid AND users.isLogged='True'"),
+
    //Reports 
   
    getMostCommonGenres : ('SELECT g1.name, count(g1.name)\n' +
@@ -83,17 +85,17 @@ module.exports = {
    addUser : "INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES ($1,$2,$3,$4,$5,'True');",
    addtrackstate: "INSERT INTO TrackState (trackid,state) VALUES ($1,'TRUE')",
    
-   selectAlbumID : "SELECT AlbumId FROM Album WHERE title=$1",
-   selectARtistID : "SELECT ArtistID From Artist WHERE name=$1",
-   selectMediaID : "SELECT MediaTypeId From MediaType WHERE Name=$1",
-   selectGenreID : "SELECT GenreId From Genre WHERE name=$1",
+   selectAlbumID : "SELECT AlbumId FROM Album WHERE title=$1;",
+   selectARtistID : "SELECT ArtistID From Artist WHERE name=$1;",
+   selectMediaID : "SELECT MediaTypeId From MediaType WHERE Name=$1;",
+   selectGenreID : "SELECT GenreId From Genre WHERE name=$1;",
   
    UpdateArtist : "UPDATE Artist SET Name=$2 WHERE Artistid=$1;",
-   UpdateTrackState: "UPDATE TrackState SET state=$2 WHERE trackid=$1",
+   UpdateTrackState: "UPDATE TrackState SET state=$2 WHERE trackid=$1;",
    UpdateUser : "UPDATE Users SET Username=$3, email=$3, password=$4,role=$5 WHERE UserId=$1;",
    UpdatePermission : "UPDATE UserPermissions SET canlogin=$2, canaddartist=$3, canaddalbum=$4, canaddtrack=$5, caninactivatesong=$6, canmodifiysong=$7, candeletesong=$8, canmodifiyalbum=$9, candeletealbum=$10, canmodifyartist=$11, candeleteartist=$12 WHERE UserId=$1;", 
-   UpdateAlbum : "UPDATE Album SET Title=$2, ArtistId=$3 where AlbumID=$1",
-   UpdateTrack : "UPDATE Track SET Name=$2, AlbumId=$3, MediaTypeId=$4, GenreId=$5, Composer=$6, Milliseconds=$7, Bytes=$8, UnitPrice=$9 WHERE TrackId=$1",
+   UpdateAlbum : "UPDATE Album SET Title=$2, ArtistId=$3 where AlbumID=$1;",
+   UpdateTrack : "UPDATE Track SET Name=$2, AlbumId=$3, MediaTypeId=$4, GenreId=$5, Composer=$6, Milliseconds=$7, Bytes=$8, UnitPrice=$9 WHERE TrackId=$1;",
    
    Login: "UPDATE Users SET isLogged='True' WHERE Username=$1;",
    Logout: "UPDATE Users SET isLogged='False' WHERE Username=$1;", 

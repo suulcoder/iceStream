@@ -57,8 +57,16 @@ export default connect(
                                 })
                                 fetch(request1)
                                 .then(async(response)=>{
-                                    dispatch(actions.changeState(1))
-                                    window.location.href = 'https://accounts.spotify.com/authorize?client_id=9dd9df7b812f484c91490a594286ca76&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&scope=user-read-private%20user-read-email&response_type=token&state=123'                               
+                                    fetch('http://localhost:8080/api/boughtTracks',{method:'GET'})
+                                    .then(response => response.json())
+                                    .then(data => {
+
+                                        data.forEach(element => {
+                                            dispatch(userActions.addBoughtTrack(element.trackid))
+                                        });
+                                        dispatch(actions.changeState(1))
+                                        window.location.href = 'https://accounts.spotify.com/authorize?client_id=9dd9df7b812f484c91490a594286ca76&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&scope=user-read-private%20user-read-email&response_type=token&state=123'                               
+                                    })  
                                 })
                             }
                             catch(err){
