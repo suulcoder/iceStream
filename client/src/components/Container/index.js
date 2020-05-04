@@ -8,6 +8,7 @@ import Elements from '../Elements';
 import Admin from '../Admin';
 import SearchElements from '../SearchElements';
 import MyIce from '../MyIce';
+import Cart from '../Cart';
 
 const Header = ({app}) => (
         <div className="container">
@@ -33,10 +34,10 @@ const Header = ({app}) => (
                                     (app===5)?(
                                         <Fragment></Fragment>
                                     ):(
-                                        (app==6)?(
+                                        (app===6)?(
                                             <Fragment></Fragment>
                                         ):(
-                                            <Fragment></Fragment>
+                                            <Cart></Cart>
                                         )
                                 )
                             )

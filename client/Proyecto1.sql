@@ -1,6 +1,7 @@
 ﻿/*******************************************************************************
    Create Tables
 ********************************************************************************/
+DROP TABLE IF EXISTS cart;
 DROP TABLE IF EXISTS binnacle;
 DROP TABLE IF EXISTS HasAddedArtist;
 DROP TABLE IF EXISTS HasAddedAlbum;
@@ -230,13 +231,6 @@ CREATE TABLE Binnacle
     userId INT
 );
 
-CREATE TABLE Cart
-(
-    trackId INT NOT NULL,
-    quantity INT,
-    PRIMARY KEY (trackId)
-);
-
 DROP FUNCTION IF EXISTS CreateUser;
 
 CREATE FUNCTION CreateUser()
@@ -255,6 +249,29 @@ CREATE TRIGGER CreatingUser
 	AFTER INSERT ON Users
 	FOR EACH ROW
 	EXECUTE PROCEDURE CreateUser();
+
+
+
+DROP FUNCTION IF EXISTS Buy;
+
+CREATE FUNCTION Buy(id INT, quantity INT)
+RETURNS INT AS 
+$BODY$
+DECLARE price NUMERIC(10,2);
+DECLARE newInvoiceid INT;
+DECLARE newInvoiceLine INT;
+DECLARE customer INT;
+BEGIN
+	SELECT userId INTO customer FROM Users WHERE isLogged='True';
+	SELECT MAX(invoiceid)+1 as ids INTO newInvoiceid FROM Invoice;
+	SELECT MAX(invoiceLineid)+1 as ids INTO newInvoiceLine FROM InvoiceLine;
+	SELECT unitprice INTO price FROM Track WHERE trackid=id;
+	INSERT INTO Invoice(InvoiceId,CustomerId,InvoiceDate,Total) VALUES(newInvoiceid,customer,CURRENT_DATE,(quantity*price));
+	INSERT INTO InvoiceLine VALUES(newInvoiceLine,newInvoiceid,id,price,quantity);
+	RETURN 1;
+END
+$BODY$
+language plpgsql;
 
 DROP FUNCTION IF EXISTS UpdateTrack;
 

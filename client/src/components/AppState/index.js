@@ -10,8 +10,8 @@ import * as types from '../../types/reportSections'
 import { withRouter } from "react-router";
 import * as selectors from '../../reducers'
 import * as spotifyActions from '../../actions/spotify'
-import * as cartActions from '../../actions/cart'
 import * as appActions from '../../actions/app'
+import * as userActions from '../../actions/user'
 
 class AppState extends React.Component{
     
@@ -67,7 +67,7 @@ class AppState extends React.Component{
         .then(data => {
             this.props.onSubmit(appActions.addSection('genre',data))
         })
-
+/*
         fetch('http://localhost:8080/api/album',{method:'GET'})
         .then(response => response.json())
         .then(data => {
@@ -76,7 +76,7 @@ class AppState extends React.Component{
             data.map(element => {
                 track.search(Object.values(element)[1], {limit: 1}).then((trackCollection) => {
                     if(trackCollection[0] === undefined){
-                        this.props.onSubmit(actions.addAlbum({...element}))
+                        //this.props.onSubmit(actions.addAlbum({...element}))
                     }
                     else {
                         this.props.onSubmit(actions.addAlbum({
@@ -88,16 +88,15 @@ class AppState extends React.Component{
                 });
                 return null
             })
-        })
+        })*/
 
-        fetch('http://localhost:8080/api/cart',{method:'GET'})
+        fetch('http://localhost:8080/api/boughtTracks',{method:'GET'})
         .then(response => response.json())
         .then(data => {
-            data.forEach(element => {
-                this.props.onSubmit(cartActions.addToCart({id:element.trackid,quantity:element.quantity}))
-            });
+            data.forEach(id=>{
+                this.props.onSubmit(userActions.addBoughtTrack(id.trackid))
+            })
         })
-
 
         fetch('http://localhost:8080/api/media',{method:'GET'})
         .then(response => response.json())

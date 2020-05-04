@@ -40,3 +40,4 @@ export const getAdminState = state => adminSelectors.getAdminState(state.admin)
 export const getToken = state => spotifySelectors.getToken(state.spotify)
 export const getAllCartId = state => cartSelectors.getTracksId(state.cart);
 export const getCart = state => cartSelectors.getAllCart(state.cart);
+export const getQuantity = (state,id) => cartSelectors.getQuantity(state.cart,id)

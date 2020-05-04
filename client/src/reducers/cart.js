@@ -5,7 +5,6 @@ const cart = (state={}, action) => {
         case types.ADD_TO_CART:
             return {...state,[action.payload.id]:action.payload.quantity}
         case types.REMOVE_FROM_CART:
-            console.log("here")
             const currentState = state;
             delete currentState[action.payload]
             return currentState
@@ -22,3 +21,4 @@ export default cart
 
 export const getAllCart = state => state;
 export const getTracksId = state => Object.keys(state)
+export const getQuantity = (state,id) => state[id]

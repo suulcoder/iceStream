@@ -1,0 +1,40 @@
+.cart{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 100px;
+}
+.bought_name{
+    width: 250px;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+.bought_q{
+    width: 100px;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+.bought_n{
+    width: 100px;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+.message__{
+    padding: 50px;
+    margin-top: 50px;
+}
+.cart_tittle{
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-right: 50px;
+    font-size: 100px;
+}
+.tittle___{
+    font-size: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}

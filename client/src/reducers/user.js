@@ -37,7 +37,7 @@ const order = (state=[],action) => {
 }
 
 const bought = (state=[],action) => {
-    switch (action.payload) {
+    switch (action.type) {
         case types.addBoughtTrack:
             return [...state,action.payload]
         default:

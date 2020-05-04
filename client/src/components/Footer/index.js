@@ -25,7 +25,7 @@ const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,mill
                                         <strong className="tittle">ADDED TO CART</strong>
                                     ):(
                                         <button className="link__" type="submit" onClick={
-                                            () => addToCart(id)}>
+                                            () => addToCart(id,unitprice)}>
                                         </button>
                                     )
         
@@ -91,7 +91,7 @@ export default connect(
                 image: Object.values(selectors.getSelected(state))[11],
                 song: Object.values(selectors.getSelected(state))[12],
                 state: Object.values(selectors.getSelected(state))[13],
-                isBought: selectors.getBought(state).includes(selectors.getSelected(state).id.substring(5)),
+                isBought: selectors.getBought(state).includes(parseInt(selectors.getSelected(state).id.substring(5))),
                 inCart : selectors.getAllCartId(state).includes(selectors.getSelected(state).id.substring(5))
             })
         }
@@ -101,8 +101,8 @@ export default connect(
         onsubmit(song){
             window.location.href = song;
         },
-        addToCart(id){
-            dispatch(actions.addToCart(id,1))
+        addToCart(id,unitprice){
+            dispatch(actions.addToCart({id,quantity:1,unitprice}))
         },
         removeFromCart(id){
             dispatch(actions.removeFromCart(id))

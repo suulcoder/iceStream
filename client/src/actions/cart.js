@@ -1,9 +1,9 @@
 import * as types from '../types/cart'
 
-export const addToCart = (id,quantity) => {
+export const addToCart = ({id,quantity,unitPrice}) => {
     return({
     type: types.ADD_TO_CART,
-    payload: {id,quantity}
+    payload: {id,quantity,unitPrice}
 })}
 
 export const removeFromCart = (id) => ({

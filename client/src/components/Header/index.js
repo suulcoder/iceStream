@@ -22,7 +22,7 @@ const Header = ({app,role,onSubmit,logout,home,user,simulate,onBinnacle,onCart})
                     ) : (
                         <div className="headerContainer">
                             {
-                                (app!==3)?(
+                                (app===1 || app===2)?(
                                     <Search></Search>
                                 ):(
                                     <Fragment></Fragment>
@@ -118,6 +118,7 @@ export default connect(
                 dispatch(elementActions.selectElement(null))
                 dispatch(elementActions.editElement(null))
                 dispatch(userActions.setUsertoNull())
+                localStorage.clear();
             })
         },
         home(){
@@ -125,12 +126,15 @@ export default connect(
         },
         onBinnacle(){
             dispatch(actions.changeState(5))
+            dispatch(elementActions.selectElement(null))
         },
         simulate(){
             dispatch(actions.changeState(6))
+            dispatch(elementActions.selectElement(null))
         },
         onCart(){
             dispatch(actions.changeState(7))
+            dispatch(elementActions.selectElement(null))
         }
     })
 )(Header)

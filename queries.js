@@ -42,6 +42,8 @@ module.exports = {
       `FROM playlist p1 join playlisttrack pt1 on p1.playlistid = pt1.playlistid join track t1 on t1.trackid = pt1.trackid`),
    getBoughtTracks: ("SELECT q.trackid FROM invoiceline as q JOIN invoice as i ON q.invoiceid=i.invoiceid, Users WHERE i.customerid=users.userid AND users.isLogged='True'"),
    getCart: "SELECT * FROM Cart",
+   addCart: "INSERT INTO Cart Values($1,$1)",
+   updateCart: "UPDATE Cart SET quantity=$2 WHERE trackid=$1",
 
    //Reports 
   
@@ -71,9 +73,9 @@ module.exports = {
    getPlaylistByArtistCount : "SELECT G.Name, COUNT(G.name) FROM (SELECT Playlist.Name as name, COUNT(Track.AlbumId) as number_of_artists FROM PlaylistTrack JOIN Playlist ON PlaylistTrack.PlaylistId=Playlist.PlaylistId JOIN Track ON PlaylistTrack.TrackId=Track.TrackId GROUP BY (Playlist.Name,Track.AlbumId)) G Group by G.name",
    getArtistByGenreCount : "SELECT Artist.name, COUNT(Artist.name) FROM (SELECT Artist.artistid as artist,track.genreid as genre FROM ARTIST JOIN Album ON Album.ArtistId=Artist.ArtistId JOIN TRACK ON Track.AlbumId=Album.AlbumId GROUP BY(artist.artistID,track.genreid)) G JOIN Artist ON G.artist=Artist.artistid JOIN Genre ON G.genre=Genre.genreid GROUP BY (Artist.name) ORDER BY COUNT(Artist.name) DESC LIMIT 5",
    
-   searchTrack:"SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid, TrackState.state as state FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId JOIN TrackState ON TrackState.Trackid=Track.Trackid WHERE Track.Name ILIKE $1 LIMIT 5",
-   searchAlbum:"SELECT Album.Albumid, Album.title, Artist.Name as artist FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId WHERE Album.Title ILIKE $1 LIMIT 5",
-   searchArtist:"SELECT * FROM Artist WHERE Name ILIKE $1 LIMIT 5",
+   searchTrack:"SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid, TrackState.state as state FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId JOIN TrackState ON TrackState.Trackid=Track.Trackid WHERE Track.Name ILIKE $1 LIMIT 4",
+   searchAlbum:"SELECT Album.Albumid, Album.title, Artist.Name as artist FROM Album JOIN Artist ON Album.ArtistId=Artist.ArtistId WHERE Album.Title ILIKE $1 LIMIT 1",
+   searchArtist:"SELECT * FROM Artist WHERE Name ILIKE $1 LIMIT 1",
    searchUser:"SELECT UserId FROM Users WHERE Username LIKE $1 AND UserId<>1",
   
    addArtist : "INSERT INTO Artist (ArtistId, Name) VALUES ($1,$2);",
@@ -104,6 +106,8 @@ module.exports = {
    deleteTrack: "DELETE FROM Track WHERE TrackId=$1;",
    deleteAlbum: "DELETE FROM Album WHERE AlbumId=$1;",
    deleteArtist: "DELETE FROM Artist WHERE ArtistId=$1;",
-  
+   buy: "SELECT * FROM BUY($1,$2,$3)",
+   invoice: "SELECT * FROM MakeInvoice($1)"
+
   
 }
