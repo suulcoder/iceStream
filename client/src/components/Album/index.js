@@ -123,6 +123,7 @@ export default connect(
                                 .then(table => {
                                     dispatch(actions.deleteElement(id))
                                     dispatch(actions.deleteSection(albumid))
+                                    window.location.href = 'http://localhost:3000/'
                                 })
                             })
                     })

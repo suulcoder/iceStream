@@ -295,7 +295,6 @@ RETURNS TRIGGER AS
 $BODY$
 BEGIN
 	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','UPDATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
-	UPDATE TRACK SET lastuserid=NULL WHERE trackid=NEW.trackID;
 	RETURN NEW;	
 END
 $BODY$
@@ -305,7 +304,6 @@ language plpgsql;
 CREATE TRIGGER UpdatingTrack
 	AFTER UPDATE ON Track
 	FOR EACH ROW
-	WHEN (NEW.trackid != NULL AND NEW.lastuserid!=NULL)
 	EXECUTE PROCEDURE UpdateTrack();
 
 
@@ -316,7 +314,6 @@ RETURNS TRIGGER AS
 $BODY$
 BEGIN
 	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
-	UPDATE TRACK SET lastuserid=NULL WHERE trackid=NEW.trackID;
 	RETURN NEW;
 END
 $BODY$
@@ -368,7 +365,6 @@ RETURNS TRIGGER AS
 $BODY$
 BEGIN
 	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','UPDATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
-	UPDATE Album SET lastuserid=NULL WHERE albumid=NEW.albumID;
 	RETURN NEW;
 END
 $BODY$
@@ -378,7 +374,6 @@ language plpgsql;
 CREATE TRIGGER UpdatingAlbum
 	AFTER UPDATE ON Album
 	FOR EACH ROW
-	WHEN (NEW.albumid != NULL AND New.lastuserid!= NULL)
 	EXECUTE PROCEDURE UpdateAlbum();
 
 
@@ -389,7 +384,6 @@ RETURNS TRIGGER AS
 $BODY$
 BEGIN
 	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
-	UPDATE Album SET lastuserid=NULL WHERE albumid=NEW.albumID;
 	RETURN NEW;
 END
 $BODY$
@@ -431,7 +425,6 @@ RETURNS TRIGGER AS
 $BODY$
 BEGIN
 	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','UPDATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
-	UPDATE ARTIST SET lastuserid=NULL WHERE artistid=NEW.artistID;
 	RETURN NEW;
 END
 $BODY$
@@ -441,7 +434,6 @@ language plpgsql;
 CREATE TRIGGER UpdatingArtist
 	AFTER UPDATE ON Artist
 	FOR EACH ROW
-	WHEN (NEW.artistid != NULL AND NEW.lastuserid!=NULL)
 	EXECUTE PROCEDURE UpdateArtist();
 
 
@@ -452,7 +444,6 @@ RETURNS TRIGGER AS
 $BODY$
 BEGIN
 	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
-	UPDATE ARTIST SET lastuserid=NULL WHERE artistid=NEW.artistID;
 	RETURN NEW;
 END
 $BODY$
@@ -490,6 +481,12 @@ CREATE TRIGGER DeletingArtist
 /*******************************************************************************
    Create Primary Key Unique Indexes
 ********************************************************************************/
+DROP INDEX IF EXISTS binnacle_userid;
+CREATE INDEX binnacle_userid ON binnacle (id);
+
+DROP INDEX IF EXISTS binnacle_date;
+CREATE INDEX binnacle_date ON binnacle (indate);
+
 DROP INDEX IF EXISTS IFK_AlbumArtistId;
 CREATE INDEX IFK_AlbumArtistId ON Album (ArtistId);
 DROP INDEX IF EXISTS IFK_CustomerSupportRepId;

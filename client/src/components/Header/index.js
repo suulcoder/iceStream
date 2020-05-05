@@ -128,11 +128,11 @@ export default connect(
             dispatch(actions.changeState(1))
         },
         onBinnacle(){
-            dispatch(actions.changeState(5))
             fetch('http://localhost:8080/api/binnacle',{method:'GET'})
             .then(response => response.json())
             .then(data => {
                 data.forEach(id=>{
+                    dispatch(actions.changeState(5))
                     dispatch(binnacleActions.add({...id}))
                 })
                 dispatch(elementActions.selectElement(null))

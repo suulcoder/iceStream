@@ -241,16 +241,28 @@ export default connect(
         },
         onDelete(id,userid){
             const trackid = id.split('track')[1]
-            const request = new Request('http://localhost:8080/api/actions/delete/track',{
+            const request = new Request('http://localhost:8080/api/actions/delete/before/track',{
                 method:'POST',
                 headers: { 'Content-Type':'application/json'},
-                body: JSON.stringify({id:trackid})
+                body: JSON.stringify({id:trackid,userid})
             })
             fetch(request)
                 .then(async(response)=>{
                     response.json()
                     .then(table => {
-                        dispatch(actions.deleteElement(id))
+                        const request = new Request('http://localhost:8080/api/actions/delete/track',{
+                            method:'POST',
+                            headers: { 'Content-Type':'application/json'},
+                            body: JSON.stringify({id:trackid})
+                        })
+                        fetch(request)
+                            .then(async(response)=>{
+                                response.json()
+                                .then(table => {
+                                    dispatch(actions.deleteElement(id))
+                                    window.location.href = 'http://localhost:3000/'
+                                })
+                            })
                     })
                 })
         },

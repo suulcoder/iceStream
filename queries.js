@@ -44,7 +44,7 @@ module.exports = {
    getCart: "SELECT * FROM Cart",
    addCart: "INSERT INTO Cart Values($1,$1)",
    updateCart: "UPDATE Cart SET quantity=$2 WHERE trackid=$1",
-   getBinnacle: "SELECT * FROM Binnacle JOIN Users ON Users.userid=Binnacle.userid ORDER BY Binnacle.InDate DESC",
+   getBinnacle: "SELECT * FROM Binnacle JOIN Users ON Users.userid=Binnacle.userid WHERE simulationid IS NULL ORDER BY Binnacle.InDate DESC LIMIT 150",
    playTrack: "SELECT * FROM PlayTrack($1,$2)",
 
    //Reports 
@@ -105,11 +105,11 @@ module.exports = {
    Login: "UPDATE Users SET isLogged='True' WHERE Username=$1;",
    Logout: "UPDATE Users SET isLogged='False' WHERE Username=$1;", 
 
-   BeforeDeleteTrack: "UPDATE Track SET lastuserid=$2 WHERE Trackid=$1;",
+   BeforeDeleteTrack: "INSERT INTO Binnacle(Id,element,action,InDate,userId,simulationid) VALUES ($1, 'TRACK','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),$2,0);",
    deleteTrack: "DELETE FROM Track WHERE TrackId=$1;",
-   BeforeDeleteAlbum: "UPDATE Album SET lastuserid=$2 WHERE Albumid=$1;", 
+   BeforeDeleteAlbum: "INSERT INTO Binnacle(Id,element,action,InDate,userId,simulationid) VALUES ($1, 'ALBUM','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),$2,0);", 
    deleteAlbum: "DELETE FROM Album WHERE AlbumId=$1;",
-   BeforeDeleteArtist: "UPDATE Artist SET lastuserid=$2 WHERE Artistid=$1;",
+   BeforeDeleteArtist: "INSERT INTO Binnacle(Id,element,action,InDate,userId,simulationid) VALUES ($1, 'ARTIST','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),$2,0);",
    deleteArtist: "DELETE FROM Artist WHERE ArtistId=$1;",
    buy: "SELECT * FROM BUY($1,$2,$3)",
    invoice: "SELECT * FROM MakeInvoice($1,$2)"

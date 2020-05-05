@@ -127,6 +127,7 @@ export default connect(
                     .then(table => {
                         dispatch(actions.upadateArtist({...element,name}))
                         dispatch(actions.editElement(null))
+                        window.location.href = 'http://localhost:3000/'
                     })
                 })
         }
