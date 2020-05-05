@@ -10,11 +10,11 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
     onSaveArtist,
     userid}) => {
     const [trackName,changeTrack] = useState('')
-    const [albumName,changeAlbum] = useState((Object.values(albums[0])[0]===undefined)?(''):(Object.values(albums[0])[1]))
+    const [albumName,changeAlbum] = useState((Object.values(albums[0])[1]===undefined)?(''):(Object.values(albums[0])[1]))
     const [album,changeAlbumName] = useState('')
-    const [artist,changeArtistName] = useState((Object.values(artists[0])[0]===undefined)?(''):(Object.values(artists[0])[1]))
-    const [genreName,changeGenre] = useState((Object.values(genres[0])[0]===undefined)?(''):(Object.values(genres[0])[1]))
-    const [mediaTypeName,changeMediaType] = useState((Object.values(mediatypes[0])[0]===undefined)?(''):(Object.values(mediatypes[0])[1]))
+    const [artist,changeArtistName] = useState((Object.values(artists[0])[1]===undefined)?(''):(Object.values(artists[0])[1]))
+    const [genreName,changeGenre] = useState((Object.values(genres[0])[1]===undefined)?(''):(Object.values(genres[0])[1]))
+    const [mediaTypeName,changeMediaType] = useState((Object.values(mediatypes[0])[1]===undefined)?(''):(Object.values(mediatypes[0])[1]))
     const [composerName,changeComposer] = useState('')
     const [Minutes,changeMinutes] = useState('0')
     const [seconds,changeSeconds] = useState('0')
@@ -251,23 +251,25 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
 }
 
 export default connect(
-    state=>({
-        canAddArtist:Object.values(selectors.getUser(state))[5],
-        canAddAlbum:Object.values(selectors.getUser(state))[6],
-        canAddTrack:Object.values(selectors.getUser(state))[7],
-        canInactivateTrack:Object.values(selectors.getUser(state))[8],
-        canModifyTrack:Object.values(selectors.getUser(state))[9],
-        canDeleteTrack:Object.values(selectors.getUser(state))[10],
-        canModifyAlbum:Object.values(selectors.getUser(state))[11],
-        canDeleteAlbum:Object.values(selectors.getUser(state))[12],
-        canModifyArtist:Object.values(selectors.getUser(state))[13],
-        canDeleteArtist:Object.values(selectors.getUser(state))[14],
+    state=>{
+        console.log(selectors.getUser(state).userid)
+        return ({
+        canAddArtist:selectors.getUser(state).canAddArtist,
+        canAddAlbum:selectors.getUser(state).canAddAlbum,
+        canAddTrack:selectors.getUser(state).canAddTrack,
+        canInactivateTrack:selectors.getUser(state).canInactivateTrack,
+        canModifyTrack:selectors.getUser(state).canModifyTrack,
+        canDeleteTrack:selectors.getUser(state).canDeleteTrack,
+        canModifyAlbum:selectors.getUser(state).canModifyAlbum,
+        canDeleteAlbum:selectors.getUser(state).canDeleteAlbum,
+        canModifyArtist:selectors.getUser(state).canModifyArtist,
+        canDeleteArtist:selectors.getUser(state).canDeleteArtist,
         artists: selectors.getInfo(state,'artist'),
         genres: selectors.getInfo(state,'genre'),
         albums: selectors.getInfo(state,'album'),
         mediatypes: selectors.getInfo(state,'mediatype'),
         userid: selectors.getUser(state).userid
-    }),
+    })},
     dispatch => ({
         onSaveAlbum(album,artist,userid){
             fetch('http://localhost:8080/api/newalbumid',{method:'GET'})

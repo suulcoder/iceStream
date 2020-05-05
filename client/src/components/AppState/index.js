@@ -67,7 +67,7 @@ class AppState extends React.Component{
         .then(data => {
             this.props.onSubmit(appActions.addSection('genre',data))
         })
-/*
+
         fetch('http://localhost:8080/api/album',{method:'GET'})
         .then(response => response.json())
         .then(data => {
@@ -88,7 +88,7 @@ class AppState extends React.Component{
                 });
                 return null
             })
-        })*/
+        })
 
         fetch('http://localhost:8080/api/boughtTracks',{method:'GET'})
         .then(response => response.json())

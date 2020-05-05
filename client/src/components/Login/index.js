@@ -49,6 +49,7 @@ export default connect(
                         if(table!==null){
                             try{
                                 const data = table.rows 
+                                console.log(data[0])
                                 dispatch(userActions.setUser(data[0]))
                                 const request1 = new Request('http://localhost:8080/api/login',{
                                     method:'POST',

@@ -12,12 +12,6 @@ const pool = new pg.Pool({
     password: 'admin',
     database: 'ProyectoBasedeDatos'
 })
-app.use(cookieSession({
-  name: 'session',
-  keys: ['DB'],
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
-}))
-
 app.use(bodyParser.urlencoded({ extended: false })) 
 app.use(express.urlencoded({ extended: true })) 
 app.use(bodyParser.json())
@@ -28,6 +22,12 @@ app.use((req, res, next) => {
 	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
 	next();
 });
+
+app.use(cookieSession({
+    name: 'session',
+    keys: ['DB'],
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }))
 
 const SQLQuery = (apiRoute,Query,method='get') => {
     switch (method) {
