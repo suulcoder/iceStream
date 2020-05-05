@@ -27,6 +27,7 @@
 }
 .cart_tittle{
     align-items: center;
+    font-family: 'Courier New', Courier, monospace;
     justify-content: center;
     margin-top: 50px;
     margin-bottom: 50px;

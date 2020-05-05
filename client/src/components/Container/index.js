@@ -9,6 +9,7 @@ import Admin from '../Admin';
 import SearchElements from '../SearchElements';
 import MyIce from '../MyIce';
 import Cart from '../Cart';
+import Binnacle from '../Binnacle';
 
 const Header = ({app}) => (
         <div className="container">
@@ -32,7 +33,7 @@ const Header = ({app}) => (
                                     <Admin></Admin>
                                 ):(
                                     (app===5)?(
-                                        <Fragment></Fragment>
+                                        <Binnacle></Binnacle>
                                     ):(
                                         (app===6)?(
                                             <Fragment></Fragment>

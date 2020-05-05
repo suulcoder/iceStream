@@ -3,6 +3,8 @@ const express = require('express');
 const pg = require('pg');
 const bodyParser = require('body-parser')
 const app = express();
+const session = require('express-session');
+var cookieSession = require('cookie-session')
 
 const pool = new pg.Pool({
     port: 5432,
@@ -10,11 +12,15 @@ const pool = new pg.Pool({
     password: 'admin',
     database: 'ProyectoBasedeDatos'
 })
+app.use(cookieSession({
+  name: 'session',
+  keys: ['DB'],
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 
 app.use(bodyParser.urlencoded({ extended: false })) 
 app.use(express.urlencoded({ extended: true })) 
 app.use(bodyParser.json())
-
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
@@ -53,9 +59,11 @@ const SQLQuery = (apiRoute,Query,method='get') => {
                         db.query(Query,values,(req,res) => {
                             console.log(Query,values)
                             if(err){
+                                console.log('err',err)
                                 return response.status(400).send(err)
                             }
                             else{
+                                console.log('req',req)
                                 return response.status(201).send(res)
                             }
                         })
@@ -83,9 +91,11 @@ SQLQuery('/api/newalbumid',query.getLastAlbumId)
 SQLQuery('/api/newtrackid',query.getLastTrackId)
 SQLQuery('/api/boughtTracks',query.getBoughtTracks)
 SQLQuery('/api/cart',query.getCart)
+SQLQuery('/api/binnacle',query.getBinnacle)
 
 SQLQuery('/api/getsongs',query.getAllSongs),
-SQLQuery('/api/getalbums',query.getAllAlbum)
+SQLQuery('/api/getalbums',query.getAllAlbum),
+SQLQuery('/api/play',query.playTrack,'post')
 
 SQLQuery('/api/newArtist',query.addArtist,'post')
 SQLQuery('/api/newAlbum',query.addAlbum,'post')

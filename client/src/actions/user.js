@@ -52,6 +52,10 @@ export const addUser = ({userid,email,role,username,canlogin,canaddartist,canadd
     }
 })
 
+export const set_Bought_to_null = () => ({
+    type: types.setBoughtToNull
+})
+
 export const setEpmty = () => ({
     type:types.set_empty
 })

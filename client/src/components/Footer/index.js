@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/cart'
 
-const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onsubmit,addToCart,inCart,removeFromCart}) => (
+const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state,onsubmit,addToCart,inCart,role,userid}) => (
     <div className="footerCont">
         <div className="empty"></div>
         <div className="bar"></div>
@@ -14,9 +14,9 @@ const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,mill
                     <img alt='' src={image} className="footer_img"></img>
                     <div className="state">
                         {
-                            (isBought)?(
+                            (isBought || role==='admin')?(
                                 <button className="link_" type="submit" onClick={
-                                    () => onsubmit(song)}>
+                                    () => onsubmit(song,id,userid)}>
                                 </button>
                             ):(
                                 <Fragment>
@@ -92,14 +92,25 @@ export default connect(
                 song: Object.values(selectors.getSelected(state))[12],
                 state: Object.values(selectors.getSelected(state))[13],
                 isBought: selectors.getBought(state).includes(parseInt(selectors.getSelected(state).id.substring(5))),
-                inCart : selectors.getAllCartId(state).includes(selectors.getSelected(state).id.substring(5))
+                inCart : selectors.getAllCartId(state).includes(selectors.getSelected(state).id.substring(5)),
+                role: (selectors.getUser(state)!=null)?selectors.getUser(state)[Object.keys(selectors.getUser(state))[1]]:null,     
+                userid: selectors.getUser(state).userid
             })
         }
         return {isSelected:false}
     },
     dispatch => ({
-        onsubmit(song){
-            window.location.href = song;
+        onsubmit(song,id,userid){
+            const request1 = new Request('http://localhost:8080/api/play',{
+                method:'POST',
+                headers: { 'Content-Type':'application/json'},
+                body: JSON.stringify({id,userid})
+            })
+            fetch(request1)
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = song;
+            });  
         },
         addToCart(id,unitprice){
             dispatch(actions.addToCart({id,quantity:1,unitprice}))

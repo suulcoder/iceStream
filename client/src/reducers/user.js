@@ -40,6 +40,8 @@ const bought = (state=[],action) => {
     switch (action.type) {
         case types.addBoughtTrack:
             return [...state,action.payload]
+        case types.setBoughtToNull:
+            return []
         default:
             return state
     }

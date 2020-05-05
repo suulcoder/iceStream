@@ -8,37 +8,36 @@ import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf';  
 import * as appActions from '../../actions/app'
 
-const Cart = ({tracks,onsubmit,total,bought}) => {
-    return (
-        <div className="cart" id="cart">
-            <div className="cart_tittle">MY CART</div>
-            <div className="bought">
-                <div alt='' className="image_">IMAGE</div>
-                <strong className="bought_name">{'Name'}</strong>
-                <text className="bought_q"> {'Quantity'} </text>
-                <text className="bought_n"> {'Unit Price'} </text>
-                <text className="bought_n"> {'SubTotal'} </text>
-                <button  type="submit" onClick={
-                    () => onsubmit(bought,total)
-                }>{'BUY NOW'}
-                </button>
-            </div>
-            {tracks.length!==0?(
-                <Fragment>
-                    {tracks.map(
-                        track => (
-                            <BoughtTrack key={track} id={'track'+track}>
-                            </BoughtTrack>
-                        ))}
-                </Fragment>
-            ):(
-                <div className="message__">{'FIRST ADD SOME TRACKS TO THE CART'}</div>
-                )
-            }
-            <div className="tittle___">TOTAL: $ {Math.round(total*100,2)/100}</div>
+const Cart = ({tracks,onsubmit,total,bought}) => (
+    <div className="cart" id="cart">
+        <div className="cart_tittle">MY CART</div>
+        <div className="bought">
+            <div alt='' className="image_">IMAGE</div>
+            <strong className="bought_name">{'Name'}</strong>
+            <text className="bought_q"> {'Quantity'} </text>
+            <text className="bought_n"> {'Unit Price'} </text>
+            <text className="bought_n"> {'SubTotal'} </text>
+            <button  type="submit" onClick={
+                () => onsubmit(bought,total)
+            }>{'BUY NOW'}
+            </button>
         </div>
-    )
-}
+        {tracks.length!==0?(
+            <Fragment>
+                {tracks.map(
+                    track => (
+                        <BoughtTrack key={track} id={'track'+track}>
+                        </BoughtTrack>
+                    ))}
+            </Fragment>
+        ):(
+            <div className="message__">{'FIRST ADD SOME TRACKS TO THE CART'}</div>
+            )
+        }
+        <div className="tittle___">TOTAL: $ {Math.round(total*100,2)/100}</div>
+    </div>
+)
+
 
 export default connect(
     state=>({
@@ -52,6 +51,7 @@ export default connect(
     }),
     dispatch=>({
         onsubmit(tracks,total){
+            alert("ITEMS WILL BE BOUGHT")
             const request = new Request('http://localhost:8080/api/invoice',{
                 method:'POST',
                 headers: { 'Content-Type':'application/json'},
@@ -82,7 +82,7 @@ export default connect(
                             var position = 0;  
                             var heightLeft = imgHeight;  
                             pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);  
-                            pdf.save("download.pdf");  
+                            pdf.save("IceStreamdownload.pdf");  
                             dispatch(actions.removeFromCart(id))
                             dispatch(appActions.changeState(1))
                         });  

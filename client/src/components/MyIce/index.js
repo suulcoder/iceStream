@@ -7,7 +7,8 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
     canDeleteTrack,canModifyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist,artists,
     mediatypes,genres,albums,
     onSaveTrack,onSaveAlbum,
-    onSaveArtist,userid}) => {
+    onSaveArtist,
+    userid}) => {
     const [trackName,changeTrack] = useState('')
     const [albumName,changeAlbum] = useState((Object.values(albums[0])[0]===undefined)?(''):(Object.values(albums[0])[1]))
     const [album,changeAlbumName] = useState('')
@@ -265,7 +266,7 @@ export default connect(
         genres: selectors.getInfo(state,'genre'),
         albums: selectors.getInfo(state,'album'),
         mediatypes: selectors.getInfo(state,'mediatype'),
-        userid: Object.values(selectors.getUser(state))[3]
+        userid: selectors.getUser(state).userid
     }),
     dispatch => ({
         onSaveAlbum(album,artist,userid){

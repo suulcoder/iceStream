@@ -6,6 +6,7 @@ import report,* as reportSelectors from './report'
 import user,* as userSelectors from './user'
 import spotify, * as spotifySelectors from './spotify'
 import cart, * as cartSelectors from './cart'
+import binnacle, * as binnacleSelectors from './binnacle'
 
 const reducer = combineReducers({
     admin,
@@ -14,7 +15,8 @@ const reducer = combineReducers({
     report,
     user,
     spotify,
-    cart
+    cart,
+    binnacle
 })
 
 export default reducer
@@ -41,3 +43,4 @@ export const getToken = state => spotifySelectors.getToken(state.spotify)
 export const getAllCartId = state => cartSelectors.getTracksId(state.cart);
 export const getCart = state => cartSelectors.getAllCart(state.cart);
 export const getQuantity = (state,id) => cartSelectors.getQuantity(state.cart,id)
+export const getBinnacle = (state) => binnacleSelectors.getBinnacle(state.binnacle)

@@ -1,7 +1,7 @@
 module.exports = {
    getAllUsers :`SELECT * FROM Users INNER JOIN UserPermissions ON Users.UserId=UserPermissions.UserId WHERE Users.role<>'admin'`,
    getAllArtist :`SELECT * FROM Artist`,
-   getAllSongs : "SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid, TrackState.state as state FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId JOIN TrackState ON TrackState.Trackid=Track.Trackid LIMIT 300",
+   getAllSongs : "SELECT Track.name, Track.composer, Track.trackid, Track.milliseconds, Track.bytes, Track.unitprice, Artist.name as artist ,Genre.name as genre, Mediatype.name as mediatype, Album.Title as album, Album.albumid as albumid, TrackState.state as state FROM Track JOIN Album ON Track.AlbumId=Album.AlbumId JOIN Artist ON Album.ArtistId=Artist.ArtistId JOIN Genre ON Track.GenreId=Genre.GenreId JOIN MediaType ON MediaType.MediaTypeId=Track.MediaTypeId JOIN TrackState ON TrackState.Trackid=Track.Trackid LIMIT 200",
    getAllAlbum : "SELECT Artist.name as artist, Album.title,Album.Albumid FROM Album JOIN Artist ON Artist.ArtistId=Album.ArtistId",
    getJustAllAlbum : "SELECT * FROM Album",
    getAllGenre : "SELECT * FROM Genre",
@@ -44,6 +44,8 @@ module.exports = {
    getCart: "SELECT * FROM Cart",
    addCart: "INSERT INTO Cart Values($1,$1)",
    updateCart: "UPDATE Cart SET quantity=$2 WHERE trackid=$1",
+   getBinnacle: "SELECT * FROM Binnacle JOIN Users ON Users.userid=Binnacle.userid ORDER BY Binnacle.InDate DESC",
+   playTrack: "SELECT * FROM PlayTrack($1)",
 
    //Reports 
   

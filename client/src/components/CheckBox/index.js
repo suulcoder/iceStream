@@ -160,11 +160,6 @@ export default connect(
                 })
             })
             fetch(request)
-                .then(async(response)=>{
-                    response.json()
-                    .then(table => {
-                        console.log(table)
-                    })})
             dispatch(actions.addUser(newHash))
         }
     })

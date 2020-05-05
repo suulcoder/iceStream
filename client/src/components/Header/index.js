@@ -7,6 +7,7 @@ import Search from '../Search';
 import * as actions from '../../actions/app';
 import * as userActions from '../../actions/user'
 import * as elementActions from '../../actions/elemnts'
+import * as binnacleActions from '../../actions/binnacle'
 
 const Header = ({app,role,onSubmit,logout,home,user,simulate,onBinnacle,onCart}) => (
         <Fragment>
@@ -118,15 +119,24 @@ export default connect(
                 dispatch(elementActions.selectElement(null))
                 dispatch(elementActions.editElement(null))
                 dispatch(userActions.setUsertoNull())
+                dispatch(userActions.set_Bought_to_null())
                 localStorage.clear();
             })
         },
         home(){
+            dispatch(binnacleActions.toNull())
             dispatch(actions.changeState(1))
         },
         onBinnacle(){
             dispatch(actions.changeState(5))
-            dispatch(elementActions.selectElement(null))
+            fetch('http://localhost:8080/api/binnacle',{method:'GET'})
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(id=>{
+                    dispatch(binnacleActions.add({...id}))
+                })
+                dispatch(elementActions.selectElement(null))
+            })
         },
         simulate(){
             dispatch(actions.changeState(6))
