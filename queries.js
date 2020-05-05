@@ -80,13 +80,13 @@ module.exports = {
    searchArtist:"SELECT * FROM Artist WHERE Name ILIKE $1 LIMIT 1",
    searchUser:"SELECT UserId FROM Users WHERE Username LIKE $1 AND UserId<>1",
   
-   addArtist : "INSERT INTO Artist (ArtistId, Name) VALUES ($1,$2);",
+   addArtist : "INSERT INTO Artist (ArtistId, Name,lastuserid) VALUES ($1,$2,$3);",
   
    addUserAlbum : " INSERT INTO hasAddedAlbum (UserId,AlbumId,InDate) VALUES ($1,$2,$3)",
    addUserArtist : " INSERT INTO hasAddedArtist (UserId,ArtistId,InDate) VALUES ($1,$2,$3)",
    addUserTrack : " INSERT INTO hasAddedTrack (UserId,TrackId,InDate) VALUES ($1,$2,$3)",
-   addAlbum : "INSERT INTO Album (AlbumId, Title, ArtistId) VALUES ($1,$2,$3);",
-   addTrack : "INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);",
+   addAlbum : "INSERT INTO Album (AlbumId, Title, ArtistId,lastuserid) VALUES ($1,$2,$3,$4);",
+   addTrack : "INSERT INTO Track (TrackId, Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice,lastuserid) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);",
    addUser : "INSERT INTO Users (UserId,Username,email,password,role,isLogged) VALUES ($1,$2,$3,$4,$5,'True');",
    addtrackstate: "INSERT INTO TrackState (trackid,state) VALUES ($1,'TRUE')",
    
@@ -95,21 +95,24 @@ module.exports = {
    selectMediaID : "SELECT MediaTypeId From MediaType WHERE Name=$1;",
    selectGenreID : "SELECT GenreId From Genre WHERE name=$1;",
   
-   UpdateArtist : "UPDATE Artist SET Name=$2 WHERE Artistid=$1;",
+   UpdateArtist : "UPDATE Artist SET Name=$2, lastuserid=$3 WHERE Artistid=$1;",
    UpdateTrackState: "UPDATE TrackState SET state=$2 WHERE trackid=$1;",
    UpdateUser : "UPDATE Users SET Username=$3, email=$3, password=$4,role=$5 WHERE UserId=$1;",
    UpdatePermission : "UPDATE UserPermissions SET canlogin=$2, canaddartist=$3, canaddalbum=$4, canaddtrack=$5, caninactivatesong=$6, canmodifiysong=$7, candeletesong=$8, canmodifiyalbum=$9, candeletealbum=$10, canmodifyartist=$11, candeleteartist=$12 WHERE UserId=$1;", 
-   UpdateAlbum : "UPDATE Album SET Title=$2, ArtistId=$3 where AlbumID=$1;",
-   UpdateTrack : "UPDATE Track SET Name=$2, AlbumId=$3, MediaTypeId=$4, GenreId=$5, Composer=$6, Milliseconds=$7, Bytes=$8, UnitPrice=$9 WHERE TrackId=$1;",
+   UpdateAlbum : "UPDATE Album SET Title=$2, ArtistId=$3, lastuserid=$4 where AlbumID=$1;",
+   UpdateTrack : "UPDATE Track SET Name=$2, AlbumId=$3, MediaTypeId=$4, GenreId=$5, Composer=$6, Milliseconds=$7, Bytes=$8, UnitPrice=$9, lastuserid=$10 WHERE TrackId=$1;",
    
    Login: "UPDATE Users SET isLogged='True' WHERE Username=$1;",
    Logout: "UPDATE Users SET isLogged='False' WHERE Username=$1;", 
 
+   BeforeDeleteTrack: "UPDATE Track SET lastuserid=$2 WHERE Trackid=$1;",
    deleteTrack: "DELETE FROM Track WHERE TrackId=$1;",
+   BeforeDeleteAlbum: "UPDATE Album SET lastuserid=$2 WHERE Albumid=$1;", 
    deleteAlbum: "DELETE FROM Album WHERE AlbumId=$1;",
+   BeforeDeleteArtist: "UPDATE Artist SET lastuserid=$2 WHERE Artistid=$1;",
    deleteArtist: "DELETE FROM Artist WHERE ArtistId=$1;",
    buy: "SELECT * FROM BUY($1,$2,$3)",
-   invoice: "SELECT * FROM MakeInvoice($1)"
+   invoice: "SELECT * FROM MakeInvoice($1,$2)"
 
   
 }

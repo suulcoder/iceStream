@@ -4,7 +4,7 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import * as actions from '../../actions/elemnts'
 
-const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelete,isEdited,onUpdate,onEdit,element}) => {
+const Artist = ({userid,artistid,name,image,artist,onSubmit,canModify,canDelete,onDelete,isEdited,onUpdate,onEdit,element}) => {
     const [artistName,changeName] = useState(name)  
     return (
     <Fragment>
@@ -44,7 +44,7 @@ const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelet
                     ):(
                         (canModify)?(
                             <button className="save" type="submit" onClick={
-                                () => onUpdate(artistid,artistName,element)
+                                () => onUpdate(artistid,artistName,element,userid)
                             }>
                             </button>
                         ):(
@@ -56,7 +56,7 @@ const Artist = ({artistid,name,image,artist,onSubmit,canModify,canDelete,onDelet
                 {
                     (canDelete)?(
                         <button className="delete" type="submit" onClick={
-                            () => onDelete(artistid)
+                            () => onDelete(artistid,userid)
                         }>
                         </button>
                     ):(
@@ -77,37 +77,49 @@ export default connect(
         canModify:Object.values(selectors.getUser(state))[13],
         canDelete:Object.values(selectors.getUser(state))[14],
         isEdited,
-        element:selectors.getElement(state,id)
+        element:selectors.getElement(state,id),
+        userid: selectors.getUser(state).userid
     }),
     dispatch=>({
         onSubmit(artist){
             window.location.href = artist;
         },
-        onDelete(id){
+        onDelete(id,userid){
             alert("ALL ALBUMS WILL BE DELETED TOO")
             const artistid = id.split('artist')[1]
-            const request = new Request('http://localhost:8080/api/actions/delete/artist',{
+            const request = new Request('http://localhost:8080/api/actions/delete/before/artist',{
                 method:'POST',
                 headers: { 'Content-Type':'application/json'},
-                body: JSON.stringify({id:artistid})
+                body: JSON.stringify({id:artistid,userid})
             })
             fetch(request)
                 .then(async(response)=>{
                     response.json()
                     .then(table => {
-                        dispatch(actions.deleteElement(id))
+                        const request1 = new Request('http://localhost:8080/api/actions/delete/artist',{
+                            method:'POST',
+                            headers: { 'Content-Type':'application/json'},
+                            body: JSON.stringify({id:artistid})
+                        })
+                        fetch(request1)
+                            .then(async(response)=>{
+                                response.json()
+                                .then(table => {
+                                    dispatch(actions.deleteElement(id))
+                                })
+                            })
                     })
                 })
         },
         onEdit(id){
             dispatch(actions.editElement(id))
         },
-        onUpdate(id,name,element){
+        onUpdate(id,name,element,userid){
             const artistid = id.split('artist')[1]
             const request = new Request('http://localhost:8080/api/actions/update/artist',{
                 method:'POST',
                 headers: { 'Content-Type':'application/json'},
-                body: JSON.stringify({id:artistid,name:name})
+                body: JSON.stringify({id:artistid,name:name,userid})
             })
             fetch(request)
                 .then(async(response)=>{

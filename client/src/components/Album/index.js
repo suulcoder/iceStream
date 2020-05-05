@@ -4,7 +4,7 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import * as actions from '../../actions/elemnts'
 
-const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,onDelete,onUpdate,isEdited,element,artists,onEdit}) => {
+const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,onDelete,onUpdate,isEdited,element,artists,onEdit,userid}) => {
     const [albumName,changeAlbum] = useState(title)
     const [artistName,changeArtist] = useState(artist)
     return (
@@ -57,7 +57,7 @@ const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,on
                         ):(
                             (canModify)?(
                                 <button className="save" type="submit" onClick={
-                                    () => onUpdate(albumid,albumName,artistName,element)
+                                    () => onUpdate(albumid,albumName,artistName,element,userid)
                                 }>
                                 </button>
                             ):(
@@ -69,7 +69,7 @@ const Album = ({albumid,title,artist,image,album,onSubmit,canModify,canDelete,on
                     {
                         (canDelete)?(
                             <button className="delete" type="submit" onClick={
-                                () => onDelete(albumid)
+                                () => onDelete(albumid,userid)
                             }>
                             </button>
                         ):(
@@ -93,33 +93,45 @@ export default connect(
         canDelete:Object.values(selectors.getUser(state))[12],
         isEdited,
         element:selectors.getElement(state,id),
-        artists: selectors.getInfo(state,'artist')
+        artists: selectors.getInfo(state,'artist'),
+        userid: selectors.getUser(state).userid
     }),
     dispatch=>({
         onSubmit(album){
             window.location.href = album;
         },
-        onDelete(id){
+        onDelete(id,userid){
             alert("ALL TRACKS WILL BE DELETED TOO")
             const albumid = id.split('album')[1]
-            const request = new Request('http://localhost:8080/api/actions/delete/album',{
+            const request = new Request('http://localhost:8080/api/actions/delete/before/album',{
                 method:'POST',
                 headers: { 'Content-Type':'application/json'},
-                body: JSON.stringify({id:albumid})
+                body: JSON.stringify({id:albumid,userid})
             })
             fetch(request)
                 .then(async(response)=>{
                     response.json()
                     .then(table => {
-                        dispatch(actions.deleteElement(id))
-                        dispatch(actions.deleteSection(albumid))
+                        const request1 = new Request('http://localhost:8080/api/actions/delete/album',{
+                            method:'POST',
+                            headers: { 'Content-Type':'application/json'},
+                            body: JSON.stringify({id:albumid})
+                        })
+                        fetch(request1)
+                            .then(async(response)=>{
+                                response.json()
+                                .then(table => {
+                                    dispatch(actions.deleteElement(id))
+                                    dispatch(actions.deleteSection(albumid))
+                                })
+                            })
                     })
                 })
         },
         onEdit(id){
             dispatch(actions.editElement(id))
         },
-        onUpdate(id,title,artist,element){
+        onUpdate(id,title,artist,element,userid){
             const albumid = id.split('album')[1]
             const request = new Request('http://localhost:8080/api/actions/update/getArtistID',{
                 method:'POST',
@@ -134,7 +146,7 @@ export default connect(
                         const request = new Request('http://localhost:8080/api/actions/update/album',{
                             method:'POST',
                             headers: { 'Content-Type':'application/json'},
-                            body: JSON.stringify({id:albumid,name:title,artistid:artistid})
+                            body: JSON.stringify({id:albumid,name:title,artistid:artistid,userid})
                         })
                         fetch(request)
                             .then(async(response)=>{

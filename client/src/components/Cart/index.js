@@ -8,7 +8,7 @@ import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf';  
 import * as appActions from '../../actions/app'
 
-const Cart = ({tracks,onsubmit,total,bought}) => (
+const Cart = ({tracks,onsubmit,total,bought,userid}) => (
     <div className="cart" id="cart">
         <div className="cart_tittle">MY CART</div>
         <div className="bought">
@@ -18,7 +18,7 @@ const Cart = ({tracks,onsubmit,total,bought}) => (
             <text className="bought_n"> {'Unit Price'} </text>
             <text className="bought_n"> {'SubTotal'} </text>
             <button  type="submit" onClick={
-                () => onsubmit(bought,total)
+                () => onsubmit(bought,total,userid)
             }>{'BUY NOW'}
             </button>
         </div>
@@ -47,15 +47,16 @@ export default connect(
             const quantity = selectors.getQuantity(state,parseInt(id));
             return (price*quantity)
         }).reduce(((prev,current)=>prev+current),0),
-        bought: selectors.getCart(state)
+        bought: selectors.getCart(state),
+        userid: selectors.getUser(state).userid
     }),
     dispatch=>({
-        onsubmit(tracks,total){
+        onsubmit(tracks,total,userid){
             alert("ITEMS WILL BE BOUGHT")
             const request = new Request('http://localhost:8080/api/invoice',{
                 method:'POST',
                 headers: { 'Content-Type':'application/json'},
-                body: JSON.stringify({total:(Math.round(total*100,2)/100)})
+                body: JSON.stringify({total:(Math.round(total*100,2)/100),userid})
             })
             fetch(request)
             .then(response => response.json())

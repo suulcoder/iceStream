@@ -4,7 +4,7 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import * as actions from '../../actions/elemnts'
 
-const Track = ({id,name,album,mediatype,genre,select,composer,milliseconds,bytes,unitprice,artist,image,song,state,canDelete,canModify,canInactivate,inactivate,reduxState,onDelete,isEdited,onEdit,element,onUpdate,artists,genres,mediatypes,albums}) => {
+const Track = ({userid,id,name,album,mediatype,genre,select,composer,milliseconds,bytes,unitprice,artist,image,song,state,canDelete,canModify,canInactivate,inactivate,reduxState,onDelete,isEdited,onEdit,element,onUpdate,artists,genres,mediatypes,albums}) => {
   const [trackName,changeTrack] = useState(name)
   const [albumName,changeAlbum] = useState(album)
   const [genreName,changeGenre] = useState(genre)
@@ -166,7 +166,7 @@ const Track = ({id,name,album,mediatype,genre,select,composer,milliseconds,bytes
                         ):(
                             (canModify)?(
                                 <button className="save" type="submit" onClick={
-                                    () => onUpdate(id,trackName,albumName,mediaTypeName,genreName,composerName,(seconds*1000+Minutes*60000),size*1024*1024,myPrice,artist,image,song,state)
+                                    () => onUpdate(userid,id,trackName,albumName,mediaTypeName,genreName,composerName,(seconds*1000+Minutes*60000),size*1024*1024,myPrice,artist,image,song,state)
                                 }>
                                 </button>
                             ):(
@@ -178,7 +178,7 @@ const Track = ({id,name,album,mediatype,genre,select,composer,milliseconds,bytes
                     {
                         (canDelete)?(
                             <button className="delete" type="submit" onClick={
-                                () => onDelete(id)
+                                () => onDelete(id,userid)
                             }>
                             </button>
                         ):(
@@ -216,7 +216,8 @@ export default connect(
         artists: selectors.getInfo(state,'artist'),
         genres: selectors.getInfo(state,'genre'),
         albums: selectors.getInfo(state,'album'),
-        mediatypes: selectors.getInfo(state,'mediatype')
+        mediatypes: selectors.getInfo(state,'mediatype'),
+        userid: selectors.getUser(state).userid
     }),
     dispatch=>({
         select(id){
@@ -238,7 +239,7 @@ export default connect(
                     })
                 })
         },
-        onDelete(id){
+        onDelete(id,userid){
             const trackid = id.split('track')[1]
             const request = new Request('http://localhost:8080/api/actions/delete/track',{
                 method:'POST',
@@ -256,7 +257,7 @@ export default connect(
         onEdit(id){
             dispatch(actions.editElement(id))
         },
-        onUpdate(trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state){
+        onUpdate(userid,trackid,name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,artist,image,song,state){
             const id = trackid.split('track')[1]
             const request1 = new Request('http://localhost:8080/api/actions/update/getAlbumID',{
                 method:'POST',
@@ -291,7 +292,7 @@ export default connect(
                                                 const request4 = new Request('http://localhost:8080/api/actions/update/track',{
                                                     method:'POST',
                                                     headers: { 'Content-Type':'application/json'},
-                                                    body: JSON.stringify({id: parseInt(id),name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:parseInt(bytes),unitprice:unitprice})
+                                                    body: JSON.stringify({id: parseInt(id),name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:parseInt(bytes),unitprice:unitprice,userid})
                                                 })
                                                 fetch(request4)
                                                     .then(async(response)=>{

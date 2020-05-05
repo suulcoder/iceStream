@@ -288,7 +288,7 @@ export default connect(
                             const request1 = new Request('http://localhost:8080/api/newAlbum',{
                                 method:'POST',
                                 headers: { 'Content-Type':'application/json'},
-                                body: JSON.stringify({id:Object.values(data[0])[0]+1,album:album,artist:artistid})
+                                body: JSON.stringify({id:Object.values(data[0])[0]+1,album:album,artist:artistid,userid})
                             })
                             fetch(request1)
                             .then(async(response)=>{
@@ -314,7 +314,7 @@ export default connect(
                 const request = new Request('http://localhost:8080/api/newArtist',{
                     method:'POST',
                     headers: { 'Content-Type':'application/json'},
-                    body: JSON.stringify({id:Object.values(data[0])[0]+1,name:value})
+                    body: JSON.stringify({id:Object.values(data[0])[0]+1,name:value,userid})
                 })
                 fetch(request)
                 .then(async(response)=>{
@@ -369,21 +369,21 @@ export default connect(
                                                         const request4 = new Request('http://localhost:8080/api/newTrack',{
                                                             method:'POST',
                                                             headers: { 'Content-Type':'application/json'},
-                                                            body: JSON.stringify({id:Object.values(data[0])[0]+1,name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:parseInt(bytes),unitprice:unitprice})
+                                                            body: JSON.stringify({id:Object.values(data[0])[0]+2,name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:parseInt(bytes),unitprice:unitprice,userid})
                                                         })
                                                         fetch(request4)
                                                         .then(async(response)=>{
                                                             const request5 = new Request('http://localhost:8080/api/usertrack',{
                                                                 method:'POST',
                                                                 headers: { 'Content-Type':'application/json'},
-                                                                body: JSON.stringify({userid:userid, id:Object.values(data[0])[0]+1,inDate:new Date()})
+                                                                body: JSON.stringify({userid:userid, id:Object.values(data[0])[0]+2,inDate:new Date()})
                                                             })
                                                             fetch(request5)
                                                             .then(async(response)=>{
                                                                 const request5 = new Request('http://localhost:8080/api/trackstate',{
                                                                     method:'POST',
                                                                     headers: { 'Content-Type':'application/json'},
-                                                                    body: JSON.stringify({id:Object.values(data[0])[0]+1})
+                                                                    body: JSON.stringify({id:Object.values(data[0])[0]+2})
                                                                 })
                                                                 fetch(request5)
                                                                 .then(async(response)=>{

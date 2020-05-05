@@ -138,8 +138,11 @@ SQLQuery('/api/reports/playlist_artist',query.getPlaylistByArtistCount)
 SQLQuery('/api/reports/artist_genre',query.getArtistByGenreCount)
 
 SQLQuery('/api/actions/inactivate',query.UpdateTrackState,'post')
+SQLQuery('/api/actions/delete/before/track',query.BeforeDeleteTrack,'post')
 SQLQuery('/api/actions/delete/track',query.deleteTrack,'post')
+SQLQuery('/api/actions/delete/before/album',query.BeforeDeleteAlbum,'post')
 SQLQuery('/api/actions/delete/album',query.deleteAlbum,'post')
+SQLQuery('/api/actions/delete/before/artist',query.BeforeDeleteArtist,'post')
 SQLQuery('/api/actions/delete/artist',query.deleteArtist,'post')
 
 SQLQuery('/api/actions/update/getAlbumID',query.selectAlbumID,'post')

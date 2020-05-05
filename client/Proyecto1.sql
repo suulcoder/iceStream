@@ -26,6 +26,7 @@ CREATE TABLE Artist
 (
     ArtistId INT NOT NULL,
     Name VARCHAR(120),
+    lastuserid INT,
     CONSTRAINT PK_Artist PRIMARY KEY (ArtistId)
 );
 
@@ -34,6 +35,7 @@ CREATE TABLE Album
     AlbumId INT NOT NULL,
     Title VARCHAR(160) NOT NULL,
     ArtistId INT NOT NULL,
+    lastuserid INT,
     CONSTRAINT PK_Album PRIMARY KEY (AlbumId),
     FOREIGN KEY (ArtistId) REFERENCES Artist (ArtistId) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -118,6 +120,7 @@ CREATE TABLE Track
     Milliseconds INT NOT NULL,
     Bytes INT,
     UnitPrice NUMERIC(10,2) NOT NULL,
+    lastuserid INT,
     CONSTRAINT PK_Track PRIMARY KEY (TrackId),
     FOREIGN KEY (AlbumId) REFERENCES Album (AlbumId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (GenreId) REFERENCES Genre (GenreId) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -227,7 +230,7 @@ CREATE TABLE Binnacle
     Id INT NOT NULL,
     element VARCHAR(20),
     action VARCHAR(50),
-    InDate TIMESTAMP,
+    InDate VARCHAR,
     userId INT
 );
 
@@ -254,34 +257,45 @@ CREATE TRIGGER CreatingUser
 
 DROP FUNCTION IF EXISTS Buy;
 
-CREATE FUNCTION Buy(id INT, quantity INT)
+CREATE FUNCTION Buy(id INT, quantity INT,newInvoiceid INT)
 RETURNS INT AS 
 $BODY$
 DECLARE price NUMERIC(10,2);
-DECLARE newInvoiceid INT;
 DECLARE newInvoiceLine INT;
-DECLARE customer INT;
 BEGIN
-	SELECT userId INTO customer FROM Users WHERE isLogged='True';
-	SELECT MAX(invoiceid)+1 as ids INTO newInvoiceid FROM Invoice;
 	SELECT MAX(invoiceLineid)+1 as ids INTO newInvoiceLine FROM InvoiceLine;
 	SELECT unitprice INTO price FROM Track WHERE trackid=id;
-	INSERT INTO Invoice(InvoiceId,CustomerId,InvoiceDate,Total) VALUES(newInvoiceid,customer,CURRENT_DATE,(quantity*price));
 	INSERT INTO InvoiceLine VALUES(newInvoiceLine,newInvoiceid,id,price,quantity);
 	RETURN 1;
 END
 $BODY$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS MakeInvoice;
+
+CREATE FUNCTION MakeInvoice(total Numeric(10,2),customer INT)
+RETURNS INT AS 
+$BODY$
+DECLARE newInvoiceid INT;
+BEGIN
+	SELECT MAX(invoiceid)+1 as ids INTO newInvoiceid FROM Invoice;
+	INSERT INTO Invoice(InvoiceId,CustomerId,InvoiceDate,Total) VALUES(newInvoiceid,customer,CURRENT_DATE,total);
+	RETURN newInvoiceid;
+END
+$BODY$
+language plpgsql;
+
+
+
+
 DROP FUNCTION IF EXISTS UpdateTrack;
 
 CREATE FUNCTION UpdateTrack()
 RETURNS TRIGGER AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','UPDATE',CURRENT_DATE,currentUser);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','UPDATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
+	UPDATE TRACK SET lastuserid=NULL WHERE trackid=NEW.trackID;
 	RETURN NEW;	
 END
 $BODY$
@@ -291,6 +305,7 @@ language plpgsql;
 CREATE TRIGGER UpdatingTrack
 	AFTER UPDATE ON Track
 	FOR EACH ROW
+	WHEN (NEW.trackid != NULL AND NEW.lastuserid!=NULL)
 	EXECUTE PROCEDURE UpdateTrack();
 
 
@@ -299,10 +314,9 @@ DROP FUNCTION IF EXISTS CreateTrack;
 CREATE FUNCTION CreateTrack()
 RETURNS TRIGGER AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','CREATE',CURRENT_DATE,currentUser);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
+	UPDATE TRACK SET lastuserid=NULL WHERE trackid=NEW.trackID;
 	RETURN NEW;
 END
 $BODY$
@@ -319,11 +333,9 @@ DROP FUNCTION IF EXISTS DeleteTrack;
 CREATE FUNCTION DeleteTrack()
 RETURNS TRIGGER AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','DELETE',CURRENT_DATE,currentUser);
-	RETURN NEW;
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (OLD.trackId, 'TRACK','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),OLD.lastuserid);
+	RETURN OLD;
 END
 $BODY$
 language plpgsql;
@@ -338,13 +350,11 @@ CREATE TRIGGER DeletingTrack
 
 DROP FUNCTION IF EXISTS PlayTrack;
 
-CREATE FUNCTION PlayTrack(trackId INT)
+CREATE FUNCTION PlayTrack(trackId INT,currentUser INT)
 RETURNS INT AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.trackId, 'TRACK','PLAY',CURRENT_DATE,currentUser);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (trackId, 'TRACK','PLAY',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),currentUser);
 	RETURN 0;
 END
 $BODY$
@@ -356,10 +366,9 @@ DROP FUNCTION IF EXISTS UpdateAlbum;
 CREATE FUNCTION UpdateAlbum()
 RETURNS TRIGGER AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','UPDATE',CURRENT_DATE,currentUser);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','UPDATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
+	UPDATE Album SET lastuserid=NULL WHERE albumid=NEW.albumID;
 	RETURN NEW;
 END
 $BODY$
@@ -369,6 +378,7 @@ language plpgsql;
 CREATE TRIGGER UpdatingAlbum
 	AFTER UPDATE ON Album
 	FOR EACH ROW
+	WHEN (NEW.albumid != NULL AND New.lastuserid!= NULL)
 	EXECUTE PROCEDURE UpdateAlbum();
 
 
@@ -377,10 +387,9 @@ DROP FUNCTION IF EXISTS CreateAlbum;
 CREATE FUNCTION CreateAlbum()
 RETURNS TRIGGER AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','CREATE',CURRENT_DATE,currentUser);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
+	UPDATE Album SET lastuserid=NULL WHERE albumid=NEW.albumID;
 	RETURN NEW;
 END
 $BODY$
@@ -398,11 +407,9 @@ DROP FUNCTION IF EXISTS DeleteAlbum;
 CREATE FUNCTION DeleteAlbum()
 RETURNS TRIGGER AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.albumId, 'ALBUM','DELETE',CURRENT_DATE,currentUser);
-	RETURN NEW;
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (OLD.albumId, 'ALBUM','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),OLD.lastuserid);
+	RETURN OLD;
 END
 $BODY$
 language plpgsql;
@@ -422,10 +429,9 @@ DROP FUNCTION IF EXISTS UpdateArtist;
 CREATE FUNCTION UpdateArtist()
 RETURNS TRIGGER AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','UPDATE',CURRENT_DATE,currentUser);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','UPDATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
+	UPDATE ARTIST SET lastuserid=NULL WHERE artistid=NEW.artistID;
 	RETURN NEW;
 END
 $BODY$
@@ -435,6 +441,7 @@ language plpgsql;
 CREATE TRIGGER UpdatingArtist
 	AFTER UPDATE ON Artist
 	FOR EACH ROW
+	WHEN (NEW.artistid != NULL AND NEW.lastuserid!=NULL)
 	EXECUTE PROCEDURE UpdateArtist();
 
 
@@ -443,10 +450,9 @@ DROP FUNCTION IF EXISTS CreateArtist;
 CREATE FUNCTION CreateArtist()
 RETURNS TRIGGER AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','CREATE',CURRENT_DATE,currentUser);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),NEW.lastuserid);
+	UPDATE ARTIST SET lastuserid=NULL WHERE artistid=NEW.artistID;
 	RETURN NEW;
 END
 $BODY$
@@ -464,11 +470,9 @@ DROP FUNCTION IF EXISTS DeleteArtist;
 CREATE FUNCTION DeleteArtist()
 RETURNS TRIGGER AS 
 $BODY$
-DECLARE currentUser INT;
 BEGIN
-	SELECT userId INTO currentUser FROM Users WHERE isLogged='True';
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.artistId, 'ARTIST','DELETE',CURRENT_DATE,currentUser);
-	RETURN NEW;
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (OLD.artistId, 'ARTIST','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS') ,OLD.lastuserid);
+	RETURN OLD;
 END
 $BODY$
 language plpgsql;
@@ -478,6 +482,8 @@ CREATE TRIGGER DeletingArtist
 	AFTER DELETE ON Artist
 	FOR EACH ROW
 	EXECUTE PROCEDURE DeleteArtist();
+
+
 
 
 
