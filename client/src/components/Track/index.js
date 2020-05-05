@@ -207,9 +207,9 @@ export default connect(
         song: selectors.getElement(state,id).song,
         state: selectors.getElement(state,id).state,
         albumid: selectors.getElement(state,id).albumid,
-        canInactivate:selectors.getUser(state).canInactivate,
-        canModify:selectors.getUser(state).canModify,
-        canDelete:selectors.getUser(state).canDelete,
+        canInactivate:selectors.getUser(state).caninactivatesong,
+        canModify:selectors.getUser(state).canmodifiysong,
+        canDelete:selectors.getUser(state).candeletesong,
         reduxState:state,
         isEdited,
         element:selectors.getElement(state,id),
@@ -291,7 +291,7 @@ export default connect(
                                                 const request4 = new Request('http://localhost:8080/api/actions/update/track',{
                                                     method:'POST',
                                                     headers: { 'Content-Type':'application/json'},
-                                                    body: JSON.stringify({id: parseInt(id),name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:bytes,unitprice:unitprice})
+                                                    body: JSON.stringify({id: parseInt(id),name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:parseInt(bytes),unitprice:unitprice})
                                                 })
                                                 fetch(request4)
                                                     .then(async(response)=>{

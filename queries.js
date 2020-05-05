@@ -45,7 +45,7 @@ module.exports = {
    addCart: "INSERT INTO Cart Values($1,$1)",
    updateCart: "UPDATE Cart SET quantity=$2 WHERE trackid=$1",
    getBinnacle: "SELECT * FROM Binnacle JOIN Users ON Users.userid=Binnacle.userid ORDER BY Binnacle.InDate DESC",
-   playTrack: "SELECT * FROM PlayTrack($1)",
+   playTrack: "SELECT * FROM PlayTrack($1,$2)",
 
    //Reports 
   
