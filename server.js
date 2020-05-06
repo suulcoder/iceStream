@@ -89,7 +89,7 @@ SQLQuery('/api/newuserid',query.getLastUserId)
 SQLQuery('/api/newartistid',query.getLastArtistId)
 SQLQuery('/api/newalbumid',query.getLastAlbumId)
 SQLQuery('/api/newtrackid',query.getLastTrackId)
-SQLQuery('/api/boughtTracks',query.getBoughtTracks)
+SQLQuery('/api/boughtTracks',query.getBoughtTracks,'post')
 SQLQuery('/api/cart',query.getCart)
 SQLQuery('/api/binnacle',query.getBinnacle)
 

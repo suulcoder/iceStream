@@ -8,6 +8,7 @@ import * as actions from '../../actions/app';
 import * as userActions from '../../actions/user'
 import * as elementActions from '../../actions/elemnts'
 import * as binnacleActions from '../../actions/binnacle'
+import * as simulateActions from '../../actions/simulation'
 
 const Header = ({app,role,onSubmit,logout,home,user,simulate,onBinnacle,onCart}) => (
         <Fragment>
@@ -94,7 +95,9 @@ export default connect(
                     fetch('http://localhost:8080/api/user',{method:'GET'})
                     .then(response => response.json())
                     .then(data => {
+                        const myData = []
                         data.forEach(element => {
+                            myData.push([element.userid,element.username])
                             dispatch(userActions.addUser(element))
                         });
                     }) 
@@ -139,8 +142,28 @@ export default connect(
             })
         },
         simulate(){
-            dispatch(actions.changeState(6))
-            dispatch(elementActions.selectElement(null))
+            dispatch(simulateActions.setLodaer(true))
+            fetch('http://localhost:8080/api/customer',{method:'GET'})
+            .then(response => response.json())
+            .then(data => {
+                dispatch(simulateActions.setValidUsers(data.map(element=>[element.customerid,element.firstame])))
+                data.forEach(element=>{
+                    const request1 = new Request('http://localhost:8080/api/boughtTracks',{
+                        method:'POST',
+                        headers: { 'Content-Type':'application/json'},
+                        body: JSON.stringify({customerid:element.customerid})
+                    })
+                    dispatch(elementActions.selectElement(null))
+                    dispatch(actions.changeState(6))
+                    fetch(request1)
+                    .then(response => response.json())
+                    .then(data1 => {
+                        dispatch(simulateActions.setLodaer(true))
+                        dispatch(simulateActions.setState({userid: element.customerid, bought:data.map(el => el.trackid)}))
+                        dispatch(simulateActions.setLodaer(false))
+                    })
+                })
+            }) 
         },
         onCart(){
             dispatch(actions.changeState(7))

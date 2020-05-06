@@ -58,7 +58,12 @@ export default connect(
                                 })
                                 fetch(request1)
                                 .then(async(response)=>{
-                                    fetch('http://localhost:8080/api/boughtTracks',{method:'GET'})
+                                    const request2 = new Request('http://localhost:8080/api/boughtTracks',{
+                                        method:'POST',  
+                                        headers: { 'Content-Type':'application/json'},
+                                        body: JSON.stringify({user:data[0].userid})
+                                    })
+                                    fetch(request2)
                                     .then(response => response.json())
                                     .then(data => {
 

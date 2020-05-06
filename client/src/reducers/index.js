@@ -7,6 +7,7 @@ import user,* as userSelectors from './user'
 import spotify, * as spotifySelectors from './spotify'
 import cart, * as cartSelectors from './cart'
 import binnacle, * as binnacleSelectors from './binnacle'
+import simulator, * as simulatorSelectors from './simulation'
 
 const reducer = combineReducers({
     admin,
@@ -16,7 +17,8 @@ const reducer = combineReducers({
     user,
     spotify,
     cart,
-    binnacle
+    binnacle,
+    simulator
 })
 
 export default reducer
@@ -44,3 +46,11 @@ export const getAllCartId = state => cartSelectors.getTracksId(state.cart);
 export const getCart = state => cartSelectors.getAllCart(state.cart);
 export const getQuantity = (state,id) => cartSelectors.getQuantity(state.cart,id)
 export const getBinnacle = (state) => binnacleSelectors.getBinnacle(state.binnacle)
+export const getValidTracks = state => simulatorSelectors.getValidTracks(state.simulator);
+export const getValidUsers = state => simulatorSelectors.getValidUsers(state.simulator);
+export const getDailyPlays = state => simulatorSelectors.getDailyPlays(state.simulator);
+export const getDailySells = state => simulatorSelectors.getDailySells(state.simulator);
+export const getSimulationState = state => simulatorSelectors.getSimulationState(state.simulator);
+export const getTopPlayed = state => simulatorSelectors.getTopPlayed(state.simulator);
+export const getTopSelled = state => simulatorSelectors.getTopSelled(state.simulator);
+export const getTopInteraction = state => simulatorSelectors.getTopInteraction(state.simulator);

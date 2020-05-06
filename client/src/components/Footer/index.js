@@ -74,6 +74,7 @@ const Footer = ({isSelected,isBought,id,name,album,mediatype,genre,composer,mill
 
 export default connect(
     state=>{
+        console.log(state)
         if(selectors.getAppState(state)!==0 && selectors.getSelected(state) && selectors.getSelected(state).id && selectors.getAppState(state)!==4 && selectors.getAppState(state)!==3 && selectors.getSelected(state)!==null && selectors.getSelected(state)!==undefined){
             return ({
                 isSelected:true,

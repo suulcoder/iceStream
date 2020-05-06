@@ -231,7 +231,8 @@ CREATE TABLE Binnacle
     element VARCHAR(20),
     action VARCHAR(50),
     InDate VARCHAR,
-    userId INT
+    userId INT,
+    simulationid INT
 );
 
 DROP FUNCTION IF EXISTS CreateUser;
@@ -330,8 +331,10 @@ DROP FUNCTION IF EXISTS DeleteTrack;
 CREATE FUNCTION DeleteTrack()
 RETURNS TRIGGER AS 
 $BODY$
+DECLARE id INT;
 BEGIN
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (OLD.trackId, 'TRACK','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),OLD.lastuserid);
+	SELECT userid INTO id FROM Binnacle WHERE simulationid=0 AND element='TRACK' ORDER BY Binnacle.InDate DESC LIMIT 1;
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (OLD.trackId, 'TRACK','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),id);
 	RETURN OLD;
 END
 $BODY$
@@ -401,8 +404,10 @@ DROP FUNCTION IF EXISTS DeleteAlbum;
 CREATE FUNCTION DeleteAlbum()
 RETURNS TRIGGER AS 
 $BODY$
+DECLARE id INT;
 BEGIN
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (OLD.albumId, 'ALBUM','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),OLD.lastuserid);
+	SELECT userid INTO id FROM Binnacle WHERE simulationid=0 AND element='ALBUM' ORDER BY Binnacle.InDate DESC LIMIT 1;
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (OLD.albumId, 'ALBUM','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),id);
 	RETURN OLD;
 END
 $BODY$
@@ -461,8 +466,10 @@ DROP FUNCTION IF EXISTS DeleteArtist;
 CREATE FUNCTION DeleteArtist()
 RETURNS TRIGGER AS 
 $BODY$
+DECLARE id INT;
 BEGIN
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (OLD.artistId, 'ARTIST','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS') ,OLD.lastuserid);
+	SELECT userid INTO id FROM Binnacle WHERE simulationid=0 AND element='ARTIST' ORDER BY Binnacle.InDate DESC LIMIT 1;
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (OLD.artistId, 'ARTIST','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS') ,id);
 	RETURN OLD;
 END
 $BODY$

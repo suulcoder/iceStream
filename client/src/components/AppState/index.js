@@ -12,6 +12,7 @@ import * as selectors from '../../reducers'
 import * as spotifyActions from '../../actions/spotify'
 import * as appActions from '../../actions/app'
 import * as userActions from '../../actions/user'
+import * as simulateActions from '../../actions/simulation'
 
 class AppState extends React.Component{
     
@@ -36,7 +37,9 @@ class AppState extends React.Component{
         fetch('http://localhost:8080/api/getsongs',{method:'GET'})
         .then(response => response.json())
         .then(async(data) => {
-            data.map(element => { 
+            const myData = []
+            data.map(element => {
+                myData.push([element.trackid,element.name]) 
             track.search(Object.values(element)[9], {limit: 1}).then((trackCollection) => {
                 if(trackCollection[0]===undefined){
                     this.props.onSubmit(elementActions.addSong({...element}))
@@ -51,9 +54,11 @@ class AppState extends React.Component{
                     image:Object.values(Object.values(Object.values(trackCollection[0])[0])[6][0])[1],
                     song:Object.values(Object.values(trackCollection[0])[7])[0]
                     }))}
+                
             });  
             return null
             });
+            this.props.onSubmit(simulateActions.setValidTracks(myData))
         })
 
         fetch('http://localhost:8080/api/artist',{method:'GET'})
