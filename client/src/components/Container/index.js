@@ -10,6 +10,7 @@ import SearchElements from '../SearchElements';
 import MyIce from '../MyIce';
 import Cart from '../Cart';
 import Binnacle from '../Binnacle';
+import Simulation from '../Simulation';
 
 const Header = ({app}) => (
         <div className="container">
@@ -36,7 +37,7 @@ const Header = ({app}) => (
                                         <Binnacle></Binnacle>
                                     ):(
                                         (app===6)?(
-                                            <Fragment></Fragment>
+                                            <Simulation></Simulation>
                                         ):(
                                             <Cart></Cart>
                                         )

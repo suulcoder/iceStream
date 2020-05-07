@@ -40,7 +40,8 @@ module.exports = {
           `FROM playlist`),
    getAllSongsInPlaylist : (`SELECT *\n` +
       `FROM playlist p1 join playlisttrack pt1 on p1.playlistid = pt1.playlistid join track t1 on t1.trackid = pt1.trackid`),
-   getBoughtTracks: ("SELECT q.trackid FROM invoiceline as q JOIN invoice as i ON q.invoiceid=i.invoiceid, Users WHERE i.customerid=$1'"),
+   getBoughtTracks: ("SELECT q.trackid FROM invoiceline as q JOIN invoice as i ON q.invoiceid=i.invoiceid WHERE i.customerid=$1"),
+   getCustomer: ("SELECT * From customer"),
    getCart: "SELECT * FROM Cart",
    addCart: "INSERT INTO Cart Values($1,$1)",
    updateCart: "UPDATE Cart SET quantity=$2 WHERE trackid=$1",

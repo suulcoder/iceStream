@@ -73,7 +73,7 @@ const validUsers = (state=[],action) => {
 const bought = (state={},action) => {
     switch (action.type) {
         case types.SET_STATE:
-            return {...state,[action.payload.userid]:action.payload.bought};
+            return {...state,...action.payload};
         case types.SET_NULL:
             return {}
         case types.SET_ACTION:
@@ -87,15 +87,15 @@ const bought = (state={},action) => {
     }
 }
 
-const mustPlayed = (state=[],action)=>{
+const mostPlayed = (state=[],action)=>{
     switch (action.type) {
         case types.SET_NULL:
             return []
         case types.SET_ACTION:
             let currstate = {...state}
             action.payload.forEach(currAction => {
-                if(action.action==='PLAY'){
-                    currstate = [...currstate,currAction[action.payload.id]]
+                if(currAction.action==='PLAY'){
+                    currstate = [...currstate,currAction.id]
                 }
             })
             return state
@@ -104,15 +104,15 @@ const mustPlayed = (state=[],action)=>{
     }
 }
 
-const mustSelled = (state=[],action)=>{
+const mostSelled = (state=[],action)=>{
     switch (action.type) {
         case types.SET_NULL:
             return []
         case types.SET_ACTION:
             let currstate = {...state}
             action.payload.forEach(currAction => {
-                if(action.action==='BUY'){
-                    currstate = [...currstate,currAction[action.payload.id]]
+                if(currAction.action==='BUY'){
+                    currstate = [...currstate,currAction.id]
                 }
             })
             return state
@@ -121,16 +121,34 @@ const mustSelled = (state=[],action)=>{
     }
 }
 
-const mustInteractions = (state=[],action)=>{
+const mostInteractions = (state=[],action)=>{
     switch (action.type) {
         case types.SET_NULL:
             return []
         case types.SET_ACTION:
             let currstate = {...state}
             action.payload.forEach(currAction => {
-                currstate = [...currstate,currAction[action.payload.userid]]
+                currstate = [...currstate,currAction.userid]
             })
             return state
+        default:
+            return state
+    }
+}
+
+const actions = (state=[],action)=>{
+    switch (action.type) {
+        case types.SET_NULL:
+            return []
+        case types.SET_ACTION:
+            const dailyActions = action.payload.length;
+            const currstate = [...state]
+            let counter = 0
+            action.payload.forEach(currAction => {
+                currstate.push(`${Date(Date.getTime() + ((state.length+1)*86400000)) + ((86400000/dailyActions)*counter)} :  ${currAction.userid} performed action of time '${currAction.action}' on track: ${currAction.id}`)
+                counter++;
+            })
+            return currstate
         default:
             return state
     }
@@ -144,9 +162,10 @@ const simulation = combineReducers({
     days,
     dailyPlays,
     dailySells,
-    mustInteractions,
-    mustPlayed,
-    mustSelled
+    mostInteractions,
+    mostPlayed,
+    mostSelled,
+    actions
 })
 
 
@@ -157,6 +176,8 @@ export const getValidUsers = state => state.validUsers;
 export const getDailyPlays = state => state.dailyPlays;
 export const getDailySells = state => state.dailySells;
 export const getSimulationState = state => state.bought;
-export const getTopPlayed = state => top(state.mustPlayed);
-export const getTopSelled = state => top(state.mustSelled);
-export const getTopInteraction = state => top(state.mustInteractions);
+export const getTopPlayed = state => top(state.mostPlayed);
+export const getTopSelled = state => top(state.mostSelled);
+export const getTopInteraction = state => top(state.mostInteractions);
+export const getLoader = state => state.loader;
+export const getActions = state => state.actions;

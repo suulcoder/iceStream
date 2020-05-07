@@ -54,3 +54,5 @@ export const getSimulationState = state => simulatorSelectors.getSimulationState
 export const getTopPlayed = state => simulatorSelectors.getTopPlayed(state.simulator);
 export const getTopSelled = state => simulatorSelectors.getTopSelled(state.simulator);
 export const getTopInteraction = state => simulatorSelectors.getTopInteraction(state.simulator);
+export const getLoader = state => state.simulator;
+export const getActions = state => state.simulator;

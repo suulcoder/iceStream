@@ -67,7 +67,7 @@ export default connect(
                                     .then(response => response.json())
                                     .then(data => {
 
-                                        data.forEach(element => {
+                                        data.rows.forEach(element => {
                                             console.log(element)
                                             dispatch(userActions.addBoughtTrack(element))
                                         });

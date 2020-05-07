@@ -20,11 +20,9 @@ export const setDays = (value) => ({
     payload: value
 })
 
-export const setAction = ({userid, id}) => ({
+export const setAction = (value) => ({
     type: types.SET_ACTION,
-    payload: {
-        userid,id
-    }
+    payload: value
 })
 
 export const setValidTracks = (value) => ({
@@ -41,7 +39,9 @@ export const setNull = () =>({
     type: types.SET_NULL
 })
 
-export const setState = (value) => ({
+export const setState = ({userid,bought}) => {
+    const myDic = {}
+    return ({
     type: types.SET_STATE,
-    payload: value
-})
+    payload: {...myDic,[userid]:bought}
+})}

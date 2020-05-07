@@ -92,6 +92,8 @@ SQLQuery('/api/newtrackid',query.getLastTrackId)
 SQLQuery('/api/boughtTracks',query.getBoughtTracks,'post')
 SQLQuery('/api/cart',query.getCart)
 SQLQuery('/api/binnacle',query.getBinnacle)
+SQLQuery('/api/customer',query.getCustomer)
+
 
 SQLQuery('/api/getsongs',query.getAllSongs),
 SQLQuery('/api/getalbums',query.getAllAlbum),

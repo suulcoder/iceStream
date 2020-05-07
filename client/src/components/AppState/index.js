@@ -77,7 +77,6 @@ class AppState extends React.Component{
         .then(response => response.json())
         .then(data => {
             this.props.onSubmit(appActions.addSection('album',data))
-            console.log(data)
             data.map(element => {
                 track.search(Object.values(element)[1], {limit: 1}).then((trackCollection) => {
                     if(trackCollection[0] === undefined){
@@ -98,7 +97,7 @@ class AppState extends React.Component{
         fetch('http://localhost:8080/api/boughtTracks',{method:'GET'})
         .then(response => response.json())
         .then(data => {
-            data.forEach(id=>{
+            data.rows.forEach(id=>{
                 this.props.onSubmit(userActions.addBoughtTrack(id.trackid))
             })
         })

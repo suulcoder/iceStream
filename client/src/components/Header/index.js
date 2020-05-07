@@ -143,23 +143,23 @@ export default connect(
         },
         simulate(){
             dispatch(simulateActions.setLodaer(true))
+            dispatch(elementActions.selectElement(null))
+            dispatch(actions.changeState(6))
             fetch('http://localhost:8080/api/customer',{method:'GET'})
             .then(response => response.json())
             .then(data => {
-                dispatch(simulateActions.setValidUsers(data.map(element=>[element.customerid,element.firstame])))
+                dispatch(simulateActions.setValidUsers(data.map(element=>[element.customerid,element.firstname])))
                 data.forEach(element=>{
                     const request1 = new Request('http://localhost:8080/api/boughtTracks',{
                         method:'POST',
                         headers: { 'Content-Type':'application/json'},
                         body: JSON.stringify({customerid:element.customerid})
                     })
-                    dispatch(elementActions.selectElement(null))
-                    dispatch(actions.changeState(6))
                     fetch(request1)
                     .then(response => response.json())
                     .then(data1 => {
                         dispatch(simulateActions.setLodaer(true))
-                        dispatch(simulateActions.setState({userid: element.customerid, bought:data.map(el => el.trackid)}))
+                        dispatch(simulateActions.setState({userid: element.customerid, bought: data1.rows.map(el => el.trackid)}))
                         dispatch(simulateActions.setLodaer(false))
                     })
                 })
