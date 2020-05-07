@@ -123,6 +123,7 @@ export default connect(
                 dispatch(elementActions.editElement(null))
                 dispatch(userActions.setUsertoNull())
                 dispatch(userActions.set_Bought_to_null())
+                dispatch(simulateActions.setNull())
                 localStorage.clear();
             })
         },
