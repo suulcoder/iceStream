@@ -6,7 +6,7 @@ const top = (arr) => {
     {
             for (let j=i; j<arr.length; j++)
             {
-                    if (arr[i] == arr[j]){
+                    if (arr[i] === arr[j]){
                         m++;
                     }                        
                     if (mf<m){
@@ -16,7 +16,7 @@ const top = (arr) => {
             }
             m=0;
     }
-    return mf;
+    return item;
 }
 
 export default top;

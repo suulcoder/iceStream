@@ -83,7 +83,7 @@ class AppState extends React.Component{
                         //this.props.onSubmit(actions.addAlbum({...element}))
                     }
                     else {
-                        this.props.onSubmit(actions.addAlbum({
+                        this.props.onSubmit(elementActions.addAlbum({
                             ...element, 
                             image: Object.values(Object.values(Object.values(trackCollection[0])[0])[6][0])[1],
                             album: Object.values(Object.values(Object.values(trackCollection[0])[0])[3])[0],

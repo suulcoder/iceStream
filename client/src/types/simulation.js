@@ -7,3 +7,4 @@ export const SET_NULL = "SET_NULL";
 export const SET_VALID_TRACKS = "SET_VALID_TRACKS";
 export const SET_VALID_USERS = "SET_VALID_USERS";
 export const SET_STATE = "SET_STATE";
+export const SET_DONE = "SET_DONE";

@@ -27,8 +27,8 @@ export default connect(
             image:selectors.getElement(state,id).image,
             name:selectors.getElement(state,id).name,
             price: selectors.getElement(state,id).unitprice,
-            quantity: selectors.getQuantity(state,parseInt(id.substring(5))),
-            id:parseInt(id.substring(5))
+            quantity: selectors.getQuantity(state,parseInt(id.substring(5),10)),
+            id:parseInt(id.substring(5),10)
         }),
     dispatch => ({
         plus(id,quantity){

@@ -304,7 +304,7 @@ export default connect(
                                                 const request4 = new Request('http://localhost:8080/api/actions/update/track',{
                                                     method:'POST',
                                                     headers: { 'Content-Type':'application/json'},
-                                                    body: JSON.stringify({id: parseInt(id),name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:parseInt(bytes),unitprice:unitprice,userid})
+                                                    body: JSON.stringify({id: parseInt(id,10),name:name,albumid:albumid,mediatypeid:mediatypeid,genreid:genreid,composer:composer,milliseconds:milliseconds,bytes:parseInt(bytes,10),unitprice:unitprice,userid})
                                                 })
                                                 fetch(request4)
                                                     .then(async(response)=>{

@@ -41,10 +41,10 @@ const Cart = ({tracks,onsubmit,total,bought,userid}) => (
 
 export default connect(
     state=>({
-        tracks: selectors.getAllCartId(state).filter(id=>(selectors.getQuantity(state,parseInt(id))!==0)),
+        tracks: selectors.getAllCartId(state).filter(id=>(selectors.getQuantity(state,parseInt(id,10))!==0)),
         total: selectors.getAllCartId(state).map(id=>{
             const price = selectors.getElement(state,'track'+id).unitprice;
-            const quantity = selectors.getQuantity(state,parseInt(id));
+            const quantity = selectors.getQuantity(state,parseInt(id,10));
             return (price*quantity)
         }).reduce(((prev,current)=>prev+current),0),
         bought: selectors.getCart(state),
@@ -66,7 +66,7 @@ export default connect(
                     const request1 = new Request('http://localhost:8080/api/buy',{
                         method:'POST',
                         headers: { 'Content-Type':'application/json'},
-                        body: JSON.stringify({id:parseInt(id),quantity:tracks[id],invoiceid:data.rows[0].makeinvoice})
+                        body: JSON.stringify({id:parseInt(id,10),quantity:tracks[id],invoiceid:data.rows[0].makeinvoice})
                     })
                     fetch(request1)
                     .then(response => response.json())
@@ -75,13 +75,10 @@ export default connect(
                         html2canvas(input)  
                         .then((canvas) => {  
                             var imgWidth = 200;  
-                            var pageHeight = 290;  
                             var imgHeight = canvas.height * imgWidth / canvas.width;  
-                            var heightLeft = imgHeight;  
                             const imgData = canvas.toDataURL('image/png');  
                             const pdf = new jsPDF('p', 'mm', 'a4')  
                             var position = 0;  
-                            var heightLeft = imgHeight;  
                             pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);  
                             pdf.save("IceStreamdownload.pdf");  
                             dispatch(actions.removeFromCart(id))

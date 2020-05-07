@@ -84,6 +84,7 @@ SQLQuery('/api/checkuser',query.getUserByUsername,'post')
 SQLQuery('/api/checkusername',query.checkUserByUsername,'post')
 SQLQuery('/api/adduser',query.addUser,'post')
 SQLQuery('/api/addpermission',query.addUserPermission,'post')
+SQLQuery('/api/tracks',query.getSongs,'post')
 
 SQLQuery('/api/newuserid',query.getLastUserId)
 SQLQuery('/api/newartistid',query.getLastArtistId)

@@ -5,6 +5,11 @@ export const setLodaer = (value) => ({
     payload: value
 })
 
+export const setDone = (value) => ({
+    type: types.SET_DONE,
+    payload: value
+})
+
 export const setSells = (value) => ({
     type: types.SET_DAILY_SELLS,
     payload: value

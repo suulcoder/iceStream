@@ -158,7 +158,6 @@ export default connect(
                     fetch(request1)
                     .then(response => response.json())
                     .then(data1 => {
-                        dispatch(simulateActions.setLodaer(true))
                         dispatch(simulateActions.setState({userid: element.customerid, bought: data1.rows.map(el => el.trackid)}))
                         dispatch(simulateActions.setLodaer(false))
                     })
