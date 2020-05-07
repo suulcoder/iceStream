@@ -2,14 +2,22 @@ import './styles.css';
 import React, {Fragment, useState} from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
-import { getTopSelled } from '../../reducers/simulation';
+import Spinner from '../Spinner';
 
-const MyIce = ({}) => {
+const Simulation = ({
+    isLoading,  actions,    topPlayed,  topSold, topInteractions,validTracks,
+    validUsers, dailyPlays, dailySells, simulationState
+}) => {
     return (
         <div className='myIce'>
             <div className="addMyIce">
                 <div className="addMyIce_">
-                    <strong>Simulate with IceStream:</strong>
+                    <div className="tittle">
+                        <strong>Simulate with IceStream:</strong>
+                        {
+                            (isLoading)?<Spinner/>:<Fragment/>
+                        }
+                    </div>
                     <div className="GrayBar">
                 </div>
                 <div className="myPermissions" >
@@ -31,7 +39,7 @@ export default connect(
         isLoading: selectors.getLoader(state),
         actions: selectors.getActions(state),
         topPlayed: selectors.getElement(state,selectors.getTopPlayed(state)),
-        topSold: selectors.getElement(state,getTopSelled(state)),
+        topSold: selectors.getElement(state,selectors.getTopSelled(state)),
         topInteractions: selectors.getUsers(state,selectors.getTopInteraction(state)),
         validTracks: selectors.getValidTracks(state),
         validUsers: selectors.getValidUsers(state),
@@ -41,4 +49,4 @@ export default connect(
     }),
     dispatch => ({
         
-}))(MyIce)
+}))(Simulation)

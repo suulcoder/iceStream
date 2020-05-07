@@ -1,4 +1,4 @@
-const top = arr => {
+const top = (arr) => {
     let mf = 1;
     let m = 0;
     let item;
