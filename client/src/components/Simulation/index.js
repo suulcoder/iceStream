@@ -4,13 +4,13 @@ import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
 import Spinner from '../Spinner';
 import "react-datepicker/dist/react-datepicker.css";
-import { setDays, setAction, setLodaer, setValidTracks, setDone, setNull } from '../../actions/simulation';
+import { setDays, setAction, setLodaer, setValidTracks, setDone } from '../../actions/simulation';
 import simulateDay from '../../Utilities/simulation';
-import { changeState } from '../../actions/app';
+import {v4} from 'uuid'
 
 const Simulation = ({
-    isLoading,  actions,    topPlayed,  topSold,         topInteractions, validTracks,
-    validUsers, dailyPlays, dailySells, simulationState, onSubmit, done, restart
+    isLoading,  actions,    topPlayed,  topSold, validTracks,
+    validUsers, dailyPlays, dailySells, simulationState, onSubmit, done,
 }) => {
     const [date,changeDate] = useState('')
     const [dailyP,changePlays] = useState(dailyPlays)
@@ -75,11 +75,7 @@ const Simulation = ({
                                                     {'START SIMULATION'}
                                                 </button>  
                                             ):(
-                                                <button className="login_button" type="submit" onClick={
-                                                    () => restart()
-                                                }>
-                                                    {'HOME'}
-                                                </button>  
+                                                <div className="done_"><strong >DONE</strong></div>
                                             )
                                         }
                                               
@@ -94,7 +90,7 @@ const Simulation = ({
                     <div className="myPermissions_">History:</div>
                         {
                             actions.map(action=>
-                                <div key={action} className="configuration_section">{action}</div>)
+                                <div key={v4()} className="configuration_section">{action}</div>)
                         }
                 </div>
             </div>
@@ -153,27 +149,48 @@ export default connect(
                 fetch(request)
                 .then(response => response.json())
                 .then(async(data) => {
-                    dispatch(setValidTracks(data.rows.map(track => [track.trackid,track.name])))
-                    let daysToSet = parseInt(Date.parse(date)-Date.parse(d),10)/86400000
-                    dispatch(setDays(daysToSet))
-                    while (daysToSet+1>0) {
-                        daysToSet--;
-                        const actions = simulateDay(validTracks,validUsers,stateSim,salesByDay,playsByDay)
-                        actions.forEach(element => {
-                            dispatch(setAction(element))
-                        });
-                    }
-                    dispatch(setLodaer(false))
-                    dispatch(setDone(true))
+                    const request1 = new Request('http://localhost:8080/api/sim',{
+                        method:'POST',
+                        headers: { 'Content-Type':'application/json'},
+                        body: JSON.stringify({playsByDay,salesByDay,limit,date})
+                    })
+                    fetch(request1)
+                    .then(response => response.json())
+                    .then(async(data1) => {
+                        const simID = data1.rows[0].simulate
+                        dispatch(setValidTracks(data.rows.map(track => [track.trackid,track.name])))
+                        let daysToSet = parseInt(Date.parse(date)-Date.parse(d),10)/86400000
+                        dispatch(setDays(daysToSet))
+                        while (daysToSet+1>0) {
+                            daysToSet--;
+                            const actions = simulateDay(validTracks,validUsers,stateSim,salesByDay,playsByDay)
+                            let counter = actions.length
+                            actions.forEach(element => {
+                                counter--;
+                                const trackid = element.id
+                                const userid = element.userid
+                                const action = element.action
+                                const request2 = new Request('http://localhost:8080/api/sim/line',{
+                                    method:'POST',
+                                    headers: { 'Content-Type':'application/json'},
+                                    body: JSON.stringify({trackid,action,userid,simID})
+                                })
+                                fetch(request2)
+                                .then(response => response.json())
+                                .then(async(data2) => {
+                                   dispatch(setAction(element))
+                                   if(counter===0){
+                                        dispatch(setDone(true))
+                                   }
+                                })
+                            });
+                        }
+                        dispatch(setLodaer(false))
+                    })
                 })
             }
             else{
                 alert('PICK A VALID DATE')
             }
         },
-        restart(){
-            dispatch(setNull())
-            dispatch(setDone(false))
-            dispatch(changeState(1))
-        }
 }))(Simulation)

@@ -27,6 +27,10 @@ module.exports = {
    addUser: "INSERT INTO Users (UserId,Username,email,password,role) VALUES ($1,$2,$3,$4,$5)",
    addUserPermission: "INSERT INTO UserPermissions(UserId,canLogin,canAddArtist,canAddAlbum,canAddTrack,canInactivateSong,canModifiySong,canDeleteSong,canModifiyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12);",
    getLastUserId : `SELECT max(Userid) FROM Users\n`,
+
+   addSimulation : "SELECT * FROM simulate($1,$2,$3,$4);",
+   addSimulationAction: "INSERT INTO Binnacle VALUES ($1, 'TRACK',$2,TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),$3,$4);",
+
    getLastArtistId :
       ("SELECT max(artistid)\n" +
           "from artist"),

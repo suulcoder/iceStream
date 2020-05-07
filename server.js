@@ -95,6 +95,8 @@ SQLQuery('/api/cart',query.getCart)
 SQLQuery('/api/binnacle',query.getBinnacle)
 SQLQuery('/api/customer',query.getCustomer)
 
+SQLQuery('/api/sim',query.addSimulation,'post')
+SQLQuery('/api/sim/line',query.addSimulationAction,'post')
 
 SQLQuery('/api/getsongs',query.getAllSongs),
 SQLQuery('/api/getalbums',query.getAllAlbum),

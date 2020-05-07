@@ -1,7 +1,7 @@
 ﻿/*******************************************************************************
    Create Tables
 ********************************************************************************/
-DROP TABLE IF EXISTS cart;
+DROP TABLE IF EXISTS simulation;
 DROP TABLE IF EXISTS binnacle;
 DROP TABLE IF EXISTS HasAddedArtist;
 DROP TABLE IF EXISTS HasAddedAlbum;
@@ -235,6 +235,16 @@ CREATE TABLE Binnacle
     simulationid INT
 );
 
+CREATE TABLE simulation
+(
+    simulationid INT PRIMARY KEY,
+    startDate TIMESTAMP,
+    endDate TIMESTAMP,
+    dailyPlays INT,
+    dailySales INT,
+    NumberOfTracks Int
+);
+
 DROP FUNCTION IF EXISTS CreateUser;
 
 CREATE FUNCTION CreateUser()
@@ -285,6 +295,24 @@ BEGIN
 END
 $BODY$
 language plpgsql;
+
+INSERT INTO simulation VALUES (1, CURRENT_DATE,30,40,500);
+DROP FUNCTION IF EXISTS simulate;
+
+CREATE FUNCTION simulate(dailyPlays INT, dailySales INT, tracks INT,date_ TIMESTAMP)
+RETURNS INT AS 
+$BODY$
+DECLARE id INT;
+BEGIN
+	SELECT MAX(simulationid)+1 INTO id FROM simulation;
+	INSERT INTO simulation VALUES (id, CURRENT_DATE,date_,dailyplays,dailysales,tracks);
+	RETURN id;
+END
+$BODY$
+language plpgsql;
+
+
+
 
 
 
@@ -19734,3 +19762,5 @@ INSERT INTO TrackState (TrackId, state) VALUES (3500,'TRUE');
 INSERT INTO TrackState (TrackId, state) VALUES (3501,'TRUE');
 INSERT INTO TrackState (TrackId, state) VALUES (3502,'TRUE');
 INSERT INTO TrackState (TrackId, state) VALUES (3503,'TRUE');
+
+

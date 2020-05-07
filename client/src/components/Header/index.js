@@ -129,6 +129,8 @@ export default connect(
         home(){
             dispatch(binnacleActions.toNull())
             dispatch(actions.changeState(1))
+            dispatch(simulateActions.setNull())
+            dispatch(simulateActions.setDone(false))
         },
         onBinnacle(){
             fetch('http://localhost:8080/api/binnacle',{method:'GET'})
