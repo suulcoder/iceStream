@@ -296,7 +296,7 @@ END
 $BODY$
 language plpgsql;
 
-INSERT INTO simulation VALUES (1, CURRENT_DATE,30,40,500);
+INSERT INTO simulation VALUES (1, CURRENT_DATE,CURRENT_DATE,30,40,500);
 DROP FUNCTION IF EXISTS simulate;
 
 CREATE FUNCTION simulate(dailyPlays INT, dailySales INT, tracks INT,date_ TIMESTAMP)
