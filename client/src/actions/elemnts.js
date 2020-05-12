@@ -161,6 +161,13 @@ export const selectElement = (id) => ({
     }
 })
 
+export const selectElementDeezer = (id) =>({
+    type:types.element_selected_deezer,
+    payload:{
+        id
+    }
+})
+
 export const editElement = (id) => ({
     type: types.element_edited,
     payload:{

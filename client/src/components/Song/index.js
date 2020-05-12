@@ -8,13 +8,13 @@ const Song = ({id,name,type,onSubmit,state}) => (
     <Fragment>
         <div className="track">
             <button className="play" type="submit" onClick={
-                () => onSubmit(id,)
+                () => onSubmit(id)
             }>
             </button>
             <div className="trackname">{name}</div>
         </div>
     </Fragment>
-    
+
 )
 
 export default connect(
@@ -23,8 +23,11 @@ export default connect(
             name:(selectors.getElement(state,id))?selectors.getElement(state,id).name:'',
             milliseconds: (selectors.getElement(state,id))?selectors.getElement(state,id).milliseconds:'',
         }),
-    dispatch => ({
+    (dispatch, {nameToID, artistToID}) => ({
         onSubmit(id,type,state){
+            fetch(`https://api.deezer.com/search/track/?q=${nameToID} ${artistToID}&index=0&limit=1`).then(
+                response => response.json().then(value => dispatch(actions.selectElementDeezer(value.data[0].id)))
+            )
             dispatch(actions.selectElement(id))
         }
     })

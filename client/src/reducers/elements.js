@@ -69,6 +69,15 @@ const isSelected = (state=null,action) => {
     }
 }
 
+const deezerSelection = (state = null, action) =>{
+    switch (action.type) {
+        case types.element_selected_deezer:
+            return action.payload.id
+        default:
+            return state
+    }
+}
+
 const elementOrder = (state=[],action) => {
     switch (action.type) {
         case types.search_element_added:
@@ -91,6 +100,7 @@ const elements = combineReducers({
     byId,
     isEdited,
     isSelected,
+    deezerSelection,
     elementOrder
 })
 
@@ -103,5 +113,6 @@ export const getAll = (state) => state.orderSections.map(
 ).filter(section => section!=null);
 export const getSectionIDs = (state) => Object.keys(state.order)
 export const getSelected = (state) => (state.isSelected===null)?null: getElement(state,state.isSelected)
+export const getDeezerID = (state) => state.deezerSelection
 export const getEdited = state => state.isEdited
 export const getSearchedElements = (state) => state.elementOrder

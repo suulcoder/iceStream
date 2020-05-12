@@ -7,7 +7,7 @@ import Artist from '../Artist';
 import Album from '../Album';
 import Track from '../Track'
 
-const Element = ({type,id,app,showSong,isEdited}) => (
+const Element = ({type,id,app,showSong,isEdited, nameToLook, artistToLook}) => (
     <Fragment>
         {(app===2 && !showSong)?(
             (type==='track')?(
@@ -18,7 +18,7 @@ const Element = ({type,id,app,showSong,isEdited}) => (
                 <Album key={id} id={id} isEdited={isEdited}></Album>
             ))
         ):(
-            <Song key={id} id={id}></Song>
+            <Song key={id} id={id} nameToID = {nameToLook} artistToID = {artistToLook}></Song>
         )}
     </Fragment>
     
@@ -30,7 +30,9 @@ export default connect(
             app:selectors.getAppState(state),
             type:Object.values(selectors.getElement(state,id))[0],
             id:id,
-            isEdited: selectors.getEdited(state)===id
+            isEdited: selectors.getEdited(state)===id,
+            nameToLook:(selectors.getElement(state,id))?selectors.getElement(state,id).name:'',
+            artistToLook: (selectors.getElement(state,id))?selectors.getElement(state,id).artist:'',
         }),
     undefined
 )(Element)
