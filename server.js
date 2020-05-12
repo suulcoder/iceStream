@@ -6,6 +6,10 @@ const app = express();
 const session = require('express-session');
 var cookieSession = require('cookie-session')
 
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
+
+
 const pool = new pg.Pool({
     port: 5432,
     user: 'admin',
@@ -28,6 +32,62 @@ app.use(cookieSession({
     keys: ['DB'],
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }))
+
+
+app.post('/api/purchase', (request,response) => {
+    const entry = {
+        'client':request.body.client,
+        'song':request.body.song,
+        'date':request.body.date
+    }
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        const dbo = db.db("mydb");
+        dbo.collection("customers").insertOne(entry, function(err, res) {
+            if (err) {
+                console.log(err, 'Something went wrong')
+            };
+            db.close();
+        });
+    });
+    return response.status(200).send({
+        'succes':true,
+        'entry':entry
+    })
+})
+
+app.post('/api/lookup', (request, response) =>{
+    const dateToLook = {
+        'date':request.body.date
+    }
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        const dbo = db.db("mydb");
+        return dbo.collection("customers").find(dateToLook).toArray(function (err, result) {
+            db.close();
+            if (err){return response.status(400)}
+            return response.status(200).send({
+                'succes':true,
+                'result':result
+            })
+        });
+    });
+})
+
+app.get('/api/getLatest', (request, response) =>{
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        const dbo = db.db("mydb");
+        return dbo.collection("customers").find({}).limit(10).sort({'date':-1}).toArray(function (err, result) {
+            db.close();
+            if (err){return response.status(400)}
+            return response.status(200).send({
+                'succes':true,
+                'result':result
+            })
+        });
+    });
+})
 
 const SQLQuery = (apiRoute,Query,method='get') => {
     switch (method) {
