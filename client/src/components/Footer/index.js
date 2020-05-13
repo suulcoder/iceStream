@@ -84,7 +84,6 @@ const Footer = ({isSelected, isBought, id, name, album, mediatype, genre, compos
 
 export default connect(
     state => {
-        /*console.log(state)*/
             if (selectors.getAppState(state) !== 0 && selectors.getSelected(state) && selectors.getSelected(state).id && selectors.getAppState(state) !== 4 && selectors.getAppState(state) !== 3 && selectors.getSelected(state) !== null && selectors.getSelected(state) !== undefined) {
                     return ({
                             isSelected: true,
@@ -102,7 +101,7 @@ export default connect(
                             image: Object.values(selectors.getSelected(state))[11],
                             song: Object.values(selectors.getSelected(state))[12],
                             state: Object.values(selectors.getSelected(state))[13],
-                            isBought: selectors.getBought(state).includes(parseInt(selectors.getSelected(state).id.substring(5))),
+                            isBought: selectors.getBought(state).includes( parseInt(selectors.getSelected(state).id.substring(5)) ),
                             inCart: selectors.getAllCartId(state).includes(selectors.getSelected(state).id.substring(5)),
                             role: (selectors.getUser(state) != null) ? selectors.getUser(state)[Object.keys(selectors.getUser(state))[1]] : null,
                             userid: selectors.getUser(state).userid,
