@@ -25,7 +25,7 @@ export default connect(
         }),
     (dispatch, {nameToID, artistToID}) => ({
         onSubmit(id,type,state){
-            fetch(`https://cors-anywhere.herokuapp.com/api.deezer.com/search/track/?q=${nameToID} ${artistToID}&index=0&limit=1`).then(
+            fetch(`https://https://cors-anywhere.herokuapp.com/api.deezer.com/search/track/?q=${nameToID} ${artistToID}&index=0&limit=1api.deezer.com/search/track/?q=${nameToID} ${artistToID}&index=0&limit=1`).then(
                 response => response.json().then(value => dispatch(actions.selectElementDeezer(value.data[0].id)))
             )
             dispatch(actions.selectElement(id))
