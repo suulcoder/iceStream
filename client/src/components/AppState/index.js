@@ -100,13 +100,18 @@ class AppState extends React.Component {
                 })
             })
 
-        fetch('http://localhost:8080/api/boughtTracks', {method: 'GET'})
-            .then(response => response.json())
-            .then(data => {
-                data.rows.forEach(id => {
-                    this.props.onSubmit(userActions.addBoughtTrack(id.trackid))
-                })
-            })
+        const request2 = new Request('http://localhost:8080/api/boughtTracks',{
+            method:'POST',  
+            headers: { 'Content-Type':'application/json'},
+            body: JSON.stringify({user:this.props.userid})
+        })
+        fetch(request2)
+        .then(response => response.json())
+        .then(data => {
+            data.rows.forEach(element => {
+                this.props.onSubmit(userActions.addBoughtTrack(element))
+            });
+        })  
 
         fetch('http://localhost:8080/api/media', {method: 'GET'})
             .then(response => response.json())
@@ -196,7 +201,8 @@ class AppState extends React.Component {
 
 export default withRouter(connect(
     state => ({
-        token: selectors.getToken(state)
+        token: selectors.getToken(state),
+        userid: selectors.getUser(state).userid
     }),
     dispatch => ({
         onSubmit(toAdd) {

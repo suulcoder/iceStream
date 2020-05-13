@@ -162,8 +162,8 @@ SQLQuery('/api/sim', query.addSimulation, 'post')
 SQLQuery('/api/sim/line', query.addSimulationAction, 'post')
 
 SQLQuery('/api/getsongs', query.getAllSongs),
-    SQLQuery('/api/getalbums', query.getAllAlbum),
-    SQLQuery('/api/play', query.playTrack, 'post')
+SQLQuery('/api/getalbums', query.getAllAlbum),
+SQLQuery('/api/play', query.playTrack, 'post')
 
 SQLQuery('/api/newArtist', query.addArtist, 'post')
 SQLQuery('/api/newAlbum', query.addAlbum, 'post')
