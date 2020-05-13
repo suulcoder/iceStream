@@ -202,7 +202,7 @@ class AppState extends React.Component {
 export default withRouter(connect(
     state => ({
         token: selectors.getToken(state),
-        userid: selectors.getUser(state).userid
+        userid: selectors.getUser(state)? selectors.getUser(state).userid:null
     }),
     dispatch => ({
         onSubmit(toAdd) {
