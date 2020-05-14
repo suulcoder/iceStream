@@ -1,0 +1,1 @@
+export const FETCH_MONGO = 'FETCH_MONGO'

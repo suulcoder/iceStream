@@ -8,7 +8,7 @@ import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf';  
 import * as appActions from '../../actions/app'
 
-const Cart = ({tracks,onsubmit,total,bought,userid}) => (
+const Cart = ({tracks,onsubmit,total,bought,userid, selectedUser}) => (
     <div className="cart" id="cart">
         <div className="cart_tittle">MY CART</div>
         <div className="bought">
@@ -18,7 +18,7 @@ const Cart = ({tracks,onsubmit,total,bought,userid}) => (
             <text className="bought_n"> {'Unit Price'} </text>
             <text className="bought_n"> {'SubTotal'} </text>
             <button  type="submit" onClick={
-                () => onsubmit(bought,total,userid)
+                () => onsubmit(bought,total,userid, selectedUser)
             }>{'BUY NOW'}
             </button>
         </div>
@@ -48,10 +48,11 @@ export default connect(
             return (price*quantity)
         }).reduce(((prev,current)=>prev+current),0),
         bought: selectors.getCart(state),
-        userid: selectors.getUser(state).userid
+        userid: selectors.getUser(state).userid,
+        selectedUser:selectors.getUser(state).userid,
     }),
     dispatch=>({
-        onsubmit(tracks,total,userid){
+        onsubmit(tracks,total,userid, selectedUser){
             alert("ITEMS WILL BE BOUGHT")
             const request = new Request('http://localhost:8080/api/invoice',{
                 method:'POST',
@@ -85,8 +86,27 @@ export default connect(
                             dispatch(appActions.changeState(1))
                         });  
                     })
-                }
-            });
+                    }
+                    const purchaseRequest = new Request('http://localhost:8080/api/purchase', {
+                        method: 'post',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(
+                            {
+                                'client': {
+                                    'name': `${selectedUser}`,
+                                    'Info': 'ClientInfo'
+                                },
+                                'song': {
+                                    'title': `${id}`,
+                                    'Info': 'SongInfo'
+                                },
+                                'date': `${new Date()}`
+                            })
+                    })
+
+                    fetch(purchaseRequest).then(value => {
+                        console.log('yay')})
+                });
             })            
         }
     })

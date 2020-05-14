@@ -8,6 +8,7 @@ import spotify, * as spotifySelectors from './spotify'
 import cart, * as cartSelectors from './cart'
 import binnacle, * as binnacleSelectors from './binnacle'
 import simulator, * as simulatorSelectors from './simulation'
+import mongo, * as mongoSelectors from "./mongo";
 
 const reducer = combineReducers({
     admin,
@@ -18,7 +19,8 @@ const reducer = combineReducers({
     spotify,
     cart,
     binnacle,
-    simulator
+    simulator,
+    mongo
 })
 
 export default reducer
@@ -59,3 +61,4 @@ export const getLoader = state => simulatorSelectors.getLoader(state.simulator);
 export const getActions = state => simulatorSelectors.getActions(state.simulator);
 export const getDays = state => simulatorSelectors.getDays(state.simulator);
 export const getDone = state => simulatorSelectors.getDone(state.simulator);
+export const getMongoReports = state =>  mongoSelectors.getAllReports(state.mongo)
