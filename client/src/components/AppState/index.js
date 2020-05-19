@@ -119,6 +119,12 @@ class AppState extends React.Component {
                 this.props.onSubmit(appActions.addSection('mediatype', data))
             })
 
+        fetch('http://localhost:8080/api/tracknames', {method: 'GET'})
+            .then(response => response.json())
+            .then(data => {
+                this.props.onSubmit(appActions.addSection('track', data))
+            })
+
         fetch('http://localhost:8080/api/reports/commongenre', {method: 'GET'})
             .then(response => response.json())
             .then(data => {

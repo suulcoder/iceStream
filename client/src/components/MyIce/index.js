@@ -7,8 +7,8 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
     canDeleteTrack,canModifyAlbum,canDeleteAlbum,canModifyArtist,canDeleteArtist,artists,
     mediatypes,genres,albums,
     onSaveTrack,onSaveAlbum,
-    onSaveArtist,
-    userid}) => {
+    onSaveArtist,onSavePlaylist,
+    userid, tracks}) => {
     const [trackName,changeTrack] = useState('')
     const [albumName,changeAlbum] = useState((Object.values(albums[0])[0]===undefined)?(''):(Object.values(albums[0])[1]))
     const [album,changeAlbumName] = useState('')
@@ -21,10 +21,68 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
     const [size,changeSize] = useState('0')
     const [myPrice,changePrice] = useState('0')
     const [name,changeName] = useState('')
+    const [playlist,changePlaylist] = useState('')
+    const [track1,changeTrack1] = useState((Object.values(tracks[0])[0]===undefined)?(''):(Object.values(tracks[0])[1]))
+    const [track2,changeTrack2] = useState((Object.values(tracks[0])[0]===undefined)?(''):(Object.values(tracks[0])[1]))
+    const [track3,changeTrack3] = useState((Object.values(tracks[0])[0]===undefined)?(''):(Object.values(tracks[0])[1]))
+    const [track4,changeTrack4] = useState((Object.values(tracks[0])[0]===undefined)?(''):(Object.values(tracks[0])[1]))
+    const [track5,changeTrack5] = useState((Object.values(tracks[0])[0]===undefined)?(''):(Object.values(tracks[0])[1]))
     return (
         <div className='myIce'>
             <div className="addMyIce">
                 <div className="addMyIce_"><strong>MyIce:</strong>
+                <div className="GrayBar"></div>
+                <div className="add_title"><strong>NEW PLAYLIST:</strong></div>
+                <Fragment>
+                <div className="info">
+                    <div><strong>Name:</strong>
+                        <input
+                        className="input_"
+                        type="text"
+                        placeholder="Name"
+                        value={playlist}
+                        onChange={e => changePlaylist(e.target.value)}
+                        />
+                    </div>
+                    <div><strong>Tracks:</strong>
+                        <select value={track1} onChange={e=>{
+                        return changeTrack1(e.target.value)}} className="select" id="B" name="track">
+                        {tracks.map(track => (
+                            <option key={Object.values(track)[0]} value={Object.values(track)[1]}>{Object.values(track)[1]}</option>
+                        ))}
+                        </select>
+                        <select value={track2} onChange={e=>{
+                        return changeTrack2(e.target.value)}} className="select" id="B" name="track">
+                        {tracks.map(track => (
+                            <option key={Object.values(track)[0]} value={Object.values(track)[1]}>{Object.values(track)[1]}</option>
+                        ))}
+                        </select>
+                        <select value={track3} onChange={e=>{
+                        return changeTrack3(e.target.value)}} className="select" id="B" name="track">
+                        {tracks.map(track => (
+                            <option key={Object.values(track)[0]} value={Object.values(track)[1]}>{Object.values(track)[1]}</option>
+                        ))}
+                        </select>
+                        <select value={track4} onChange={e=>{
+                        return changeTrack4(e.target.value)}} className="select" id="B" name="track">
+                        {tracks.map(track => (
+                            <option key={Object.values(track)[0]} value={Object.values(track)[1]}>{Object.values(track)[1]}</option>
+                        ))}
+                        </select>
+                        <select value={track5} onChange={e=>{
+                        return changeTrack5(e.target.value)}} className="select" id="B" name="track">
+                        {tracks.map(track => (
+                            <option key={Object.values(track)[0]} value={Object.values(track)[1]}>{Object.values(track)[1]}</option>
+                        ))}
+                        </select>
+                    </div>
+                </div>
+                <button className="save" type="submit" onClick={
+                    () => onSavePlaylist(playlist,track1,track2,track3,track4,track5,userid)
+                }>
+                </button>
+                </Fragment>
+                <div className="GrayBar"></div>
                 <div className="GrayBar"></div>
                 <div className="add_title"><strong>NEW ALBUM:</strong></div>
                 <div className="album">
@@ -72,7 +130,20 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
                             <input
                             className="input_"
                             type="text"
-                            placeholder="Artist Name"
+                            pl                                className="input_"
+                            type="text"
+                            placeholder="Track"
+                            value={trackName}   
+                            onChange={e => changeTrack(e.target.value)}
+                            />
+                        </div>
+                        <div><strong>Album:</strong>
+                            <select value={albumName}  onChange={e=>{
+                            return changeAlbum(e.target.value)}} className="select" id="C" name="album">
+                            {albums.map(element => (
+                                <option key={Object.values(element)[0]} value={Object.values(element)[1]}>{Object.values(element)[1]}</option>
+                            ))}
+                            </select>aceholder="Artist Name"
                             value={name}
                             onChange={e => changeName(e.target.value)}
                             />
@@ -251,9 +322,7 @@ const MyIce = ({canAddTrack,canAddArtist,canAddAlbum,canInactivateTrack,canModif
 }
 
 export default connect(
-    state=>{
-        console.log(selectors.getUser(state).userid)
-        return ({
+    state=>({
         canAddArtist:Object.values(selectors.getUser(state))[5],
         canAddAlbum:Object.values(selectors.getUser(state))[6],
         canAddTrack:Object.values(selectors.getUser(state))[7],
@@ -268,8 +337,9 @@ export default connect(
         genres: selectors.getInfo(state,'genre'),
         albums: selectors.getInfo(state,'album'),
         mediatypes: selectors.getInfo(state,'mediatype'),
-        userid: selectors.getUser(state).userid
-    })},
+        userid: selectors.getUser(state).userid,
+        tracks: selectors.getInfo(state,'track')
+    }),
     dispatch => ({
         onSaveAlbum(album,artist,userid){
             fetch('http://localhost:8080/api/newalbumid',{method:'GET'})
@@ -331,6 +401,18 @@ export default connect(
                 })
         
             })
+        },
+        onSavePlaylist(playlist,track1,track2,track3,track4,track5,userid){
+        const request1 = new Request('http://localhost:8080/api/playlist/add',{
+        method:'POST',
+        headers: { 'Content-Type':'application/json'},
+        body: JSON.stringify({playlist,track1,track2,track3,track4,track5,userid})
+        })
+        fetch(request1)
+        .then(async(response)=>{
+            alert("PLAYLIST ADDED SUCCESSFULLY")
+            window.location.href = 'http://localhost:3000/'
+        })
         },
         onSaveTrack(name,album,mediatype,genre,composer,milliseconds,bytes,unitprice,userid){
             fetch('http://localhost:8080/api/newtrackid',{method:'GET'})

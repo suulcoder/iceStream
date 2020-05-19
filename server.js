@@ -147,7 +147,7 @@ SQLQuery('/api/checkuser', query.getUserByUsername, 'post')
 SQLQuery('/api/checkusername', query.checkUserByUsername, 'post')
 SQLQuery('/api/adduser', query.addUser, 'post')
 SQLQuery('/api/addpermission', query.addUserPermission, 'post')
-SQLQuery('/api/tracks', query.getSongs, 'post')
+SQLQuery('/api/tracknames', query.getAllTrackData)
 
 SQLQuery('/api/newuserid', query.getLastUserId)
 SQLQuery('/api/newartistid', query.getLastArtistId)
@@ -160,6 +160,10 @@ SQLQuery('/api/customer', query.getCustomer)
 
 SQLQuery('/api/sim', query.addSimulation, 'post')
 SQLQuery('/api/sim/line', query.addSimulationAction, 'post')
+
+SQLQuery('/api/playist/add', query.createPlaylist, 'post')
+SQLQuery('/api/playist/update', query.updatePlaylist, 'post')
+SQLQuery('/api/playist/delete', query.deletePlaylist, 'post')
 
 SQLQuery('/api/getsongs', query.getAllSongs),
 SQLQuery('/api/getalbums', query.getAllAlbum),

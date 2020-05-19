@@ -7,6 +7,7 @@ module.exports = {
    getJustAllAlbum : "SELECT * FROM Album",
    getAllGenre : "SELECT * FROM Genre",
    getAllMediaType : "SELECT * FROM MediaType",
+   getAllTrackData: "SELECT trackid,name FROM Track",
    getUsersAddPermissions : "SELECT * FROM UserPermission",
    getTrackPermissionINACTIVATE: "SELECT COUNT(UserId) FROM CanInactivateTrack WHERE UserId=$1",
    getTrackPermissionUPDATE: "SELECT COUNT(UserId) FROM CanUpdateTrack WHERE UserId=$1",
@@ -30,6 +31,10 @@ module.exports = {
 
    addSimulation : "SELECT * FROM simulate($1,$2,$3,$4);",
    addSimulationAction: "INSERT INTO Binnacle VALUES ($1, 'TRACK',$2,TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),$3,$4);",
+
+   createPlaylist: "SELECT * FROM CreatePlaylist($1,$2,$3,$4,$5,$6,$7)",
+   updatePlaylist: "SELECT * FROM UpdatePlaylist($1,$2,$3,$4,$5,$6,$7,$8)",
+   deletePlaylist: "SELECT * FROM DeletePlaylist($1)",
 
    getLastArtistId :
       ("SELECT max(artistid)\n" +

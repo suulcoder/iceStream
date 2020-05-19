@@ -1,0 +1,58 @@
+.artist{
+    display: flex;
+    padding: 10px;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 20px;
+    border-color: black;
+    border-style: double;
+    margin-top: 25px;
+    margin-right: 25px;
+    margin-left: 25px;
+    overflow: auto;
+}
+.artist_{
+    display: flex;
+    padding: 20px;
+    align-items: center;
+}
+.artistinfo{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.delete{
+    background-image: url('../../public/img/trash.png');
+    background-size: cover;
+    height: 27px;
+    width: 27px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.edit{
+    background-image: url('../../public/img/edit.png');
+    background-size: cover;
+    height: 27px;
+    width: 27px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.save{
+    background-image: url('../../public/img/save.png');
+    background-size: cover;
+    height: 27px;
+    width: 27px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.artistitle{
+    margin-bottom: 10px;
+}
+.input_{
+    border-radius: 20px;
+    font-size: small;
+    margin-right: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    padding: 7px;
+}

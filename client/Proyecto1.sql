@@ -388,6 +388,64 @@ END
 $BODY$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS CreatePlaylist;
+
+CREATE FUNCTION CreatePlaylist(name VARCHAR(120),track1 INT,track2 INT,track3 INT,track4 INT,track5 INT,lastuserid INT)
+RETURNS INT AS 
+$BODY$
+DECLARE newid INT;
+BEGIN
+	SELECT MAX(playlistid)+1 as ids INTO newid FROM Playlist;
+	INSERT INTO Playlist VALUES (newid,name);
+	INSERT INTO PlaylistTrack VALUES (newid,name);
+	INSERT INTO PlaylistTrack VALUES (newid,track1);
+	INSERT INTO PlaylistTrack VALUES (newid,track2);
+	INSERT INTO PlaylistTrack VALUES (newid,track3);
+	INSERT INTO PlaylistTrack VALUES (newid,track4);
+	INSERT INTO PlaylistTrack VALUES (newid,track5);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.playlistId, 'PLAYLIST','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
+	RETURN 0;
+END
+$BODY$
+language plpgsql;
+
+DROP FUNCTION IF EXISTS UpadatePlaylist;
+
+CREATE FUNCTION UpdatePlaylist(name VARCHAR(120),track1 INT,track2 INT,track3 INT,track4 INT,track5 INT,lastuserid INT,newid INT)
+RETURNS INT AS 
+$BODY$
+BEGIN
+	
+	DELETE FROM Playlist WHERE playlistid=newid;
+	DELETE FROM PlaylistTrack WHERE playlistid=newid;
+	INSERT INTO Playlist VALUES (newid,name);
+	INSERT INTO PlaylistTrack VALUES (newid,name);
+	INSERT INTO PlaylistTrack VALUES (newid,track1);
+	INSERT INTO PlaylistTrack VALUES (newid,track2);
+	INSERT INTO PlaylistTrack VALUES (newid,track3);
+	INSERT INTO PlaylistTrack VALUES (newid,track4);
+	INSERT INTO PlaylistTrack VALUES (newid,track5);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.playlistId, 'PLAYLIST','UPDATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
+	RETURN 0;
+END
+$BODY$
+language plpgsql;
+
+
+DROP FUNCTION IF EXISTS DeletePlaylist;
+
+CREATE FUNCTION DeletePlaylist(playlist INT)
+RETURNS INT AS 
+$BODY$
+BEGIN
+	DELETE FROM Playlist WHERE playlistid=playlist;
+	DELETE FROM PlaylistTrack WHERE playlistid=playlist;
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.playlistId, 'PLAYLIST','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
+	RETURN 0;
+END
+$BODY$
+language plpgsql;
+
 
 DROP FUNCTION IF EXISTS UpdateAlbum;
 
@@ -508,7 +566,6 @@ CREATE TRIGGER DeletingArtist
 	AFTER DELETE ON Artist
 	FOR EACH ROW
 	EXECUTE PROCEDURE DeleteArtist();
-
 
 
 

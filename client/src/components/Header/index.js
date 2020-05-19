@@ -144,9 +144,9 @@ export default connect(
             .then(response => response.json())
             .then(data => {
                 data.forEach(id=>{
-                    dispatch(actions.changeState(5))
                     dispatch(binnacleActions.add({...id}))
                 })
+                dispatch(actions.changeState(5))
                 dispatch(elementActions.selectElement(null))
             })
         },
