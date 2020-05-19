@@ -9,8 +9,9 @@ import * as userActions from '../../actions/user'
 import * as elementActions from '../../actions/elemnts'
 import * as binnacleActions from '../../actions/binnacle'
 import * as simulateActions from '../../actions/simulation'
+import * as mongoActions from '../../actions/mongo'
 
-const Header = ({app,role,onSubmit,logout,home,user,simulate,onBinnacle,onCart}) => (
+const Header = ({app,role,onSubmit,logout,home,user,simulate,onBinnacle,onCart, onReport}) => (
         <Fragment>
             <div className="header">
                 <div className="tittle">
@@ -48,6 +49,11 @@ const Header = ({app,role,onSubmit,logout,home,user,simulate,onBinnacle,onCart})
                                                 () => simulate(role,app)
                                             }>
                                                 {'SIMULATE'}
+                                            </button>
+                                            <button className='button' type='submit' onClick={
+                                                () => onReport(role, app)
+                                            }>
+                                                {'GET REPORT'}
                                             </button>
                                         </Fragment>
                                     ):(
@@ -170,6 +176,14 @@ export default connect(
         onCart(){
             dispatch(actions.changeState(7))
             dispatch(elementActions.selectElement(null))
+        },
+        onReport(){
+            const getLatestRequest = new Request('http://localhost:8080/api/getLatest', {
+                method: 'get',
+                headers: {'Content-Type': 'application/json'}
+            })
+            fetch(getLatestRequest).then(response => response.json().then(data => {dispatch(mongoActions.fetchMongo(data.result))}))
+            dispatch(actions.changeState(8))
         }
     })
 )(Header)

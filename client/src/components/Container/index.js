@@ -11,6 +11,7 @@ import MyIce from '../MyIce';
 import Cart from '../Cart';
 import Binnacle from '../Binnacle';
 import Simulation from '../Simulation';
+import MongoReport from "../MongoReport";
 
 const Header = ({app}) => (
         <div className="container">
@@ -39,13 +40,16 @@ const Header = ({app}) => (
                                         (app===6)?(
                                             <Simulation></Simulation>
                                         ):(
-                                            <Cart></Cart>
+                                            (app===7)?(
+                                                <Cart></Cart>
+                                            ):
+                                                (<MongoReport/>)
                                         )
                                 )
                             )
                         ))
                     )
-                    
+
                 )
             }
             <div></div>
