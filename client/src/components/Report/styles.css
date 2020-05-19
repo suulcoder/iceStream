@@ -16,6 +16,15 @@
     color: white;
 }
 
+.report__info__and__download {
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+}
+
 .reportbutton:hover {
     background: rgb(192, 192, 192);
     color: white;
@@ -121,6 +130,12 @@
     padding-right: 2rem;
     flex: 1;
     height: 2rem;
+}
+
+.download-text{
+    color: white;
+    margin-top: 2rem;
+    align-self: center;
 }
 
 .info__container {
