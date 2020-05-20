@@ -154,7 +154,7 @@ CREATE TABLE PlaylistTrack
     TrackId INT NOT NULL,
     CONSTRAINT PK_PlaylistTrack PRIMARY KEY (PlaylistId, TrackId),
     FOREIGN KEY (PlaylistId) REFERENCES Playlist (PlaylistId) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (TrackId) REFERENCES Track (TrackId)
 );
 
 CREATE TABLE TrackState
@@ -390,42 +390,61 @@ language plpgsql;
 
 DROP FUNCTION IF EXISTS CreatePlaylist;
 
-CREATE FUNCTION CreatePlaylist(name VARCHAR(120),track1 INT,track2 INT,track3 INT,track4 INT,track5 INT,lastuserid INT)
+CREATE FUNCTION CreatePlaylist(myname VARCHAR(120),track1 VARCHAR(200),track2 VARCHAR(200),track3 VARCHAR(200),track4 VARCHAR(200),track5 VARCHAR(200),lastuserid INT)
 RETURNS INT AS 
 $BODY$
 DECLARE newid INT;
+DECLARE trackid1 INT;
+DECLARE trackid2 INT;
+DECLARE trackid3 INT;
+DECLARE trackid4 INT;
+DECLARE trackid5 INT;
 BEGIN
 	SELECT MAX(playlistid)+1 as ids INTO newid FROM Playlist;
-	INSERT INTO Playlist VALUES (newid,name);
-	INSERT INTO PlaylistTrack VALUES (newid,name);
-	INSERT INTO PlaylistTrack VALUES (newid,track1);
-	INSERT INTO PlaylistTrack VALUES (newid,track2);
-	INSERT INTO PlaylistTrack VALUES (newid,track3);
-	INSERT INTO PlaylistTrack VALUES (newid,track4);
-	INSERT INTO PlaylistTrack VALUES (newid,track5);
+	SELECT trackid as ids INTO trackid1 FROM Track WHERE Track.name=track1;
+	SELECT trackid as ids INTO trackid2 FROM Track WHERE Track.name=track2;
+	SELECT trackid as ids INTO trackid3 FROM Track WHERE Track.name=track3;
+	SELECT trackid as ids INTO trackid4 FROM Track WHERE Track.name=track4;
+	SELECT trackid as ids INTO trackid5 FROM Track WHERE Track.name=track5;
+	INSERT INTO Playlist VALUES (newid,myname);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid1);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid2);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid3);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid4);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid5);
 	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.playlistId, 'PLAYLIST','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
 	RETURN 0;
 END
 $BODY$
 language plpgsql;
 
-DROP FUNCTION IF EXISTS UpadatePlaylist;
+DROP FUNCTION IF EXISTS UpdatePlaylist;
 
 CREATE FUNCTION UpdatePlaylist(name VARCHAR(120),track1 INT,track2 INT,track3 INT,track4 INT,track5 INT,lastuserid INT,newid INT)
 RETURNS INT AS 
 $BODY$
+DECLARE trackid1 INT;
+DECLARE trackid2 INT;
+DECLARE trackid3 INT;
+DECLARE trackid4 INT;
+DECLARE trackid5 INT;
 BEGIN
 	
 	DELETE FROM Playlist WHERE playlistid=newid;
 	DELETE FROM PlaylistTrack WHERE playlistid=newid;
+	SELECT trackid as ids INTO trackid1 FROM Track WHERE name=track1;
+	SELECT trackid as ids INTO trackid2 FROM Track WHERE name=track2;
+	SELECT trackid as ids INTO trackid3 FROM Track WHERE name=track3;
+	SELECT trackid as ids INTO trackid4 FROM Track WHERE name=track4;
+	SELECT trackid as ids INTO trackid5 FROM Track WHERE name=track5;
 	INSERT INTO Playlist VALUES (newid,name);
 	INSERT INTO PlaylistTrack VALUES (newid,name);
-	INSERT INTO PlaylistTrack VALUES (newid,track1);
-	INSERT INTO PlaylistTrack VALUES (newid,track2);
-	INSERT INTO PlaylistTrack VALUES (newid,track3);
-	INSERT INTO PlaylistTrack VALUES (newid,track4);
-	INSERT INTO PlaylistTrack VALUES (newid,track5);
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.playlistId, 'PLAYLIST','UPDATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid1);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid2);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid3);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid4);
+	INSERT INTO PlaylistTrack VALUES (newid,trackid5);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (newid, 'PLAYLIST','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
 	RETURN 0;
 END
 $BODY$
@@ -434,13 +453,12 @@ language plpgsql;
 
 DROP FUNCTION IF EXISTS DeletePlaylist;
 
-CREATE FUNCTION DeletePlaylist(playlist INT)
+CREATE FUNCTION DeletePlaylist(myid INT,lastuserid INT)
 RETURNS INT AS 
 $BODY$
 BEGIN
-	DELETE FROM Playlist WHERE playlistid=playlist;
-	DELETE FROM PlaylistTrack WHERE playlistid=playlist;
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.playlistId, 'PLAYLIST','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
+	DELETE FROM PlaylistTrack WHERE playlistid=myid;
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (myid, 'PLAYLIST','DELETE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
 	RETURN 0;
 END
 $BODY$

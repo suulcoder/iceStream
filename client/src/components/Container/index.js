@@ -12,6 +12,7 @@ import Cart from '../Cart';
 import Binnacle from '../Binnacle';
 import Simulation from '../Simulation';
 import MongoReport from "../MongoReport";
+import RealPlaylist from '../RealPlaylist';
 
 const Header = ({app}) => (
         <div className="container">
@@ -23,6 +24,7 @@ const Header = ({app}) => (
                         <Fragment>
                             <Report></Report>
                             <Elements></Elements>
+                            <RealPlaylist/>
                         </Fragment>
                     ):(
                         (app===2)?(

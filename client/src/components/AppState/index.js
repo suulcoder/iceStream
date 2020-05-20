@@ -125,6 +125,12 @@ class AppState extends React.Component {
                 this.props.onSubmit(appActions.addSection('track', data))
             })
 
+        fetch('http://localhost:8080/api/playlist', {method: 'GET'})
+            .then(response => response.json())
+            .then(data => {
+                this.props.onSubmit(appActions.addSection('playlist', data))
+            })
+
         fetch('http://localhost:8080/api/reports/commongenre', {method: 'GET'})
             .then(response => response.json())
             .then(data => {

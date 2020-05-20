@@ -403,7 +403,7 @@ export default connect(
             })
         },
         onSavePlaylist(playlist,track1,track2,track3,track4,track5,userid){
-        const request1 = new Request('http://localhost:8080/api/playlist/add',{
+        const request1 = new Request('http://localhost:8080/api/playist/add',{
         method:'POST',
         headers: { 'Content-Type':'application/json'},
         body: JSON.stringify({playlist,track1,track2,track3,track4,track5,userid})
