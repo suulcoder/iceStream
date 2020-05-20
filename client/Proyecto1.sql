@@ -152,7 +152,6 @@ CREATE TABLE PlaylistTrack
 (
     PlaylistId INT NOT NULL,
     TrackId INT NOT NULL,
-    CONSTRAINT PK_PlaylistTrack PRIMARY KEY (PlaylistId, TrackId),
     FOREIGN KEY (PlaylistId) REFERENCES Playlist (PlaylistId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TrackId) REFERENCES Track (TrackId)
 );
@@ -412,7 +411,7 @@ BEGIN
 	INSERT INTO PlaylistTrack VALUES (newid,trackid3);
 	INSERT INTO PlaylistTrack VALUES (newid,trackid4);
 	INSERT INTO PlaylistTrack VALUES (newid,trackid5);
-	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (NEW.playlistId, 'PLAYLIST','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
+	INSERT INTO Binnacle(Id,element,action,InDate,userId) VALUES (newid, 'PLAYLIST','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),lastuserid);
 	RETURN 0;
 END
 $BODY$
