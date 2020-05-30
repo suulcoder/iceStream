@@ -183,6 +183,25 @@ export default connect(
                                         dispatch(setDone(true))
                                    }
                                 })
+                                const purchaseRequest = new Request('http://localhost:8080/api/purchase', {
+                                    method: 'post',
+                                    headers: {'Content-Type': 'application/json'},
+                                    body: JSON.stringify(
+                                        {
+                                            'client': {
+                                                'name': `${userid}`,
+                                                'Info': 'ClientInfo'
+                                            },
+                                            'song': {
+                                                'title': `${trackid}`,
+                                                'Info': 'SongInfo'
+                                            },
+                                            'date': `${new Date()}`
+                                        })
+                                })
+                                if(action === 'BUY'){
+                                    fetch(purchaseRequest)
+                                }
                             });
                         }
                         dispatch(setLodaer(false))

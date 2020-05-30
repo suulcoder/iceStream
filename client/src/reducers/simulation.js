@@ -160,6 +160,7 @@ export default simulation
 
 export const getValidTracks = state => state.validTracks;
 export const getValidUsers = state => state.validUsers;
+export const getSimUser = (state, id) => state.validUsers[id]
 export const getDailyPlays = state => state.dailyPlays;
 export const getDailySells = state => state.dailySells;
 export const getSimulationState = state => state.bought;

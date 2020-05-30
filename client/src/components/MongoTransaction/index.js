@@ -21,7 +21,7 @@ const MongoTransaction = ({userID, userName, songName, recommendation}) => (
 export default connect(
     (state, {userID, songID}) =>({
         songName:selectors.getElement(state, `track${songID}`).name,
-        userName:selectors.getUsers(state,userID).username,
+        userName:selectors.getValidUsers(state)[(parseInt(userID)+8)%69][1],
         recommendation:selectors.getElement(state, `track${songID-1}`).name
     }),undefined
 )(MongoTransaction)

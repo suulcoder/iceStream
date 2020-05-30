@@ -51,6 +51,7 @@ export const getQuantity = (state,id) => cartSelectors.getQuantity(state.cart,id
 export const getBinnacle = (state) => binnacleSelectors.getBinnacle(state.binnacle)
 export const getValidTracks = state => simulatorSelectors.getValidTracks(state.simulator);
 export const getValidUsers = state => simulatorSelectors.getValidUsers(state.simulator);
+export const getSimUser = (state, id) => simulatorSelectors.getSimUser(state.simulator, id)
 export const getDailyPlays = state => simulatorSelectors.getDailyPlays(state.simulator);
 export const getDailySells = state => simulatorSelectors.getDailySells(state.simulator);
 export const getSimulationState = state => simulatorSelectors.getSimulationState(state.simulator);
