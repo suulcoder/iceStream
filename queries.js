@@ -124,7 +124,12 @@ module.exports = {
    BeforeDeleteArtist: "INSERT INTO Binnacle(Id,element,action,InDate,userId,simulationid) VALUES ($1, 'ARTIST','CREATE',TO_CHAR(NOW(),'DD-MM-YY HH24:MI:SS'),$2,0);",
    deleteArtist: "DELETE FROM Artist WHERE ArtistId=$1;",
    buy: "SELECT * FROM BUY($1,$2,$3)",
-   invoice: "SELECT * FROM MakeInvoice($1,$2)"
+   invoice: "SELECT * FROM MakeInvoice($1,$2)",
 
-  
+   getWeeklySales: "SELECT sum(unitprice), week FROM weeklySales WHERE invoicedate < $1 AND invoicedate > $2 GROUP BY week ORDER BY week;",
+   weeklySales: "CREATE OR REPLACE VIEW weeklySales AS SELECT iv.invoiceid, invoicedate, invoicelineid, trackid, unitprice, quantity, EXTRACT(WEEK FROM invoicedate) as week FROM invoice iv INNER JOIN invoiceline ivl  ON iv.invoiceid = ivl.invoiceid ",
+   getMostSoldArtists: "SELECT name, count(*) FROM mostSoldArtists WHERE invoiceDate < $1 AND invoiceDate > $2 GROUP BY name ORDER BY count(*) DESC LIMIT $3;",
+   mostSoldArtists: "CREATE OR REPLACE VIEW mostSoldArtists AS SELECT ar.name, iv.invoicedate FROM invoice iv INNER JOIN invoiceline ivl ON iv.invoiceid = ivl.invoiceid INNER JOIN track tr ON tr.trackid = ivl.trackid INNER JOIN album al ON al.albumid = tr.albumid INNER JOIN artist ar ON ar.artistid = al.artistid",
+   getMostSoldGenres: 'SELECT name, count(*) FROM mostSoldGenres WHERE invoiceDate < $1 AND invoiceDate > $2 GROUP BY name ORDER BY count(*) DESC',
+   mostSoldGenres: 'CREATE OR REPLACE VIEW mostSoldGenres AS SELECT ge.name, iv.invoicedate FROM invoice iv INNER JOIN invoiceline ivl ON iv.invoiceid = ivl.invoiceid INNER JOIN track tr ON tr.trackid = ivl.trackid INNER JOIN genre ge ON tr.genreid = ge.genreid;'
 }

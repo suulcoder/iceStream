@@ -183,3 +183,53 @@ a {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.weekly__sales__report {
+    display: flex;
+    flex-direction: row;
+}
+
+.most__sold__artists__report {
+    display: flex;
+    flex-direction: row;
+}
+
+.most__sold__genres__report {
+    display: flex;
+    flex-direction: row;
+}
+
+.input__components{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding: 0 32px;
+    padding-top: 108px;
+}
+
+.report__input{
+    background-color: white;
+    border: none;
+    border-radius: 8px;
+    margin: 8px 0;
+    width: 200px;
+    text-align: center;
+    height: 32px;
+    padding: 0 8px;
+    cursor: pointer;
+}
+
+.submit__button {
+    background-color: rgb(255, 191, 0);
+    width: 200px;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.report-graph-container {
+    max-width: 1500px;
+}

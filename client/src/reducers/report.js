@@ -4,9 +4,9 @@ import {combineReducers} from 'redux'
 const index = (state = 0, action) => {
     switch (action.type) {
         case types.report_changed_up:
-            return (state + 1) % 8
+            return (state + 1) % 12
         case types.report_changed_down:
-            return (state + 7 ) % 8
+            return (state + 11) % 12
         default:
             return state
     }
