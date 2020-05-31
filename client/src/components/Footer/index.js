@@ -4,10 +4,17 @@ import React, {Fragment} from 'react';
 import Iframe from 'react-iframe';
 import {connect} from 'react-redux';
 import * as actions from '../../actions/cart';
+import IframeComm from 'react-iframe-comm';
 
 const currentlySelected = 'Little Dark Age'
 
-const Footer = ({isSelected, isBought, id, name, album, mediatype, genre, composer, milliseconds, bytes, unitprice, artist, image, song, state, onsubmit, addToCart, inCart, role, userid, deezerID}) => (
+const Footer = ({isSelected, isBought, id, name, album, mediatype, genre, composer, milliseconds, bytes, unitprice, artist, image, song, state, onsubmit, addToCart, inCart, role, userid, deezerID}) => {
+    
+    if(isSelected && isBought){
+        onsubmit(id,userid)
+    }
+
+    return (
     <div className="footerCont">
         <div className="empty"></div>
         <div className="bar"></div>
@@ -25,7 +32,8 @@ const Footer = ({isSelected, isBought, id, name, album, mediatype, genre, compos
                                 </button>*/
                                 <iframe scrolling="no" frameBorder="0" allowtransparency='true'
                                         src={`https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=true&width=700&height=350&color=ff0000&layout=dark&size=medium&type=tracks&id=${deezerID}&app_id=1`}
-                                        width="700" height="100"/>
+                                        width="700" height="100"
+                                />
                             ) : (
                                 <Fragment>
                                     {
@@ -80,7 +88,7 @@ const Footer = ({isSelected, isBought, id, name, album, mediatype, genre, compos
             </div>
         </div>
     </div>
-)
+)}
 
 export default connect(
     state => {
@@ -111,17 +119,13 @@ export default connect(
         return {isSelected: false}
     },
     dispatch => ({
-        onsubmit(song, id, userid) {
+        onsubmit(id, userid) {
             const request1 = new Request('http://localhost:8080/api/play', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({id, userid})
             })
             fetch(request1)
-                .then(response => response.json())
-                .then(data => {
-                    window.location.href = song;
-                });
         },
         addToCart(id, unitprice) {
             dispatch(actions.addToCart({id, quantity: 1, unitprice}))
