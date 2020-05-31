@@ -21,7 +21,7 @@ const prettyLink  = {
     color: '#ffffff'
 };
 
-const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, info11, info12, forward, backward, onSubmitWeeklySales, onSubmitMostSoldArtists, onSubmitMostSoldGenres, onSubmitArtistReproductions, weeklySalesExtras , mostSoldArtistsExtras }) => {
+const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, info11, info12, forward, backward, onSubmitWeeklySales, onSubmitMostSoldArtists, onSubmitMostSoldGenres, onSubmitArtistReproductions, weeklySalesExtras , mostSoldArtistsExtras, mostSoldGenresExtras }) => {
 
     const [initialDate, changeInitialDate] = useState('')
     const [finishDate, changeFinishDate] = useState('')
