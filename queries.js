@@ -126,10 +126,12 @@ module.exports = {
    buy: "SELECT * FROM BUY($1,$2,$3)",
    invoice: "SELECT * FROM MakeInvoice($1,$2)",
 
-   getWeeklySales: "SELECT sum(unitprice), week FROM weeklySales WHERE invoicedate < $1 AND invoicedate > $2 GROUP BY week ORDER BY week;",
-   weeklySales: "CREATE OR REPLACE VIEW weeklySales AS SELECT iv.invoiceid, invoicedate, invoicelineid, trackid, unitprice, quantity, EXTRACT(WEEK FROM invoicedate) as week FROM invoice iv INNER JOIN invoiceline ivl  ON iv.invoiceid = ivl.invoiceid ",
+   getWeeklySales: "SELECT sum(unitprice), year, week FROM weeklySales WHERE invoicedate < $1 AND invoicedate > $2 GROUP BY year, week ORDER BY year, week;",
+   weeklySales: "CREATE OR REPLACE VIEW weeklySales AS SELECT iv.invoiceid, invoicedate, invoicelineid, trackid, unitprice, quantity, EXTRACT(WEEK FROM invoicedate) as week, EXTRACT(YEAR FROM invoicedate) as year FROM invoice iv INNER JOIN invoiceline ivl  ON iv.invoiceid = ivl.invoiceid ",
    getMostSoldArtists: "SELECT name, count(*) FROM mostSoldArtists WHERE invoiceDate < $1 AND invoiceDate > $2 GROUP BY name ORDER BY count(*) DESC LIMIT $3;",
    mostSoldArtists: "CREATE OR REPLACE VIEW mostSoldArtists AS SELECT ar.name, iv.invoicedate FROM invoice iv INNER JOIN invoiceline ivl ON iv.invoiceid = ivl.invoiceid INNER JOIN track tr ON tr.trackid = ivl.trackid INNER JOIN album al ON al.albumid = tr.albumid INNER JOIN artist ar ON ar.artistid = al.artistid",
    getMostSoldGenres: 'SELECT name, count(*) FROM mostSoldGenres WHERE invoiceDate < $1 AND invoiceDate > $2 GROUP BY name ORDER BY count(*) DESC',
-   mostSoldGenres: 'CREATE OR REPLACE VIEW mostSoldGenres AS SELECT ge.name, iv.invoicedate FROM invoice iv INNER JOIN invoiceline ivl ON iv.invoiceid = ivl.invoiceid INNER JOIN track tr ON tr.trackid = ivl.trackid INNER JOIN genre ge ON tr.genreid = ge.genreid;'
+   mostSoldGenres: 'CREATE OR REPLACE VIEW mostSoldGenres AS SELECT ge.name, iv.invoicedate FROM invoice iv INNER JOIN invoiceline ivl ON iv.invoiceid = ivl.invoiceid INNER JOIN track tr ON tr.trackid = ivl.trackid INNER JOIN genre ge ON tr.genreid = ge.genreid;',
+   getArtistReproductions: "SELECT name, artist, count(*) FROM artistReproductions WHERE artist = $1 GROUP BY name, artist ORDER BY count(*) DESC, name LIMIT $2;",
+   artistReproductions: "CREATE OR REPLACE VIEW artistReproductions AS SELECT bi.indate, tr.name, ar.name as artist FROM binnacle bi INNER JOIN track tr ON bi.id = tr.trackid INNER JOIN album al ON al.albumid = tr.albumid INNER JOIN artist ar ON al.artistid = ar.artistid AND bi.action = 'PLAY';",
 }

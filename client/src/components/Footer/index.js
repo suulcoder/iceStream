@@ -31,7 +31,7 @@ const Footer = ({isSelected, isBought, id, name, album, mediatype, genre, compos
                                     () => onsubmit(song,id,userid)}>
                                 </button>*/
                                 <iframe scrolling="no" frameBorder="0" allowtransparency='true'
-                                        src={`https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=true&width=700&height=350&color=ff0000&layout=dark&size=medium&type=tracks&id=${deezerID}&app_id=1`}
+                                        src={`https://www.deezer.com/plugins/player?format=classic&autoplay=true&playlist=true&width=700&height=350&color=ff0000&layout=dark&size=medium&type=tracks&id=${deezerID}&app_id=1`}
                                         width="700" height="100"
                                 />
                             ) : (

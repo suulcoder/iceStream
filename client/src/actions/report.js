@@ -8,11 +8,12 @@ export const changeReportDown = () => ({
     type: types.report_changed_down
 })
 
-export const addReportSection = (key, value) => ({
+export const addReportSection = (key, value, extras = null) => ({
     type: types.report_section_added,
     payload:{
         key,
-        value
+        value,
+        extras
     }
 })
 

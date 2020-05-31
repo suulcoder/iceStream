@@ -138,6 +138,13 @@ a {
     align-self: center;
 }
 
+.download-text-inputs{
+    color: white;
+    margin-top: 3rem;
+    align-self: center;
+    text-align: center;
+}
+
 .info__container {
     display: flex;
     padding-left: 2rem;
@@ -222,6 +229,7 @@ a {
 
 .submit__button {
     background-color: rgb(255, 191, 0);
+    color: #FFFFFf;
     width: 200px;
     border: none;
     padding: 8px;

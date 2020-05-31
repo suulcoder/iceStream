@@ -1,4 +1,5 @@
 import './styles.css';
+import { v4 } from 'uuid';
 import React, { Fragment,useState } from 'react';
 import * as selectors from '../../reducers'
 import { connect } from 'react-redux';
@@ -10,7 +11,7 @@ const Artist = ({userid,playlist, onDelete}) => (
         <div className="text"><strong>PLAYLISTS:</strong></div>
         {playlist.map(
               list_ => (
-                <div className="artist"> 
+                <div key={v4()}className="artist"> 
                     <div className="artist_">
                         <div className="artistinfo">
                             <div className="artistitle"><strong>Playlist:</strong></div>

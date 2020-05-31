@@ -21,7 +21,7 @@ const prettyLink  = {
     color: '#ffffff'
 };
 
-const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, info11, info12, forward, backward, onSubmitWeeklySales, onSubmitMostSoldArtists, onSubmitMostSoldGenres }) => {
+const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, info11, info12, forward, backward, onSubmitWeeklySales, onSubmitMostSoldArtists, onSubmitMostSoldGenres, onSubmitArtistReproductions, weeklySalesExtras , mostSoldArtistsExtras }) => {
 
     const [initialDate, changeInitialDate] = useState('')
     const [finishDate, changeFinishDate] = useState('')
@@ -416,7 +416,7 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                             <div className="weekly__sales__report">
                                 <div className="report-graph-container">
                                     {info9 === undefined ? ' ' : <Bar data={{
-                                            labels: info9.map(line => line.week),
+                                            labels: info9.map(line => `${line.week} - ${line.year}`),
                                             datasets:[{
                                                 label: 'Ventas',
                                                 backgroundColor: 'rgb(128, 120, 255)',
@@ -429,7 +429,7 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                         title: {
                                             fontColor: 'white',
                                             display: true,
-                                            text: `Ventas semanales`,
+                                            text: `Ventas semanales entre ${weeklySalesExtras.initialDate ? weeklySalesExtras.initialDate : ''} y ${weeklySalesExtras.finishDate ? weeklySalesExtras.finishDate : ''}`,
                                             fontSize: 30,
                                         },
                                         legend:{
@@ -491,14 +491,14 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                     >
                                         {'GENERAR'}
                                     </button>
+                                    <span className="download-text-inputs">
+                                        {'Descargar reporte\n'} <CSVLink data={
+                                            info9.map(week => ({week: week.week, count: week.count}))
+                                        } headers={[{label: 'Semana', key: 'week'}, {label: 'Ventas', key: 'count'}]} 
+                                        style={prettyLink}
+                                        filename="ventas_semanales.csv">CSV ⬇</CSVLink>
+                                    </span>
                                 </div>
-                                <span className="download-text">
-                                    Clic acá para descargar reporte <CSVLink data={
-                                        info9.map(week => ({week: week.week, count: week.count}))
-                                    } headers={[{label: 'Semana', key: 'week'}, {label: 'Ventas', key: 'count'}]} 
-                                    style={prettyLink}
-                                    filename="ventas_semanales.csv">CSV ⬇</CSVLink>
-                                </span>
                             </div>
                         :
                         (index === 9) ? 
@@ -518,7 +518,7 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                         title: {
                                             fontColor: 'white',
                                             display: true,
-                                            text: `Artistas con más canciones vendidas`,
+                                            text: `${mostSoldArtistsExtras.number ? mostSoldArtistsExtras.number : ''} Artistas con más canciones vendidas entre ${mostSoldArtistsExtras.initialDate ? mostSoldArtistsExtras.initialDate : '...'} y ${mostSoldArtistsExtras.finishDate ? mostSoldArtistsExtras.finishDate : ''}`,
                                             fontSize: 30,
                                         },
                                         legend:{
@@ -583,14 +583,14 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                     >
                                         {'GENERAR'}
                                     </button>
+                                    <span className="download-text-inputs">
+                                        {'Descargar reporte \n'} <CSVLink data={
+                                            info10.map(artist => ({aritst: artist.name, count: artist.count}))
+                                        } headers={[{label: 'Artista', key: 'artist'}, {label: 'Ventas', key: 'count'}]} 
+                                        style={prettyLink}
+                                        filename="artistas_mas_vendidos.csv">CSV ⬇</CSVLink>
+                                    </span>
                                 </div>
-                                <span className="download-text">
-                                    Clic acá para descargar reporte <CSVLink data={
-                                        info10.map(artist => ({aritst: artist.name, count: artist.count}))
-                                    } headers={[{label: 'Artista', key: 'artist'}, {label: 'Ventas', key: 'count'}]} 
-                                    style={prettyLink}
-                                    filename="ventas_semanales.csv">CSV ⬇</CSVLink>
-                                </span>
                             </div>
                         :
                         (index === 10) ? 
@@ -610,7 +610,7 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                         title: {
                                             fontColor: 'white',
                                             display: true,
-                                            text: `Géneros con más canciones vendidas`,
+                                            text: `Géneros con más canciones vendidas entre ${mostSoldGenresExtras.initialDate ? mostSoldGenresExtras.initialDate : ''} y ${mostSoldGenresExtras.finishDate ? mostSoldGenresExtras.finishDate : ''}`,
                                             fontSize: 30,
                                         },
                                         legend:{
@@ -665,14 +665,100 @@ const Report = ({ index, info1, info2, info3, info4, info5, info6, info7, info8,
                                     >
                                         {'GENERAR'}
                                     </button>
+                                    <span className="download-text-inputs">
+                                        {'Descargar reporte \n'} <CSVLink data={
+                                            info11.map(genre => ({artist: genre.name, count: genre.count}))
+                                        } headers={[{label: 'Artist', key: 'artist'}, {label: 'Ventas', key: 'count'}]} 
+                                        style={prettyLink}
+                                        filename="generos_mas_vendidos.csv">CSV ⬇</CSVLink>
+                                    </span>
                                 </div>
-                                <span className="download-text">
-                                    Clic acá para descargar reporte <CSVLink data={
-                                        info11.map(genre => ({aritst: genre.name, count: genre.count}))
-                                    } headers={[{label: 'Género', key: 'genre'}, {label: 'Ventas', key: 'count'}]} 
-                                    style={prettyLink}
-                                    filename="ventas_semanales.csv">CSV ⬇</CSVLink>
-                                </span>
+                            </div>
+                        :
+                        (index === 11) ? 
+                            <div className="most__sold__genres__report">
+                                <div className="report-graph-container">
+                                    {info11 === undefined ? ' ' : <Bar data={{
+                                            labels: info12.map(row => row.name),
+                                            datasets:[{
+                                                label: 'Reproducciones',
+                                                backgroundColor: 'rgb(255, 128, 120)',
+                                                fontColor: 'white',
+                                                fontSize: 30,
+                                                data: info12.map(row => row.count),
+                                            }]
+                                        }
+                                    } options={{
+                                        title: {
+                                            fontColor: 'white',
+                                            display: true,
+                                            text: info12[0] === undefined ? 'Canciones más reproducidas' : `${info12.length} Canciones más reproducidas de ${info12[0].artist}`,
+                                            fontSize: 30,
+                                        },
+                                        legend:{
+                                            labels:{
+                                                fontColor: 'white',
+                                                fontSize: 16,
+                                            }
+                                        },
+                                        scales:{
+                                            yAxes:[{
+                                                scaleLabel: {
+                                                    labelString: 'Reproducciones',
+                                                    display: true,
+                                                    fontColor: 'white',
+                                                },
+                                                ticks: {
+                                                    stepSize: 1,
+                                                    beginAtZero: true,
+                                                    fontSize: 16,
+                                                    fontColor: 'white',
+                                                }
+                                            }],
+                                            xAxes: [{
+                                                ticks: {
+                                                    fontSize: 16,
+                                                    fontColor: 'white',
+                                                }
+                                            }]
+                                        }
+                                    }} height={500} width={1500}/>}
+                                </div>
+                                <div className="input__components">
+                                    <input
+                                        className="artist__name report__input"
+                                        type="text"
+                                        placeholder="Artista"
+                                        value={artistName}
+                                        onChange={e => changeArtistName(e.target.value)}
+                                    />
+                                    <input
+                                        className="number report__input"
+                                        type="number"
+                                        style={{
+                                            color: 'black'
+                                        }}
+                                        placeholder="Número de canciones"
+                                        value={n}
+                                        onChange={e => changeN(e.target.value)}
+                                    />
+                                    <button 
+                                        className="submit__button" 
+                                        type="submit"
+                                        onClick={
+                                            () => onSubmitArtistReproductions(artistName, n)
+                                        }
+                                    >
+                                        {'GENERAR'}
+                                    </button>
+                                    <span className="download-text-inputs">
+                                        {'Descargar reporte \n'} <CSVLink data={
+                                            info12.map(row => ({song: row.name, count: row.count}))
+                                        } headers={[{label: 'Canción', key: 'genre'}, {label: 'Reproducciones', key: 'count'}]} 
+                                        style={prettyLink}
+                                        filename="reproducciones_de_artista.csv">CSV ⬇</CSVLink>
+                                    </span>
+                                </div>
                             </div>
                         :
                         <div>
@@ -701,6 +787,10 @@ export default connect(
         info9: selectors.getReportSection(state, types.GET_WEEKLY_SALES),
         info10: selectors.getReportSection(state, types.GET_MOST_SOLD_ARTISTS),
         info11: selectors.getReportSection(state, types.GET_MOST_SOLD_GENRES),
+        info12: selectors.getReportSection(state, types.GET_ARTIST_REPRODUCTIONS),
+        weeklySalesExtras: selectors.getReportSection(state, `${types.GET_WEEKLY_SALES}_EXTRAS`),
+        mostSoldArtistsExtras: selectors.getReportSection(state, `${types.GET_MOST_SOLD_ARTISTS}_EXTRAS`),
+        mostSoldGenresExtras: selectors.getReportSection(state, `${types.GET_MOST_SOLD_GENRES}_EXTRAS`),
     }),
     dispatch =>({
         forward(clear1, clear2, clear3, clear4){
@@ -737,7 +827,7 @@ export default connect(
                 const json2 = await response2.json();
                 console.log(json);
                 console.log(json2.rows);
-                dispatch(actions.addReportSection(types.GET_WEEKLY_SALES, json2.rows));
+                dispatch(actions.addReportSection(types.GET_WEEKLY_SALES, json2.rows, {initialDate, finishDate}));
             }
             
             request();
@@ -762,7 +852,7 @@ export default connect(
                 const json2 = await response2.json();
                 console.log(json);
                 console.log(json2);
-                dispatch(actions.addReportSection(types.GET_MOST_SOLD_ARTISTS, json2.rows));
+                dispatch(actions.addReportSection(types.GET_MOST_SOLD_ARTISTS, json2.rows, {initialDate, finishDate, number}));
             }
             
             request();
@@ -787,7 +877,32 @@ export default connect(
                 const json2 = await response2.json();
                 console.log(json);
                 console.log(json2);
-                dispatch(actions.addReportSection(types.GET_MOST_SOLD_GENRES, json2.rows));
+                dispatch(actions.addReportSection(types.GET_MOST_SOLD_GENRES, json2.rows, {initialDate, finishDate}));
+            }
+            
+            request();
+        },
+        onSubmitArtistReproductions(name, limit){
+
+            const request1 = new Request('http://localhost:8080/api/reports/artistreproductions',{
+                method:'POST',
+                headers: { 'Content-Type':'application/json'},
+            })
+
+            const request2 = new Request('http://localhost:8080/api/reports/getArtistReproductions',{
+                method: 'POST',
+                headers: { 'Content-Type':'application/json'},
+                body: JSON.stringify({name, limit})
+            })
+
+            const request = async () => {
+                const response = await fetch(request1);
+                const json = await response.json();
+                const response2 = await fetch(request2);
+                const json2 = await response2.json();
+                console.log(json);
+                console.log(json2);
+                dispatch(actions.addReportSection(types.GET_ARTIST_REPRODUCTIONS, json2.rows, {limit}));
             }
             
             request();

@@ -15,10 +15,8 @@ const index = (state = 0, action) => {
 const info = (state = {}, action) => {
     switch (action.type){
         case types.report_section_added:
-            return {
-                ...state,
-                [action.payload.key]:action.payload.value,
-            }
+            const newState = action.payload.extras === null ? {...state, [action.payload.key]: action.payload.value} : {...state, [action.payload.key]: action.payload.value, [`${action.payload.key}_EXTRAS`]: action.payload.extras}
+            return newState;
         case types.report_sections_to_null:
             return {}
         default:

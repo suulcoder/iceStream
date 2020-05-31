@@ -216,6 +216,8 @@ SQLQuery('/api/reports/getmostsoldartists', query.getMostSoldArtists, 'post')
 SQLQuery('/api/reports/mostsoldartists', query.mostSoldArtists, 'post')
 SQLQuery('/api/reports/getmostsoldgenres', query.getMostSoldGenres, 'post')
 SQLQuery('/api/reports/mostsoldgenres', query.mostSoldGenres, 'post')
+SQLQuery('/api/reports/getartistreproductions', query.getArtistReproductions, 'post')
+SQLQuery('/api/reports/artistreproductions', query.artistReproductions, 'post')
 
 SQLQuery('/api/actions/inactivate', query.UpdateTrackState, 'post')
 SQLQuery('/api/actions/delete/before/track', query.BeforeDeleteTrack, 'post')
