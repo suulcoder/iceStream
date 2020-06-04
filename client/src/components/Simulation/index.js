@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { setDays, setAction, setLodaer, setValidTracks, setDone } from '../../actions/simulation';
 import simulateDay from '../../Utilities/simulation';
 import {v4} from 'uuid'
+import {ceil} from "lodash";
 
 const Simulation = ({
     isLoading,  actions,    topPlayed,  topSold, validTracks,
@@ -183,6 +184,26 @@ export default connect(
                                         dispatch(setDone(true))
                                    }
                                 })
+
+                                const daysOff = Math.ceil(daysToSet+1)
+                                const request = new Request('http://localhost:8080/api/invoices',{
+                                    method:'POST',
+                                    headers: { 'Content-Type':'application/json'},
+                                    body: JSON.stringify({total:(Math.round(0.99*100)/100),id:userid, daysOff})
+                                })
+
+                                fetch(request)
+                                    .then(response => response.json())
+                                        .then(data => {
+                                            const request1 = new Request('http://localhost:8080/api/buy',{
+                                                method:'POST',
+                                                headers: { 'Content-Type':'application/json'},
+                                                body: JSON.stringify({id:trackid,quantity:1,invoiceid:data.rows[0].makeinvoice})})
+                                                fetch(request1)
+                                        }
+                                        )
+
+                                //insert into invoiceline
                                 const purchaseRequest = new Request('http://localhost:8080/api/purchase', {
                                     method: 'post',
                                     headers: {'Content-Type': 'application/json'},

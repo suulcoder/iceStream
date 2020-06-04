@@ -125,6 +125,7 @@ module.exports = {
    deleteArtist: "DELETE FROM Artist WHERE ArtistId=$1;",
    buy: "SELECT * FROM BUY($1,$2,$3)",
    invoice: "SELECT * FROM MakeInvoice($1,$2)",
+   invoices: "SELECT * FROM MakeInvoices2($1,$2,$3)",
 
    getWeeklySales: "SELECT sum(unitprice), year, week FROM weeklySales WHERE invoicedate < $1 AND invoicedate > $2 GROUP BY year, week ORDER BY year, week;",
    weeklySales: "CREATE OR REPLACE VIEW weeklySales AS SELECT iv.invoiceid, invoicedate, invoicelineid, trackid, unitprice, quantity, EXTRACT(WEEK FROM invoicedate) as week, EXTRACT(YEAR FROM invoicedate) as year FROM invoice iv INNER JOIN invoiceline ivl  ON iv.invoiceid = ivl.invoiceid ",

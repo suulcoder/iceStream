@@ -14,7 +14,7 @@ const pool = new pg.Pool({
     port: 5432,
     user: 'admin',
     password: 'admin',
-    database: 'ProyectoBasedeDatos'
+    database: 'ProyectoBasedeDatosFinal'
 })
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.urlencoded({extended: true}))
@@ -181,6 +181,7 @@ SQLQuery('/api/addcart', query.addCart, 'post')
 SQLQuery('/api/updatecart', query.updateCart, 'post')
 SQLQuery('/api/buy', query.buy, 'post')
 SQLQuery('/api/invoice', query.invoice, 'post')
+SQLQuery('/api/invoices', query.invoices, 'post')
 
 SQLQuery('/api/search/track', query.searchTrack, 'post')
 SQLQuery('/api/search/album', query.searchAlbum, 'post')

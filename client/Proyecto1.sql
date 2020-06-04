@@ -295,6 +295,20 @@ END
 $BODY$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS MakeInvoices2;
+
+CREATE FUNCTION MakeInvoices2(total Numeric(10,2),customer INT)
+RETURNS INT AS
+$BODY$
+DECLARE newInvoiceid INT;
+BEGIN
+	SELECT MAX(invoiceid)+1 as ids INTO newInvoiceid FROM Invoice;
+	INSERT INTO Invoice(InvoiceId,CustomerId,InvoiceDate,Total) VALUES(newInvoiceid,customer,CURRENT_DATE,total);
+	RETURN newInvoiceid;
+END
+$BODY$
+language plpgsql;
+
 INSERT INTO simulation VALUES (1, CURRENT_DATE,CURRENT_DATE,30,40,500);
 DROP FUNCTION IF EXISTS simulate;
 

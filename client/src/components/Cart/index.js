@@ -62,6 +62,8 @@ export default connect(
             fetch(request)
             .then(response => response.json())
             .then(data => {
+                console.log(data)
+                console.log(tracks)
                 Object.keys(tracks).forEach(id => {
                 if(tracks[id]!==0){
                     const request1 = new Request('http://localhost:8080/api/buy',{
@@ -69,6 +71,7 @@ export default connect(
                         headers: { 'Content-Type':'application/json'},
                         body: JSON.stringify({id:parseInt(id,10),quantity:tracks[id],invoiceid:data.rows[0].makeinvoice})
                     })
+
                     fetch(request1)
                     .then(response => response.json())
                     .then(data => {
