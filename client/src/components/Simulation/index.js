@@ -198,8 +198,8 @@ export default connect(
                                             const request1 = new Request('http://localhost:8080/api/buy',{
                                                 method:'POST',
                                                 headers: { 'Content-Type':'application/json'},
-                                                body: JSON.stringify({id:trackid,quantity:1,invoiceid:data.rows[0].makeinvoice})})
-                                                fetch(request1)
+                                                body: JSON.stringify({id:trackid,quantity:1,invoiceid:data.rows[0].makeinvoices2})})
+                                                fetch(request1).then(response => response.json().then(response=>console.log(response)))
                                         }
                                         )
 
